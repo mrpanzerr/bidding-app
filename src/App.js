@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
-import PageTemplate from './pages/blank';
 import Dashboard from './pages/dashboard';
+import PageTemplate from './pages/pageTemplate';
 
 function App() {
   return (
