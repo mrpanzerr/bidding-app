@@ -1,5 +1,25 @@
+// Import React's useState hook to manage component state (like loading)
 import { useState } from "react";
 
+// Import CSS module for styling the modal
+import styles from "../styles/nameInputModal.module.css";
+
+/**
+ * NameInputModal Component
+ * 
+ * This is a reusable modal component used for:
+ * - Renaming a project (user types a new name)
+ * - Deleting a project (user types the existing name to confirm)
+ * 
+ * Props (values passed into the component):
+ * - originalName: The current name of the project (used to confirm deletion)
+ * - value: The text the user is typing into the input
+ * - setValue: Function that updates the input as the user types
+ * - onSave: Function called when the user confirms (save or delete)
+ * - onCancel: Function called when the user clicks "Cancel"
+ * - modalType: A string ("rename" or "delete") that determines behavior
+ * - label: The label displayed above the input field
+ */
 function NameInputModal({
   originalName = "",
   value,
@@ -9,8 +29,15 @@ function NameInputModal({
   modalType,
   label = "Name Project:",
 }) {
+  // Internal state to track whether we're currently saving
   const [loading, setLoading] = useState(false);
 
+  /**
+   * Called when the user is renaming a project and clicks Save
+   * - Shows loading indicator
+   * - Calls onSave (a function from the parent component)
+   * - Hides loading after it's done
+   */
   const handleRenameSave = async () => {
     setLoading(true);
     try {
@@ -20,10 +47,16 @@ function NameInputModal({
     }
   };
 
+  /**
+   * Called when the user is deleting a project and clicks Save
+   * - Requires the user to type the exact project name to confirm
+   * - If input doesn't match originalName, shows alert and exits
+   */
   const handleDeleteSave = async () => {
     setLoading(true);
+
     if (value !== originalName) {
-      alert("Names must match to delete");
+      alert("Names must match to delete"); // Simple user safety check
       setLoading(false);
       return;
     }
@@ -36,43 +69,48 @@ function NameInputModal({
   };
 
   return (
-    <div style={modalBackdropStyle}>
+    // Backdrop covers the screen with a semi-transparent dark background
+    <div className={styles.backdrop}>
+      {/* The white modal box itself */}
       <div
+        className={styles.modalBox}
         style={{
-          ...modalBoxStyle,
-          opacity: loading ? 0.6 : 1,
-          pointerEvents: loading ? "none" : "auto",
+          opacity: loading ? 0.6 : 1,              // Dim the modal while saving
+          pointerEvents: loading ? "none" : "auto" // Prevent clicks while saving
         }}
       >
-        <label style={labelStyle}>
+        {/* Label and input field */}
+        <label className={styles.label}>
           {label}
           <input
             type="text"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
+            value={value}                          // What the user has typed
+            onChange={(e) => setValue(e.target.value)} // Update input as user types
             onKeyDown={(e) => {
-              if (e.key === "Enter" && modalType === "delete" && !loading) {
+              if (e.key === "Enter" && !loading) {
                 e.preventDefault();
-                handleDeleteSave();
-              } else if (e.key === "Enter" && !loading) {
-                e.preventDefault();
-                handleRenameSave();
+                // Decide what to save based on modalType
+                modalType === "delete"
+                  ? handleDeleteSave()
+                  : handleRenameSave();
               }
             }}
             placeholder="Enter name"
             style={{ marginTop: "5px", padding: "5px" }}
-            disabled={loading}
+            disabled={loading} // Disable input while saving
           />
         </label>
-        <div style={buttonRowStyle}>
+
+        {/* Buttons for Save and Cancel */}
+        <div className={styles.buttonRow}>
           <button
             onClick={(e) => {
               e.preventDefault();
-              if (modalType === "delete" && !loading) {
-                handleDeleteSave();
-              } else if (!loading) {
-                handleRenameSave();
-              }
+              if (loading) return;
+
+              modalType === "delete"
+                ? handleDeleteSave()
+                : handleRenameSave();
             }}
             disabled={loading}
           >
@@ -87,39 +125,5 @@ function NameInputModal({
   );
 }
 
-const modalBackdropStyle = {
-  position: "fixed",
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
-  backgroundColor: "rgba(0,0,0,0.5)",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  zIndex: 1000,
-};
-
-const modalBoxStyle = {
-  backgroundColor: "white",
-  padding: "20px",
-  borderRadius: "10px",
-  boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
-  display: "flex",
-  flexDirection: "column",
-  gap: "10px",
-};
-
-const labelStyle = {
-  display: "flex",
-  flexDirection: "column",
-  fontWeight: "bold",
-};
-
-const buttonRowStyle = {
-  display: "flex",
-  gap: "10px",
-  justifyContent: "flex-end",
-};
-
+// Export the component so it can be used in other files
 export default NameInputModal;
