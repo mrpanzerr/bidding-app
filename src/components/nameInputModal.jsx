@@ -55,7 +55,7 @@ function NameInputModal({
   const handleDeleteSave = async () => {
     setLoading(true);
 
-    if (value !== originalName) {
+    if (value.trim() !== originalName.trim()) {
       alert("Names must match to delete"); // Simple user safety check
       setLoading(false);
       return;
