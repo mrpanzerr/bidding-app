@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { addProject, fetchProjects, renameProject } from "../firebase/projectService";
+import { addProject, deleteProject, fetchProjects, renameProject } from "../firebase/projectService";
 
 export function useProjects() {
   const [projects, setProjects] = useState([]);
@@ -42,11 +42,21 @@ export function useProjects() {
     }
   };
 
+  const deleteExistingProject = async (id) => {
+    try {
+      await deleteProject(id);
+      await loadProjects();
+    } catch (e) {
+      setError(e);
+    }
+  };
+
   return {
     projects,
     loading,
     error,
     addNewProject,
     renameExistingProject,
+    deleteExistingProject,
   };
 }

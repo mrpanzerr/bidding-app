@@ -1,19 +1,31 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import DeleteModal from "../components/deleteModal";
 import NewProjectModal from "../components/newProjectModal";
 import ProjectItem from "../components/projectItem";
 import RenameModal from "../components/renameModal";
 import { useProjects } from "../hooks/useProjects";
 
 function Dashboard() {
-  const { projects, loading, error, addNewProject, renameExistingProject } =
-    useProjects();
+  const {
+    projects,
+    loading,
+    error,
+    addNewProject,
+    renameExistingProject,
+    deleteExistingProject,
+  } = useProjects();
+
+  const [modalType, setModalType] = useState(null); // "rename" or "delete"
 
   const [newProject, setNewProject] = useState(false);
   const [projectName, setProjectName] = useState("");
 
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [newName, setNewName] = useState("");
+
+  const [originalName, setOriginalName] = useState("");
+  const [deleteName, setDeleteName] = useState("");
 
   const navigate = useNavigate();
 
@@ -37,10 +49,19 @@ function Dashboard() {
   };
 
   const handleNewProject = async () => {
-    if (!projectName.trim()) return;
-    await addNewProject(projectName.trim());
+    const trimmed = projectName.trim();
+    if (!trimmed) return;
+    await addNewProject(trimmed);
     setProjectName("");
     setNewProject(false);
+  };
+
+  const handleDeleteProject = async () => {
+    if (!selectedProjectId) return;
+    await deleteExistingProject(selectedProjectId);
+    setSelectedProjectId("");
+    setOriginalName("");
+    setDeleteName("");
   };
 
   const openProject = (id) => {
@@ -62,6 +83,12 @@ function Dashboard() {
             onRename={(id, name) => {
               setSelectedProjectId(id);
               setNewName(name);
+              setModalType("rename");
+            }}
+            onDelete={(id, name) => {
+              setSelectedProjectId(id);
+              setOriginalName(name);
+              setModalType("delete");
             }}
           />
         ))}
@@ -81,14 +108,32 @@ function Dashboard() {
         />
       )}
 
-      {selectedProjectId && (
+      {selectedProjectId && modalType === "rename" && (
         <RenameModal
+          modalType={modalType}
           newName={newName}
           setNewName={setNewName}
           onSave={handleRename}
           onCancel={() => {
             setSelectedProjectId(null);
             setNewName("");
+            setModalType(null);
+          }}
+        />
+      )}
+
+      {selectedProjectId && modalType === "delete" && (
+        <DeleteModal
+          modalType={modalType}
+          deleteName={deleteName}
+          setDeleteName={setDeleteName}
+          originalName={originalName}
+          onSave={handleDeleteProject}
+          onCancel={() => {
+            setSelectedProjectId(null);
+            setOriginalName("");
+            setDeleteName("");
+            setModalType(null);
           }}
         />
       )}

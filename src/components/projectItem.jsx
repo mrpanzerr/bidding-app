@@ -1,4 +1,4 @@
-function ProjectItem({ project, onOpen, onRename }) {
+function ProjectItem({ project, onOpen, onRename, onDelete }) {
   return (
     <li
       onClick={() => onOpen(project.id)}
@@ -9,7 +9,6 @@ function ProjectItem({ project, onOpen, onRename }) {
       } /* adds support for keyboard activation - Enter) */
       style={{ cursor: "pointer", userSelect: "none" }}
     >
-      {/* Show project name or fallback to its ID if no name exists */}
       <p>{project.name}</p>
       <button
         onClick={(e) => {
@@ -18,6 +17,14 @@ function ProjectItem({ project, onOpen, onRename }) {
         }}
       >
         Rename Project
+      </button>
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          onDelete(project.id, project.name);
+        }}
+      >
+        Delete Project
       </button>
     </li>
   );

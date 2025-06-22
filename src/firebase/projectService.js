@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, getDoc, getDocs, setDoc, Timestamp } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, setDoc, Timestamp } from 'firebase/firestore';
 import { db } from './firebase';
 
 export async function fetchProjects() {
@@ -38,5 +38,14 @@ export async function addProject(projectName) {
         });
     } catch (e) {
         console.error("Error adding document: ", e);
+    }
+}
+
+export async function deleteProject(id) {
+    try {
+        const docRef = doc(db, "projects", id);
+        await deleteDoc(docRef);
+    } catch (e) {
+        console.error("Error deleting project:", e);
     }
 }

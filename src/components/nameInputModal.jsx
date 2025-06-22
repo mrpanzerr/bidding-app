@@ -1,12 +1,35 @@
 import { useState } from "react";
 
-function NameInputModal({ value, setValue, onSave, onCancel, label = "Name Project:" }) {
+function NameInputModal({
+  originalName = "",
+  value,
+  setValue,
+  onSave,
+  onCancel,
+  modalType,
+  label = "Name Project:",
+}) {
   const [loading, setLoading] = useState(false);
 
-  const handleSave = async () => {
+  const handleRenameSave = async () => {
     setLoading(true);
     try {
-      await onSave(); 
+      await onSave();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteSave = async () => {
+    setLoading(true);
+    if (value !== originalName) {
+      alert("Names must match to delete");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      await onSave();
     } finally {
       setLoading(false);
     }
@@ -14,7 +37,13 @@ function NameInputModal({ value, setValue, onSave, onCancel, label = "Name Proje
 
   return (
     <div style={modalBackdropStyle}>
-      <div style={{ ...modalBoxStyle, opacity: loading ? 0.6 : 1, pointerEvents: loading ? "none" : "auto" }}>
+      <div
+        style={{
+          ...modalBoxStyle,
+          opacity: loading ? 0.6 : 1,
+          pointerEvents: loading ? "none" : "auto",
+        }}
+      >
         <label style={labelStyle}>
           {label}
           <input
@@ -22,9 +51,12 @@ function NameInputModal({ value, setValue, onSave, onCancel, label = "Name Proje
             value={value}
             onChange={(e) => setValue(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter" && !loading) {
+              if (e.key === "Enter" && modalType === "delete" && !loading) {
                 e.preventDefault();
-                handleSave();
+                handleDeleteSave();
+              } else if (e.key === "Enter" && !loading) {
+                e.preventDefault();
+                handleRenameSave();
               }
             }}
             placeholder="Enter name"
@@ -33,7 +65,17 @@ function NameInputModal({ value, setValue, onSave, onCancel, label = "Name Proje
           />
         </label>
         <div style={buttonRowStyle}>
-          <button onClick={handleSave} disabled={loading}>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              if (modalType === "delete" && !loading) {
+                handleDeleteSave();
+              } else if (!loading) {
+                handleRenameSave();
+              }
+            }}
+            disabled={loading}
+          >
             {loading ? "Saving..." : "Save"}
           </button>
           <button onClick={onCancel} disabled={loading}>
