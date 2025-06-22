@@ -1,70 +1,72 @@
-# Getting Started with Create React App
+# 🛠️ Bidding Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A simple and intuitive web app for managing construction bidding projects. Built with **React**, **Firebase**, and a focus on clean, accessible UI/UX.
 
-## Available Scripts
+This project is designed for small teams or individuals who want to track projects with options to **create**, **rename**, and **delete** them — all stored in the cloud via Firebase.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## ✨ Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- ✅ View a list of all projects
+- ➕ Create new projects with a custom name
+- ✏️ Rename existing projects
+- 🗑️ Delete projects with confirmation
+- 🔐 All data is stored securely in **Cloud Firestore**
+- ⚡ Responsive and keyboard-accessible UI
+- 🔁 Automatic refresh on create, rename, or delete
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+<!-- ## 📸 Preview 
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+![screenshot of app](./screenshot.png) <!-- Add this later when you have a screenshot -->
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🧠 Tech Stack
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+| Frontend | Backend  |   Deployment    |
+|----------|----------|-----------------|
+| React    | Firebase | Netlify(planned)|
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## 🚀 Getting Started
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 1. Clone the Repo
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+git clone https://github.com/mrpanzerr/bidding-app.git
+cd bidding-application
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### 2. Install Dependencies
+npm install
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### 3. Set Up Firebase
+Create a file called .env.local and add your Firebase credentials:
 
-## Learn More
+VITE_FIREBASE_API_KEY=your_api_key
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+VITE_FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+VITE_FIREBASE_PROJECT_ID=your_project_id
 
-### Code Splitting
+VITE_FIREBASE_STORAGE_BUCKET=your_project_id.appspot.com
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
 
-### Analyzing the Bundle Size
+VITE_FIREBASE_APP_ID=your_app_id
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+VITE_FIREBASE_MEASUREMENT_ID=your_measurement_id
 
-### Making a Progressive Web App
+⚠️ Make sure .env.local is in your .gitignore so secrets are not pushed to GitHub.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### 4. Start the Development Server
+npm run dev
 
-### Advanced Configuration
+📌 Future Plans
+ Add data import/export functionality
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+ Build a calculator pages for project estimations on material, material cost and labor cost
 
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+ Improve styling and animations
