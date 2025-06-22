@@ -36,7 +36,7 @@ This project is designed for small teams or individuals who want to track projec
 
 ### 1. Clone the Repo
 
-git clone https://github.com/mrpanzerr/bidding-application.git
+git clone https://github.com/mrpanzerr/bidding-app.git
 cd bidding-application
 
 ### 2. Install Dependencies
