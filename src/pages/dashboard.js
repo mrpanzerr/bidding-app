@@ -1,6 +1,6 @@
 // Import React hooks and utilities
 import { useState } from "react";
-// useNavigate lets you programmatically change pages (routes)
+// useNavigate lets you programmatically change pages
 import { useNavigate } from "react-router-dom";
 
 // Import UI components for modals and project items
@@ -9,7 +9,7 @@ import NewProjectModal from "../components/newProjectModal";
 import ProjectItem from "../components/projectItem";
 import RenameModal from "../components/renameModal";
 
-// Import your custom hook that handles project data and operations
+// Import custom hook that handles project data and operations
 import { useProjects } from "../hooks/useProjects";
 
 /**
@@ -17,7 +17,7 @@ import { useProjects } from "../hooks/useProjects";
  * Shows a list of projects with options to add, rename, delete, and open projects.
  */
 function Dashboard() {
-  // Destructure project data and functions from your custom hook
+  // Destructure project data and functions from custom hook
   const {
     projects,
     loading,

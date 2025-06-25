@@ -1,5 +1,4 @@
 // Importing Route and Routes from the "react-router-dom" package.
-// These are used to define different pages (also called "routes") in your application.
 import { Route, Routes } from "react-router-dom";
 
 // Importing the component for the Dashboard page.
@@ -8,14 +7,15 @@ import Dashboard from './pages/dashboard';
 
 // Importing the component for an individual project page.
 // This will be shown when the user visits a specific project's page, like "/project/123".
-import PageTemplate from './pages/pageTemplate';
+import TitlePage from './pages/titlePage';
 
-// This is the main App component — it's the heart of your app.
-// It defines which pages (components) to show based on the URL the user is visiting.
+// Importing the component for the section form.
+// This component will handle the form for adding or editing sections.
+import SqftCalculator from './components/sqftCalculator';
+
+// Main App component that sets up the routing for the application.
 function App() {
   return (
-    // Routes is a special component from React Router.
-    // It holds all the Route elements and decides which one to display based on the current URL.
     <Routes>
       
       {/* This Route defines what to show at the homepage ("/").
@@ -25,7 +25,11 @@ function App() {
       {/* This Route handles dynamic URLs like "/project/123" or "/project/hello-world".
           ":id" is a placeholder for any project ID or name.
           Whatever value comes after "/project/" will be passed to the PageTemplate component. */}
-      <Route path="/project/:id" element={<PageTemplate />} />
+      <Route path="/project/:id" element={<TitlePage />} />
+      
+      {/* These Routes handle the calculator pages */}
+      <Route path="/section/:id/sqftcalculator" element={<SqftCalculator />} />
+
     </Routes>
   );
 }

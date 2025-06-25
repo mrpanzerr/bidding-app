@@ -6,11 +6,13 @@ import { useParams } from "react-router-dom";
 // Import function to get project data from Firebase
 import { getProjectData } from "../firebase/projectService";
 
+import { useNavigate } from "react-router-dom";
+
 /**
  * PageTemplate component displays details for a single project.
  * It fetches the project data based on the "id" URL parameter.
  */
-function PageTemplate() {
+function TitlePage() {
   // Extract the "id" parameter from the URL (e.g. /project/:id)
   const { id } = useParams();
 
@@ -19,6 +21,12 @@ function PageTemplate() {
 
   // State to track whether the data is still loading (used to show loading message)
   const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
+
+  const openSectionForm = (id) => {
+    navigate(`/section/${id}/sqftcalculator`);
+  };
 
   /**
    * useEffect runs once when the component mounts or when the "id" changes.
@@ -60,12 +68,14 @@ function PageTemplate() {
   // Render the project details once data is loaded successfully
   return (
     <div>
-      <h1>Project: {project.name}</h1>
-      <p>ID: {project.id}</p>
+      {/* Display project details */}
+      <h1>{project.name}</h1>
+      {/* Square Foot Calculator button */}
+      <button onClick={openSectionForm}>Square Foot Calculator</button>
       {/* Add more project details UI here as needed */}
     </div>
   );
 }
 
 // Export this component for use in routing
-export default PageTemplate;
+export default TitlePage;

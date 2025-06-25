@@ -1,6 +1,6 @@
 import { useState } from "react"; // useState is a React hook that lets us add local state to a functional component.
 
-export default function SectionForm() {
+export default function SqftCalculator() {
     // `rows` is our main state variable, an array where each element is an object
     // representing a single form row. Each row has a `measurement`, `description`,
     // and a `lineTotal`. Initially, we start with one blank row.
