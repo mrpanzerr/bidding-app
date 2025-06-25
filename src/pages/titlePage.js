@@ -6,13 +6,17 @@ import { useParams } from "react-router-dom";
 // Import function to get project data from Firebase
 import { getProjectData } from "../firebase/projectService";
 
+// Import React Router's useNavigate to change pages programmatically
 import { useNavigate } from "react-router-dom";
+
+// Import component that displays title page's header
+import TitlePageHeader from "../components/titlePageHeader";
 
 /**
  * PageTemplate component displays details for a single project.
  * It fetches the project data based on the "id" URL parameter.
  */
-function TitlePage() {
+function TitlePage() {  
   // Extract the "id" parameter from the URL (e.g. /project/:id)
   const { id } = useParams();
 
@@ -68,10 +72,10 @@ function TitlePage() {
   // Render the project details once data is loaded successfully
   return (
     <div>
-      {/* Display project details */}
-      <h1>{project.name}</h1>
       {/* Square Foot Calculator button */}
       <button onClick={openSectionForm}>Square Foot Calculator</button>
+      {/* Display project details */}
+      <TitlePageHeader />
       {/* Add more project details UI here as needed */}
     </div>
   );
