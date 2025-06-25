@@ -64,9 +64,9 @@ VITE_FIREBASE_MEASUREMENT_ID=your_measurement_id
 ### 4. Start the Development Server
 npm run dev
 
-📌 Future Plans
- Add data import/export functionality
+## Future Plans
+ - Add data import/export functionality
 
- Build a calculator pages for project estimations on material, material cost and labor cost
+ - Build calculator pages for project estimations on material, material cost and labor cost
 
- Improve styling and animations
+ - Improve styling and animations
