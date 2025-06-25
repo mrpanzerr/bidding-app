@@ -15,7 +15,7 @@ function TitlePageHeader({
     const { titlePageData, loading, error } = useTitlePage();
 
     // If loading, show a simple loading message
-    if (loading) return <p>Loading title page...</p>;
+    if (loading) return <p>Loading title header...</p>;
 
     // If there's an error, display it
     if (error) return <p>Error loading title page: {error.message}</p>;

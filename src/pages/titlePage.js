@@ -1,5 +1,6 @@
 // Import React hooks for managing state and side effects
 import { useEffect, useState } from "react";
+
 // useParams lets you access URL parameters (like the project id from the route)
 import { useParams } from "react-router-dom";
 
@@ -7,13 +8,12 @@ import { useParams } from "react-router-dom";
 import { getProjectData } from "../firebase/projectService";
 
 // Import React Router's useNavigate to change pages programmatically
-import { useNavigate } from "react-router-dom";
 
 // Import component that displays title page's header
 import TitlePageHeader from "../components/titlePageHeader";
 
 /**
- * PageTemplate component displays details for a single project.
+ * TitlePage component displays details for a single project.
  * It fetches the project data based on the "id" URL parameter.
  */
 function TitlePage() {  
@@ -25,12 +25,6 @@ function TitlePage() {
 
   // State to track whether the data is still loading (used to show loading message)
   const [loading, setLoading] = useState(true);
-
-  const navigate = useNavigate();
-
-  const openSectionForm = (id) => {
-    navigate(`/section/${id}/sqftcalculator`);
-  };
 
   /**
    * useEffect runs once when the component mounts or when the "id" changes.
@@ -72,11 +66,9 @@ function TitlePage() {
   // Render the project details once data is loaded successfully
   return (
     <div>
-      {/* Square Foot Calculator button */}
-      <button onClick={openSectionForm}>Square Foot Calculator</button>
       {/* Display project details */}
       <TitlePageHeader />
-      {/* Add more project details UI here as needed */}
+      {/* Add more project details UI here */}
     </div>
   );
 }

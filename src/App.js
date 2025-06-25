@@ -9,9 +9,9 @@ import Dashboard from './pages/dashboard';
 // This will be shown when the user visits a specific project's page, like "/project/123".
 import TitlePage from './pages/titlePage';
 
-// Importing the component for the section form.
-// This component will handle the form for adding or editing sections.
 import SqftCalculator from './components/sqftCalculator';
+
+import ProjectDashboard from "./pages/projectDashboard";
 
 // Main App component that sets up the routing for the application.
 function App() {
@@ -25,10 +25,11 @@ function App() {
       {/* This Route handles dynamic URLs like "/project/123" or "/project/hello-world".
           ":id" is a placeholder for any project ID or name.
           Whatever value comes after "/project/" will be passed to the PageTemplate component. */}
-      <Route path="/project/:id" element={<TitlePage />} />
+      <Route path="/project/:id" element={<ProjectDashboard />} />
       
-      {/* These Routes handle the calculator pages */}
-      <Route path="/section/:id/sqftcalculator" element={<SqftCalculator />} />
+      {/* These Routes handle the title and calculator pages */}
+      <Route path="/section/:id/titlePage" element={<TitlePage />} />
+      <Route path="/section/:id/sqftCalculator" element={<SqftCalculator />} />
 
     </Routes>
   );
