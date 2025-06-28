@@ -28,8 +28,8 @@ function App() {
       <Route path="/project/:id" element={<ProjectDashboard />} />
       
       {/* These Routes handle the title and calculator pages */}
-      <Route path="/section/:id/titlePage" element={<TitlePage />} />
-      <Route path="/section/:id/sqftCalculator" element={<SqftCalculator />} />
+      <Route path="/project/:id/titlePage" element={<TitlePage />} />
+      <Route path="/project/:id/sqftCalculator" element={<SqftCalculator />} />
 
     </Routes>
   );

@@ -36,7 +36,7 @@ export async function getProjectData(id) {
   try {
     // Create a reference to the document with the given id in the 'projects' collection
     const docRef = doc(db, "projects", id);
-    
+
     // Retrieve the document snapshot from Firestore
     const docSnap = await getDoc(docRef);
     

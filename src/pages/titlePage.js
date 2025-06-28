@@ -35,7 +35,7 @@ function TitlePage() {
       try {
         // Call Firebase service to get the document snapshot for this project id
         const doc = await getProjectData(id);
-
+      
         // Check if the document exists in the database
         if (doc.exists()) {
           // If it exists, set project state with its data and id
@@ -43,6 +43,7 @@ function TitlePage() {
         } else {
           // If no document found, warn in console (could show UI message too)
           console.warn("no document");
+          setProject(false);
         }
       } catch (e) {
         // Log any error during fetching to the console
@@ -59,9 +60,7 @@ function TitlePage() {
 
   // While loading, show a simple loading message
   if (loading) return <p>Loading project...</p>;
-
-  // If loading is done but project is null, show a "not found" message
-  if (!project) return <p>Project not found.</p>;
+  if (project === false) return <p>Project not found.</p>;
 
   // Render the project details once data is loaded successfully
   return (

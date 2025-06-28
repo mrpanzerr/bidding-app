@@ -7,7 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getProjectData } from "../firebase/projectService";
 
 /** We're using the same use effect in here and in title page. should probably not do that
- * 
+ * and the routing to title page just opens a blank page
 */
 
 /**
@@ -27,11 +27,11 @@ function ProjectDashboard() {
   const navigate = useNavigate();
 
   const openTitlePage = (id) => {
-    navigate(`section/${id}/titlePage`)
+    navigate(`/project/${id}/titlePage`)
   };
 
   const openSectionForm = (id) => {
-    navigate(`/section/${id}/sqftCalculator`);
+    navigate(`/project/${id}/sqftCalculator`);
   };
 
    /**
@@ -75,8 +75,9 @@ function ProjectDashboard() {
     <div>
         <h1>{project.name} Dashboard</h1>
       {/* Square Foot Calculator button */}
-      <button onClick={openSectionForm}>Square Foot Calculator</button>
-      <button onClick={openTitlePage}>Title Page</button>
+      <button onClick={() => openTitlePage(project.id)}>Title Page</button>
+      <button onClick={() => openSectionForm(project.id)}>Square Foot Calculator</button>
+      {/* Add more project dashboard UI here */}
     </div>
   );
 }
