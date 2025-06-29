@@ -75,6 +75,9 @@ export async function addProject(projectName) {
     await addDoc(collection(db, "projects"), {
       name: projectName,
       createdAt: Timestamp.now(), // current server timestamp
+      dateSent: "",
+      jobAddress: "",
+      toAddress: "",
     });
   } catch (e) {
     // Log error if something goes wrong during creation

@@ -1,139 +1,366 @@
 import { useState } from "react"; // useState is a React hook that lets us add local state to a functional component.
 
 export default function SqftCalculator() {
-    // `rows` is our main state variable, an array where each element is an object
-    // representing a single form row. Each row has a `measurement`, `description`,
-    // and a `lineTotal`. Initially, we start with one blank row.
-    const [rows, setRows] = useState([{ measurement: '', description: '', lineTotal: 0 }]);
+    // Initialize state for sections. Each section has an id, name and a list of lines.
+  const [sections, setSections] = useState([
+    {
+      id: 1,
+      name: "Section Title",
+      lines: [{ id: 1, measurement: "", description: "", amount: 0 }],
+    },
+  ]);
 
-    // This function adds a single blank row to the end of the `rows` array.
-    // We use the spread operator (`...rows`) to copy all the existing row objects into a new array.
-    // Then we add a new row object to that array. Finally, we update the state with the new array.
-    const addRow = () => {
-        setRows([...rows, { measurement: '', description: '', lineTotal: 0 }]);
-    };
+  // Function to update the name of a specific section by ID in the sections array
+  const updateSectionName = (id, newName) => {
+    // Loop through all sections and return a new array
+    setSections(
+      sections.map((section) =>
+        // If this section's ID matches the one we're trying to update...
+        section.id === id
+          ? // ...return a new section object with the updated name
+            { ...section, name: newName }
+          : // ...otherwise return the section unchanged
+            section
+      )
+    );
+  };
 
-    // This function adds ten blank rows to the existing array of rows.
-    // We use Array.from to genera5te an array of 10 identical row objects.
-    // Then we use the spread operator to append all of them to the current state.
-    const addTen = () => {
-        const newRows = Array.from({ length: 10 }, () => ({
-            measurement: '',
-            description: '',
-            lineTotal: 0
-        }));
-        setRows([...rows, ...newRows]);
-    };
-
-    // This function deletes a specific row based on its index.
-    // `index` is the position of the row in the array (0 for the first row, 1 for the second, etc.).
-    // `rows.filter` creates a new array that includes all rows except the one with the matching index.
-    const deleteRow = (index) => {
-        const newRows = rows.filter((_, i) => i !== index);
-        setRows(newRows);
-    };
-
-    // This function deletes the last 10 rows in the array.
-    // `rows.slice(0, Math.max(rows.length - 10, 0))` keeps only the first `length - 10` rows.
-    // If there are fewer than 10 rows, it returns an empty array.
-    const deleteTen = () => {
-        setRows(rows.slice(0, Math.max(rows.length - 10, 0)));
-    }
-
-    // This function handles changes to individual row fields.
-    // It takes in three arguments:
-    // - `index`: the position of the row in the array
-    // - `field`: a string ('measurement' or 'description') indicating which property to update
-    // - `value`: the new value to set for the specified field
-    // We make a copy of the `rows` array, update the specific field of the appropriate row,
-    // and then update the state with this modified array.
-    const handleRowChange = (index, field, value) => {
-        const newRows = [...rows];
-        newRows[index][field] = value;
-        setRows(newRows);
-    };
-
-    // This function is triggered when the user presses a key inside the measurement input.
-    // If the key is "Enter" or "Tab", it calls `calculateMeasurement` to compute the area.
-    const handleKeyDown = (e, index) => {
-        if (e.key === "Enter" || e.key === "Tab") {
-            calculateMeasurement(e.target.value, index);
+  // Function to update a line inside a section by section ID and line ID
+  const updateLine = (sectionId, lineId, key, value) => {
+    // Go through each section
+    setSections(
+      sections.map((section) => {
+        if (section.id === sectionId) {
+          // For the matching section, update the specific line
+          return {
+            ...section,
+            lines: section.lines.map(
+              (line) =>
+                line.id === lineId
+                  ? { ...line, [key]: value } // Update the specified key
+                  : line // Keep other lines the same
+            ),
+          };
         }
+        return section;
+      })
+    );
+  };
+
+  // Function to generate unique ID
+  const generateId = () => Date.now() + Math.random();
+
+  // Function to add a new line to a given section
+  const addLine = (sectionId) => {
+    setSections(
+      sections.map((section) => {
+        if (section.id !== sectionId) return section; // Leave other sections untocuhed
+
+        // Create a new line item with unique ID and default values
+        const newLine = {
+          id: generateId,
+          measurement: "",
+          description: "",
+          amount: 0,
+        };
+
+        // Append the new line to the section's lines array
+        return {
+          ...section,
+          lines: [...section.lines, newLine],
+        };
+      })
+    );
+  };
+
+  // Function to add ten lines to a section
+  const addTenLines = (sectionId) => {
+    const newLines = Array.from({ length: 10 }, () => ({
+      id: generateId,
+      measurement: "",
+      description: "",
+      amount: 0,
+    }));
+    setSections(
+      sections.map((section) => {
+        if (section.id !== sectionId) return section;
+        return {
+          ...section,
+          lines: [...section.lines, ...newLines],
+        };
+      })
+    );
+  };
+
+  // Function to delete a specific line from a section
+  const deleteLine = (sectionId, lineId) => {
+    setSections(
+      sections.map((section) => {
+        if (section.id !== sectionId) return section;
+        return {
+          ...section,
+          lines: section.lines.filter((line) => line.id !== lineId),
+        };
+      })
+    );
+  };
+
+  // Function to delete the last ten lines from a section
+  const deleteTenLines = (sectionId) => {
+    setSections(
+      sections.map((section) => {
+        if (section.id !== sectionId) return section;
+        return {
+          ...section,
+          lines: section.lines.slice(0, Math.max(section.lines.length - 10, 0)),
+        };
+      })
+    );
+  };
+
+  // Function to add a whole new section to the page
+  const addSection = () => {
+    setSections([
+      ...sections, // Keep existing sections
+      {
+        id: Date.now(),
+        name: "Section Title",
+        lines: [
+          {
+            id: Date.now(),
+            measurement: "",
+            description: "",
+            amount: 0,
+          },
+        ],
+      },
+    ]);
+  };
+
+  const deleteSection = (sectionId) => {
+    setSections(sections.filter((section) => section.id !== sectionId));
+  };
+
+  // Function to calculate the area from a measurement string (e.g. "10 x 12") and store in amount
+  const calculateMeasurement = (measurement, sectionId, lineId) => {
+    const parts = measurement?.split(/x/i).map((p) => p.trim());
+    const nums = parts.map((p) => parseFloat(p));
+    const product = nums[0] * nums[1] || 0;
+
+    // Only update if not manually edited
+    updateLine(sectionId, lineId, "amount", product);
+  };
+
+  // Helper functionm to calculate the total amount for a section
+  const sectionTotal = (lines) =>
+    Array.isArray(lines)
+      ? lines.reduce((sum, line) => sum + Number(line.amount), 0)
+      : 0;
+
+  // Calculate the grand total b y summing all section totals
+  const grandTotal = Array.isArray(sections)
+    ? sections.reduce(
+        (total, section) => total + sectionTotal(section?.lines),
+        0
+      )
+    : 0;
+
+  // Export data to JSON
+  const exportToJSON = () => {
+    const dataStr = JSON.stringify(sections, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "sqft_data.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // Import data from JSON
+  const importFromJSON = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const importedData = JSON.parse(e.target.result);
+        setSections(importedData);
+      } catch (err) {
+        alert("Invalid JSON");
+      }
     };
+    reader.readAsText(file);
+  };
 
-    // This function takes a measurement string (like "60 x 114") and an index.
-    // It splits the string by the letter "x" (case-insensitive) to separate width and height.
-    // `split(/x/i)` splits on either "x" or "X".
-    // `map(p => p.trim())` removes any extra spaces from each part.
-    // `parseFloat(p)` converts each cleaned string to a number.
-    // We multiply the two numbers together to get the area (or 0 if invalid).
-    // Then we update the corresponding row’s `lineTotal` in state.
-    const calculateMeasurement = (measurement, index) => {
-        const parts = measurement?.split(/x/i).map((p) => p.trim());
-        const nums = parts.map((p) => parseFloat(p));
-        const product = nums[0] * nums[1] || 0;
-        const newRows = [...rows];
-        newRows[index].lineTotal = product;
-        setRows(newRows);
-    };
+  // Render the page
+  return (
+    <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+      {/* Render each section block */}
+      {sections.map((section) => (
+        <div
+          key={section.id}
+          style={{
+            border: "1px solid gray",
+            padding: "1rem",
+            marginBottom: "1rem",
+            borderRadius: "8px",
+          }}
+        >
+          {/* Editable input field for section name */}
+          <input
+            type="text"
+            value={section.name}
+            onChange={(e) => updateSectionName(section.id, e.target.value)}
+            style={{
+              fontSize: "1.5rem",
+              fontWeight: "bold",
+              border: "none",
+              borderBottom: "1px solid lightgray",
+              marginBottom: "1rem",
+              width: "100%",
+            }}
+          />
 
-    // This constant calculates the sum of all `lineTotal` values across all rows.
-    // `rows.reduce()` goes through each row, adds its lineTotal to the running total (`sum`),
-    // and returns the grand total. We use `Number()` to make sure the values are numeric.
-    const grandTotal = rows.reduce((sum, row) => sum + Number(row.lineTotal), 0);
+          {/* Loop through all line items in this section */}
+          {Array.isArray(section.lines) &&
+            section.lines.map((line) => (
+              <div
+                key={line.id}
+                style={{
+                  display: "flex",
+                  gap: "1rem",
+                  marginTop: "0.5rem",
+                  alignItems: "center",
+                }}
+              >
+                {/* Measurement input field */}
+                <input
+                  type="text"
+                  placeholder="ex. 60 x 114"
+                  value={line.measurement}
+                  onChange={(e) =>
+                    updateLine(
+                      section.id,
+                      line.id,
+                      "measurement",
+                      e.target.value
+                    )
+                  }
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === "Tab") {
+                      calculateMeasurement(e.target.value, section.id, line.id);
+                    }
+                  }}
+                  style={{ flex: 1, padding: "4px" }}
+                />
 
-    return (
-        <div>
-            {/* Here we loop over each row in the `rows` array using `map()`.
-                For each row, we render three inputs (measurement, description, lineTotal)
-                and a delete button. We use the index of the row as the key. */}
-            {rows.map((row, index) => (
-                <div key={index}>
-                    {/* This input holds the measurement string.
-                        When changed, it updates the corresponding field in state.
-                        When the user presses Enter or Tab, it triggers the calculation. */}
-                    <input
-                        value={row.measurement}
-                        onChange={(e) => handleRowChange(index, 'measurement', e.target.value)}
-                        onKeyDown={(e) => handleKeyDown(e, index)}
-                        placeholder="e.g., 60 x 114"
-                    />
+                {/* Description input field */}
+                <input
+                  type="text"
+                  placeholder="Description"
+                  value={line.description}
+                  onChange={(e) =>
+                    updateLine(
+                      section.id,
+                      line.id,
+                      "description",
+                      e.target.value
+                    )
+                  }
+                  style={{ flex: 1, padding: "4px" }}
+                />
 
-                    {/* This input holds the description text.
-                        It updates the corresponding field in the state when changed. */}
-                    <input
-                        value={row.description}
-                        onChange={(e) => handleRowChange(index, 'description', e.target.value)}
-                        placeholder="Description"
-                    />
-
-                    {/* This input displays the calculated line total.
-                        It is read-only to prevent user editing. */}
-                    <input
-                        type="text"
-                        value={row.lineTotal}
-                        readOnly
-                        placeholder="Line Total"
-                    />
-
-                    {/* Clicking this button will delete the row at this index. */}
-                    <button onClick={() => deleteRow(index)}>Delete</button>
-                </div>
+                {/* Amount input field */}
+                <input
+                  type="number"
+                  placeholder="Amount"
+                  value={line.amount}
+                  readOnly
+                  style={{ width: "100px", padding: "4px" }}
+                />
+                <button onClick={() => deleteLine(section.id, line.id)}>
+                  Delete
+                </button>
+              </div>
             ))}
 
-            {/* Buttons for adding or removing multiple rows at once. */}
-            <br />
-            <button onClick={addRow}>Add Row</button>
-            <button onClick={addTen}>10 Rows</button>
-            <button onClick={deleteTen}>Delete 10</button>
+          {/* Button to add a new line to this section */}
+          <button
+            onClick={() => addLine(section.id)}
+            style={{ marginTop: "0.5rem", marginRight: "0.2rem" }}
+          >
+            + Add Line
+          </button>
 
-            {/* This section displays the grand total of all row totals.
-                It's presented in three read-only input fields for layout clarity. */}
-            <div>
-                <input type="text" value="" readOnly />
-                <input type="text" value="Grand Total" readOnly />
-                <input type="text" value={grandTotal} readOnly />
-            </div>
+          {/* Button to add a new line to this section */}
+          <button
+            onClick={() => addTenLines(section.id)}
+            style={{ marginTop: "0.5rem", marginRight: "0.2rem" }}
+          >
+            + 10 Lines
+          </button>
+
+          {/* Button to add a new line to this section */}
+          <button
+            onClick={() => deleteTenLines(section.id)}
+            style={{ marginTop: "0.5rem", marginRight: "0.2rem" }}
+          >
+            - 10 Lines
+          </button>
+
+          {/* Button to delete a section */}
+          <button
+            onClick={() => deleteSection(section.id)}
+            style={{ marginTop: "0.5rem", color: "red" }}
+          >
+            Delete Section
+          </button>
+
+          {/* Show total for this section */}
+          <div
+            style={{
+              fontWeight: "bold",
+              marginTop: "0.5rem",
+              textAlign: "right",
+            }}
+          >
+            Section Total: {sectionTotal(section.lines).toFixed(2)}
+          </div>
         </div>
-    );
+      ))}
+
+      {/* Button to add a new section to the form */}
+      <button onClick={addSection} style={{ marginBottom: "1rem" }}>
+        + Add Section
+      </button>
+
+      {/* Display the total of all section totals */}
+      <h2 style={{ textAlign: "right" }}>
+        Grand Total: {grandTotal.toFixed(2)}
+      </h2>
+      <div
+        style={{
+          display: "flex",
+          gap: "1rem",
+          marginTop: "1rem",
+          justifyContent: "flex-end",
+        }}
+      >
+        <button onClick={exportToJSON}>Export</button>
+
+        <label style={{ cursor: "pointer", display: "inline-block" }}>
+          Import
+          <input
+            type="file"
+            accept=".json"
+            onChange={importFromJSON}
+            style={{ display: "none" }}
+          />
+        </label>
+      </div>
+    </div>
+  );
 }

@@ -67,6 +67,9 @@ function TitlePage() {
     <div>
       {/* Display project details */}
       <TitlePageHeader />
+      <p>To: {project.toAddress}</p>
+      <p>Job: {project.jobAddress}</p>
+      <p>Date: {project.dateSent}</p>
       {/* Add more project details UI here */}
     </div>
   );

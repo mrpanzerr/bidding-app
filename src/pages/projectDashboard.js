@@ -6,10 +6,6 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { getProjectData } from "../firebase/projectService";
 
-/** We're using the same use effect in here and in title page. should probably not do that
- * and the routing to title page just opens a blank page
-*/
-
 /**
  * TitlePage component displays details for a single project.
  * It fetches the project data based on the "id" URL parameter.
