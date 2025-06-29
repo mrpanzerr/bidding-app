@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 
 // Import functions that interact with your Firebase database
-import { addProject, deleteProject, fetchProjects, renameProject } from "../firebase/projectService";
+import { addProject, deleteProject, fetchProjects, getProjectData, renameProject } from "../firebase/projectService";
 
 /**
  * Custom React hook to manage project data and related operations.
@@ -92,5 +92,52 @@ export function useProjects() {
     addNewProject,           // Function to add a new project
     renameExistingProject,   // Function to rename an existing project
     deleteExistingProject,   // Function to delete a project
+  };
+}
+
+// Hook for single project
+export function useProject(id) {
+  const [project, setProject] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!id) return;
+
+    let isMounted = true; // declare here
+
+    const loadProject = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const data = await getProjectData(id);
+
+        if (data.exists()) {
+          if (isMounted) setProject({ id: data.id, ...data.data() });
+        } else {
+          if (isMounted) {
+            console.warn("No document found for this ID");
+            setProject(false);
+          }
+        }
+      } catch (e) {
+        if (isMounted) setError(e);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
+    loadProject();
+
+    return () => {
+      isMounted = false; // cleanup on unmount
+    };
+  }, [id]);
+
+  return {
+    project,
+    loading,
+    error,
   };
 }

@@ -1,17 +1,15 @@
 // Importing Route and Routes from the "react-router-dom" package.
 import { Route, Routes } from "react-router-dom";
-
 // Importing the component for the Dashboard page.
 // This will be shown when the user is on the home page ("/").
 import Dashboard from './pages/dashboard';
-
+// Importing the component for the project dashboard page.
+import ProjectDashboard from "./pages/projectDashboard";
 // Importing the component for an individual project page.
 // This will be shown when the user visits a specific project's page, like "/project/123".
 import TitlePage from './pages/titlePage';
-
-import SqftCalculator from './components/sqftCalculator';
-
-import ProjectDashboard from "./pages/projectDashboard";
+// Importing the component for the square footage calculator page.
+import SqftCalculator from './pages/sqftCalculator';
 
 // Main App component that sets up the routing for the application.
 function App() {

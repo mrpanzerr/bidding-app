@@ -165,36 +165,6 @@ export default function SqftCalculator() {
       )
     : 0;
 
-  // Export data to JSON
-  const exportToJSON = () => {
-    const dataStr = JSON.stringify(sections, null, 2);
-    const blob = new Blob([dataStr], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "sqft_data.json";
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
-  // Import data from JSON
-  const importFromJSON = (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      try {
-        const importedData = JSON.parse(e.target.result);
-        setSections(importedData);
-      } catch (err) {
-        alert("Invalid JSON");
-      }
-    };
-    reader.readAsText(file);
-  };
-
   // Render the page
   return (
     <div style={{ maxWidth: "800px", margin: "0 auto" }}>
@@ -341,26 +311,6 @@ export default function SqftCalculator() {
       <h2 style={{ textAlign: "right" }}>
         Grand Total: {grandTotal.toFixed(2)}
       </h2>
-      <div
-        style={{
-          display: "flex",
-          gap: "1rem",
-          marginTop: "1rem",
-          justifyContent: "flex-end",
-        }}
-      >
-        <button onClick={exportToJSON}>Export</button>
-
-        <label style={{ cursor: "pointer", display: "inline-block" }}>
-          Import
-          <input
-            type="file"
-            accept=".json"
-            onChange={importFromJSON}
-            style={{ display: "none" }}
-          />
-        </label>
-      </div>
     </div>
   );
 }
