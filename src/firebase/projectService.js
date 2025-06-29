@@ -13,9 +13,11 @@ import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, setDoc, Timestamp 
 import { db } from './firebase';
 
 /**
- * Fetch all projects from the 'projects' collection in Firestore.
- * Returns an array of project objects, each with its document id and data.
+ * Fetch all projects from the 'projects' collection.
+ *
+ * @returns {Promise<Array<{id: string, [key: string]: any}>>} An array of project objects including their document IDs and data.
  */
+
 export async function fetchProjects() {
   // Get all documents in the 'projects' collection
   const querySnapshot = await getDocs(collection(db, 'projects'));
@@ -29,8 +31,10 @@ export async function fetchProjects() {
 
 /**
  * Fetch data for a single project by its document ID.
- * Returns the document snapshot containing the project data.
- * Throws an error if something goes wrong.
+ *
+ * @param {string} id - The document ID of the project to retrieve.
+ * @returns {Promise<import('firebase/firestore').DocumentSnapshot>} The document snapshot containing the project data.
+ * @throws Will throw an error if the document cannot be retrieved.
  */
 export async function getProjectData(id) {
   try {
@@ -52,7 +56,10 @@ export async function getProjectData(id) {
 
 /**
  * Rename an existing project by updating its 'name' field.
- * Uses setDoc with { merge: true } to update only the name without overwriting other fields.
+ *
+ * @param {string} id - The document ID of the project to rename.
+ * @param {string} newName - The new name to assign to the project.
+ * @returns {Promise<void>} Resolves when the update is complete.
  */
 export async function renameProject(id, newName) {
   try {
@@ -67,7 +74,10 @@ export async function renameProject(id, newName) {
 }
 
 /**
- * Add a new project document to the 'projects' collection with a name and timestamp.
+ * Add a new project to the 'projects' collection.
+ *
+ * @param {string} projectName - The name of the new project.
+ * @returns {Promise<void>} Resolves when the project has been added.
  */
 export async function addProject(projectName) {
   try {
@@ -86,7 +96,10 @@ export async function addProject(projectName) {
 }
 
 /**
- * Delete a project document by its id from the 'projects' collection.
+ * Delete a project from the 'projects' collection by ID.
+ *
+ * @param {string} id - The ID of the project to delete.
+ * @returns {Promise<void>} Resolves when the project is deleted.
  */
 export async function deleteProject(id) {
   try {

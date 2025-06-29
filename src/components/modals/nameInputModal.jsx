@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 // Import CSS module for styling the modal
-import styles from "../styles/nameInputModal.module.css";
+import styles from "../../styles/nameInputModal.module.css";
 
 /**
  * NameInputModal Component

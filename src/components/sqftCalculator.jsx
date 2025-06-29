@@ -151,7 +151,7 @@ export default function SqftCalculator() {
     updateLine(sectionId, lineId, "amount", product);
   };
 
-  // Helper functionm to calculate the total amount for a section
+  // Helper function to calculate the total amount for a section
   const sectionTotal = (lines) =>
     Array.isArray(lines)
       ? lines.reduce((sum, line) => sum + Number(line.amount), 0)

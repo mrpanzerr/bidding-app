@@ -8,9 +8,13 @@ import { doc, getDoc } from "firebase/firestore";
 // Import your Firestore database instance from your firebase config file
 import { db } from "./firebase";
 
-/** * Fetch all documents from the 'titlePage' collection in Firestore.
- * Returns an array of objects, each containing the document id and its data.
- * Throws an error if something goes wrong during the fetch operation.
+/**
+ * Fetches data from a specific document in the 'titlePageData' collection.
+ *
+ * Since the collection only contains a single known document, it is accessed directly by ID.
+ *
+ * @returns {Promise<{ id: string, [key: string]: any }>} An object containing the document ID and its data fields.
+ * @throws Will throw an error if the document doesn't exist or if fetching fails.
  */
 export async function fetchTitlePageData() {
   try {

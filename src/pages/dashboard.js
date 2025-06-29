@@ -4,10 +4,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // Import UI components for modals and project items
-import DeleteModal from "../components/deleteModal";
-import NewProjectModal from "../components/newProjectModal";
+import DeleteModal from "../components/modals/deleteModal";
+import NewProjectModal from "../components/modals/newProjectModal";
+import RenameModal from "../components/modals/renameModal";
 import ProjectItem from "../components/projectItem";
-import RenameModal from "../components/renameModal";
 
 // Import custom hook that handles project data and operations
 import { useProjects } from "../hooks/useProjects";
