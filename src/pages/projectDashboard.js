@@ -1,6 +1,6 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { useProject } from "../hooks/useProjects";
 
@@ -35,19 +35,18 @@ function ProjectDashboard() {
     setNewCalculator(true); // show new calculator modal
   };
 
-  const loadCalculators = async () => {
+  const loadCalculators = useCallback(async () => {
     try {
       const data = await getAllCalculators(id);
-      console.log("Fetched calculators:", data); // ✅ ADD THIS
       setCalculators(data);
     } catch (e) {
       console.error("Error loading calculators:", e);
     }
-  };
+  }, [id]);
 
   useEffect(() => {
     if (id) loadCalculators();
-  }, [id]);
+  }, [id, loadCalculators]);
 
   const handleNewSqftCalculator = async () => {
     const trimmed = calculatorName.trim();
