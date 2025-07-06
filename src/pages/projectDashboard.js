@@ -1,15 +1,12 @@
+import { useState } from "react";
+
 import { Link, useNavigate, useParams } from "react-router-dom";
-
-import { useCallback, useEffect, useState } from "react";
-
-import { useProject } from "../hooks/useProjects";
 
 import NewCalculatorModal from "../components/modals/newCalculatorModal";
 
-import {
-  addCalculator,
-  getAllCalculators,
-} from "../firebase/calculatorServices";
+import { useProject } from "../hooks/useProjects";
+
+import { useCalculators } from "../hooks/useCalculator";
 
 /**
  * TitlePage component displays details for a single project.
@@ -18,12 +15,16 @@ import {
 function ProjectDashboard() {
   // Extract the "id" parameter from the URL (e.g. /project/:id)
   const { id } = useParams();
-
   const { project, loading, error } = useProject(id);
+
+  const {
+    calculators,
+    addNewCalculator,
+    loading: calcLoading,
+  } = useCalculators(id);
 
   const [newCalculator, setNewCalculator] = useState(false);
   const [calculatorName, setCalculatorName] = useState("");
-  const [calculators, setCalculators] = useState([]);
 
   const navigate = useNavigate();
 
@@ -35,26 +36,12 @@ function ProjectDashboard() {
     setNewCalculator(true); // show new calculator modal
   };
 
-  const loadCalculators = useCallback(async () => {
-    try {
-      const data = await getAllCalculators(id);
-      setCalculators(data);
-    } catch (e) {
-      console.error("Error loading calculators:", e);
-    }
-  }, [id]);
-
-  useEffect(() => {
-    if (id) loadCalculators();
-  }, [id, loadCalculators]);
-
   const handleNewSqftCalculator = async () => {
     const trimmed = calculatorName.trim();
     if (!trimmed) return;
-    await addCalculator(id, "sqft", trimmed);
+    await addNewCalculator(id, "sqft", trimmed);
     setCalculatorName("");
     setNewCalculator(false);
-    await loadCalculators();
   };
 
   // While loading, show a simple loading message
@@ -89,7 +76,9 @@ function ProjectDashboard() {
       {/* MAIN CONTENT */}
       <main style={{ flex: 1, padding: "1rem" }}>
         <h2>{project.name} Calculators</h2>
-        {calculators.length === 0 ? (
+        {calcLoading ? (
+          <p>Loading calculators...</p>
+        ) : calculators.length === 0 ? (
           <p>No calculators yet.</p>
         ) : (
           <ul>

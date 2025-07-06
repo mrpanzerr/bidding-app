@@ -32,14 +32,3 @@ export async function addCalculator(projectId, calculatorType, name) {
         throw e;
     }
 }
-
-// export async function updateSectionName(projectId, calculatorName, calculatorId, sectionId, newName) {
-//     try {
-//         const docRef = doc(db, "projects", projectId, calculatorName, calculatorId, sectionId);
-//         await setDoc(docRef, { name: newName }, { merge: true });
-//     } catch (e) {
-//         console.error("Error updating section name", e);
-//         throw e;
-//     }
-// }
-
