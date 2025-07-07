@@ -21,9 +21,6 @@ function TitlePage() {
 
   const { project, loading, error } = useProject(id);
 
-  
-  
-
   // While loading, show a simple loading message
   if (loading) return <p>Loading project...</p>;
   // If there's an error, show it (could be a network issue, etc.)

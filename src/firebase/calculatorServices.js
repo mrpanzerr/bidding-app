@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, getDocs } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { db } from "./firebase";
 
 /**
@@ -16,6 +16,18 @@ export async function getAllCalculators(projectId) {
         id: doc.id,
         ...doc.data(),
     }));
+}
+
+export async function getCalculator(projectId, calculatorId) {
+    const calculatorRef = doc(db, "projects", projectId, "calculators", calculatorId);
+    const calculatorSnap = await getDoc(calculatorRef);
+    if (!calculatorSnap.exists()) {
+        throw new Error("Calculator not found");
+    }
+    return {
+        id: calculatorSnap.id,
+        ...calculatorSnap.data(),
+    };
 }
 
 export async function addCalculator(projectId, calculatorType, name) {

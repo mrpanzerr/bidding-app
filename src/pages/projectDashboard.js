@@ -1,12 +1,12 @@
 import { useState } from "react";
 
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import NewCalculatorModal from "../components/modals/newCalculatorModal";
 
 import { useProject } from "../hooks/useProjects";
 
-import { useCalculators } from "../hooks/useCalculator";
+import { useCalculator } from "../hooks/useCalculator";
 
 /**
  * TitlePage component displays details for a single project.
@@ -21,7 +21,7 @@ function ProjectDashboard() {
     calculators,
     addNewCalculator,
     loading: calcLoading,
-  } = useCalculators(id);
+  } = useCalculator(id);
 
   const [newCalculator, setNewCalculator] = useState(false);
   const [calculatorName, setCalculatorName] = useState("");
@@ -29,6 +29,10 @@ function ProjectDashboard() {
   const navigate = useNavigate();
 
   const openTitlePage = () => navigate(`/project/${id}/titlePage`);
+
+  const openCalculator = (calculatorId) => {
+    navigate(`/project/${id}/calculator/${calculatorId}`);
+  };
 
   const openNewCalculatorModal = (e) => {
     e.stopPropagation();
@@ -84,12 +88,12 @@ function ProjectDashboard() {
           <ul>
             {calculators.map((calc) => (
               <li key={calc.id}>
-                <Link
-                  to={`/project/${id}/calculator/${calc.id}`}
-                  style={{ textDecoratyion: "none", color: "inherit" }}
+                <button
+                  onClick={() => openCalculator(calc.id)}
+                  style={{ background: "none", border: "2px", color: "blue", textDecoration: "none", cursor: "pointer" }}
                 >
                   {calc.name} ({calc.type})
-                </Link>
+                </button>
               </li>
             ))}
           </ul>

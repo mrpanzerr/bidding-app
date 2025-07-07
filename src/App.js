@@ -11,6 +11,8 @@ import TitlePage from './pages/titlePage';
 // Importing the component for the square footage calculator page.
 import SqftCalculator from './pages/sqftCalculator';
 
+import CalculatorPage from './pages/calculatorPage';
+
 // Main App component that sets up the routing for the application.
 function App() {
   return (
@@ -28,6 +30,7 @@ function App() {
       {/* These Routes handle the title and calculator pages */}
       <Route path="/project/:id/titlePage" element={<TitlePage />} />
       <Route path="/project/:id/sqftCalculator" element={<SqftCalculator />} />
+      <Route path="/project/:id/calculator/:calculatorId" element={<CalculatorPage />} />
 
     </Routes>
   );

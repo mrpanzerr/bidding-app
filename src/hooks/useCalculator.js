@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { addCalculator, getAllCalculators } from "../firebase/calculatorServices";
+import { addCalculator, getAllCalculators, getCalculator } from "../firebase/calculatorServices";
 
-export function useCalculators(projectId) {
+export function useCalculator(projectId) {
     const [calculators, setCalculators] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);  
@@ -28,7 +28,7 @@ export function useCalculators(projectId) {
         loadCalculators();
     }, [loadCalculators]);
 
-    const addNewCalculator = async (type, name) => {
+    const addNewCalculator = async (projectId, type, name) => {
         if (!projectId || !name.trim()) return; // no project or empty name
 
         try {
@@ -48,3 +48,30 @@ export function useCalculators(projectId) {
         loadCalculators,      // Function to manually reload calculators
     };
 }
+
+export function useCalculatorById(projectId, calculatorId) {
+    const [calculator, setCalculator] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        if (!projectId || !calculatorId) return; // no project or calculator ID
+
+        setLoading(true);
+        setError(null);
+
+        getCalculator(projectId, calculatorId)
+            .then(data => {
+                setCalculator(data);
+            })
+            .catch(e => {
+                console.error("Error loading calculator:", e);
+                setError(e);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }, [projectId, calculatorId]);
+
+    return { calculator, loading, error };
+}   
