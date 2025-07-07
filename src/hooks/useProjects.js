@@ -104,7 +104,7 @@ export function useProject(id) {
   useEffect(() => {
     if (!id) return;
 
-    let isMounted = true; // declare here
+    let isMounted = true;
 
     const loadProject = async () => {
       setLoading(true);

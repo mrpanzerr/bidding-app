@@ -92,7 +92,7 @@ function ProjectDashboard() {
                   onClick={() => openCalculator(calc.id)}
                   style={{ background: "none", border: "2px", color: "blue", textDecoration: "none", cursor: "pointer" }}
                 >
-                  {calc.name} ({calc.type})
+                  {calc.name}
                 </button>
               </li>
             ))}

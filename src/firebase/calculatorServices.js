@@ -35,12 +35,40 @@ export async function addCalculator(projectId, calculatorType, name) {
         const calculatorRef = collection(doc(db, "projects", projectId), "calculators");
 
         await addDoc(calculatorRef, {
-            type: calculatorType,
             name: name,
             createdAt: new Date(),
+            section: [{
+                id: Date.now() * Math.random(),
+                title: "Section Title",
+                lines: [{
+                    id: Date.now() * Math.random(),
+                    measurement: "",
+                    description: "",
+                    other: "",
+                    amount: 0
+                }],
+                total: 0,
+            }],
+            grandTotal: 0,
         });
     } catch (e) {
         console.error("Error adding calculator", e);
+        throw e;
+    }
+}
+
+export async function updateSectionName(projectId, calculatorId, newName) {
+    try {
+        const calculatorRef = doc(db, "project", projectId, "calculators", calculatorId);
+        const calculatorSnap = await getDoc(calculatorRef);
+        if (!calculatorSnap.exists()) {
+            throw new Error("Calculator not found");
+        }
+        await calculatorRef.update({
+            sectionName: newName,
+        });
+    } catch (e) {
+        console.error("Error updating section name", e);
         throw e;
     }
 }
