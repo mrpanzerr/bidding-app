@@ -30,7 +30,8 @@ function App() {
       {/* These Routes handle the title and calculator pages */}
       <Route path="/project/:id/titlePage" element={<TitlePage />} />
       <Route path="/project/:id/sqftCalculator" element={<SqftCalculator />} />
-      <Route path="/project/:id/calculator/:calculatorId" element={<CalculatorPage />} />
+      <Route path="/project/:id/calculator/:calculatorId/:type" element={<CalculatorPage />} />
+
 
     </Routes>
   );

@@ -6,7 +6,7 @@ import NewCalculatorModal from "../components/modals/newCalculatorModal";
 
 import { useProject } from "../hooks/useProjects";
 
-import { useCalculator } from "../hooks/useCalculator";
+import { useCalculators } from "../hooks/useCalculator";
 
 /**
  * TitlePage component displays details for a single project.
@@ -21,7 +21,7 @@ function ProjectDashboard() {
     calculators,
     addNewCalculator,
     loading: calcLoading,
-  } = useCalculator(id);
+  } = useCalculators(id);
 
   const [newCalculator, setNewCalculator] = useState(false);
   const [calculatorName, setCalculatorName] = useState("");
@@ -30,8 +30,8 @@ function ProjectDashboard() {
 
   const openTitlePage = () => navigate(`/project/${id}/titlePage`);
 
-  const openCalculator = (calculatorId) => {
-    navigate(`/project/${id}/calculator/${calculatorId}`);
+  const openCalculator = (calculatorId, type) => {
+    navigate(`/project/${id}/calculator/${calculatorId}/${type}`);
   };
 
   const openNewCalculatorModal = (e) => {
@@ -43,7 +43,7 @@ function ProjectDashboard() {
   const handleNewSqftCalculator = async () => {
     const trimmed = calculatorName.trim();
     if (!trimmed) return;
-    await addNewCalculator(id, "sqft", trimmed);
+    await addNewCalculator(id, trimmed, "SqftCalculator");
     setCalculatorName("");
     setNewCalculator(false);
   };
@@ -89,7 +89,7 @@ function ProjectDashboard() {
             {calculators.map((calc) => (
               <li key={calc.id}>
                 <button
-                  onClick={() => openCalculator(calc.id)}
+                  onClick={() => openCalculator(calc.id, calc.type)}
                   style={{ background: "none", border: "2px", color: "blue", textDecoration: "none", cursor: "pointer" }}
                 >
                   {calc.name}
