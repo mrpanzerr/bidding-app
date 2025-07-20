@@ -1,37 +1,39 @@
-// Import React hooks for managing state and side effects
 import { useEffect, useState } from 'react';
-
-// Import function to fetch title page data from your Firebase service
 import { fetchTitlePageData } from '../firebase/titlePageServices';
 
+/**
+ * Custom hook for managing title page data.
+ * Handles data fetching, loading state, and error state.
+ */
 export function useTitlePage() {
-    const [titlePageData, setTitlePageData] = useState(null); // State to hold title page data
-    const [loading, setLoading] = useState(true); // State to track loading status
-    const [error, setError] = useState(null); // State to hold any error
+    const [titlePageData, setTitlePageData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         loadTitlePageData();
     }, []);
 
+    // Fetch title page data from the backend service.
     const loadTitlePageData = async () => {
-        setLoading(true); // Set loading to true before fetching data
-        setError(null); // Clear any previous error
+        setLoading(true);
+        setError(null);
 
         try {
-            const data = await fetchTitlePageData(); // Fetch title page data from Firebase
-            setTitlePageData(data); // Store the fetched data in state
+            const data = await fetchTitlePageData();
+            setTitlePageData(data);
         } catch (e) {
-            setError(e); // Set error state if fetching fails
+            setError(e);
         } finally {
-            setLoading(false); // Set loading to false after fetching is done
+            setLoading(false);
         }
     };
 
-    // Return a;; state and data needed by components using this hook
+    // Expose data and utilities to components.
     return {
-        titlePageData, // The fetched title page data
-        loading, // Loading status
-        error, // Any error that occurred during fetching
-        loadTitlePageData, // Function to manually reload title page data
+        titlePageData,
+        loading,
+        error,
+        loadTitlePageData,
     };
 }

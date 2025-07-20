@@ -1,9 +1,21 @@
-
 // Import custom hook to manage title page data and loading state
 import { useTitlePage } from '../hooks/useTitlePage';
 
 import styles from "../styles/titlePageHeader.module.css";
 
+/**
+ * TitlePageHeader component displays company information in the title page header.
+ * It uses the `useTitlePage` hook to fetch data and handle loading and error states.
+ * 
+ * @param {Object} props - Component props.
+ * @param {string} props.company - Company name (unused, replaced by hook data).
+ * @param {string} props.companyAddress - Company address (unused, replaced by hook data).
+ * @param {string} props.contact1 - First contact number (unused, replaced by hook data).
+ * @param {string} props.contact2 - Second contact number (unused, replaced by hook data).
+ * @param {string} props.companyEmail - Company email (unused, replaced by hook data).
+ * 
+ * @returns {JSX.Element} The rendered title page header.
+ */
 function TitlePageHeader({
     company,
     companyAddress,
@@ -14,13 +26,10 @@ function TitlePageHeader({
     // Use the custom hook to get title page data and loading state
     const { titlePageData, loading, error } = useTitlePage();
 
-    // If loading, show a simple loading message
     if (loading) return <p>Loading title header...</p>;
 
-    // If there's an error, display it
     if (error) return <p>Error loading title page: {error.message}</p>;
 
-    // Render the title page header with company details
     return (
         <div className={styles.titlePage}>
             <h1>{titlePageData.company}</h1>

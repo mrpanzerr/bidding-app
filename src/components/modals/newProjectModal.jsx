@@ -3,31 +3,28 @@ import NameInputModal from "./nameInputModal";
 
 /**
  * NewProjectModal Component
- * 
- * This component shows a modal popup that lets the user name a new project.
- * 
- * It uses the shared NameInputModal, which includes:
- * - A label ("Name Project:")
- * - A text input
- * - "Save" and "Cancel" buttons
- * 
- * Props:
- * - projectName:        (string) The current value of the name input
- * - setProjectName:     (function) Updates the name input when the user types
- * - onSave:             (function) Called when the user clicks "Save"
- * - onCancel:           (function) Called when the user clicks "Cancel"
+ *
+ * Displays a modal popup allowing the user to enter a name for a new project.
+ * Wraps the shared NameInputModal component which provides input and action buttons.
+ *
+ * @param {Object} props
+ * @param {string} props.projectName - Current value of the project name input field.
+ * @param {(value: string) => void} props.setProjectName - Function to update the project name input.
+ * @param {() => void} props.onSave - Callback triggered when user clicks "Save".
+ * @param {() => void} props.onCancel - Callback triggered when user clicks "Cancel".
+ *
+ * @returns {JSX.Element} The new project naming modal UI.
  */
 function NewProjectModal({ projectName, setProjectName, onSave, onCancel }) {
   return (
     <NameInputModal
-      value={projectName}            // The current text shown in the input field
-      setValue={setProjectName}      // Function that updates the input value as the user types
-      onSave={onSave}                // Function to run when user confirms (adds the new project)
-      onCancel={onCancel}            // Function to run when user cancels (closes the modal)
-      label="Name Project:"          // Label text above the input field
+      value={projectName}         // Current text in the input field
+      setValue={setProjectName}   // Update function for the input field
+      onSave={onSave}             // Called when user confirms the name
+      onCancel={onCancel}         // Called when user cancels/closes the modal
+      label="Name Project:"       // Label above the input field
     />
   );
 }
 
-// Export this component so it can be used elsewhere (like in the dashboard)
 export default NewProjectModal;

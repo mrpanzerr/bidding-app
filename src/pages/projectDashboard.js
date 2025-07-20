@@ -1,27 +1,18 @@
 import { useState } from "react";
-
 import { useNavigate, useParams } from "react-router-dom";
 
 import NewCalculatorModal from "../components/modals/newCalculatorModal";
-
+import { useCalculators } from "../hooks/useCalculator";
 import { useProject } from "../hooks/useProjects";
 
-import { useCalculators } from "../hooks/useCalculator";
-
 /**
- * TitlePage component displays details for a single project.
- * It fetches the project data based on the "id" URL parameter.
+ * Displays the project dashboard with actions and a list of calculators.
+ * Fetches project and calculator data based on the URL "id" param.
  */
 function ProjectDashboard() {
-  // Extract the "id" parameter from the URL (e.g. /project/:id)
   const { id } = useParams();
   const { project, loading, error } = useProject(id);
-
-  const {
-    calculators,
-    addNewCalculator,
-    loading: calcLoading,
-  } = useCalculators(id);
+  const { calculators, addNewCalculator, loading: calcLoading } = useCalculators(id);
 
   const [newCalculator, setNewCalculator] = useState(false);
   const [calculatorName, setCalculatorName] = useState("");
@@ -36,8 +27,8 @@ function ProjectDashboard() {
 
   const openNewCalculatorModal = (e) => {
     e.stopPropagation();
-    setCalculatorName(calculatorName || ""); // reset calculator name input
-    setNewCalculator(true); // show new calculator modal
+    setCalculatorName(""); // Reset calculator name input
+    setNewCalculator(true); // Show modal
   };
 
   const handleNewSqftCalculator = async () => {
@@ -48,16 +39,13 @@ function ProjectDashboard() {
     setNewCalculator(false);
   };
 
-  // While loading, show a simple loading message
   if (loading) return <p>Loading project...</p>;
-  // If there's an error, show it (could be a network issue, etc.)
   if (error) return <p>Error loading project: {error.message}</p>;
-  // If loading is done but project is null, show a "not found" message
   if (!project || project === false) return <p>Project not found.</p>;
 
   return (
     <div style={{ display: "flex", minHeight: "80vh" }}>
-      {/* LEFT SIDEBAR */}
+      {/* Sidebar with project actions */}
       <aside
         style={{
           width: "250px",
@@ -77,7 +65,7 @@ function ProjectDashboard() {
         </button>
       </aside>
 
-      {/* MAIN CONTENT */}
+      {/* Main content showing calculators */}
       <main style={{ flex: 1, padding: "1rem" }}>
         <h2>{project.name} Calculators</h2>
         {calcLoading ? (
@@ -90,7 +78,13 @@ function ProjectDashboard() {
               <li key={calc.id}>
                 <button
                   onClick={() => openCalculator(calc.id, calc.type)}
-                  style={{ background: "none", border: "2px", color: "blue", textDecoration: "none", cursor: "pointer" }}
+                  style={{
+                    background: "none",
+                    border: "2px",
+                    color: "blue",
+                    textDecoration: "none",
+                    cursor: "pointer",
+                  }}
                 >
                   {calc.name}
                 </button>
@@ -100,7 +94,7 @@ function ProjectDashboard() {
         )}
       </main>
 
-      {/* MODAL */}
+      {/* Modal for creating new calculator */}
       {newCalculator && (
         <NewCalculatorModal
           calculatorName={calculatorName}
@@ -116,5 +110,5 @@ function ProjectDashboard() {
   );
 }
 
-// Export this componenet for use in routing
+// Export component for routing
 export default ProjectDashboard;

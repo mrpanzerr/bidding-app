@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-
 import {
   addCalculator,
   addOneLine,
@@ -17,12 +16,11 @@ import {
 } from "../firebase/calculatorServices";
 
 /**
- * Custom hook to manage the list of calculators for a project.
- * Handles loading state, error state, and data fetching.
- * Provides methods to add new calculators.
+ * Hook to manage the list of calculators for a project.
+ * Handles fetching, loading state, error handling, and adding new calculators.
  *
- * @param {string} projectId - The project ID to fetch calculators for.
- * @returns {object} - calculators array, loading/error states, and methods.
+ * @param {string} projectId - The ID of the project to load calculators for.
+ * @returns {object} calculators data and manipulation functions.
  */
 export function useCalculators(projectId) {
   const [calculators, setCalculators] = useState([]);
@@ -30,15 +28,13 @@ export function useCalculators(projectId) {
   const [error, setError] = useState(null);
 
   /**
-   * Fetches all calculators for the project.
-   * Uses useCallback to memoize and avoid unnecessary reloads.
+   * Loads all calculators for the given project.
+   * Memoized with useCallback to avoid unnecessary reloads.
    */
   const loadCalculators = useCallback(async () => {
     if (!projectId) return;
-
     setLoading(true);
     setError(null);
-
     try {
       const data = await getAllCalculators(projectId);
       setCalculators(data);
@@ -50,21 +46,19 @@ export function useCalculators(projectId) {
     }
   }, [projectId]);
 
-  // Load calculators on mount or when projectId changes
   useEffect(() => {
     loadCalculators();
   }, [loadCalculators]);
 
   /**
-   * Adds a new calculator to the project.
-   * After adding, reloads the calculators list.
+   * Adds a new calculator and reloads the list.
    *
-   * @param {string} projectId - Project ID.
-   * @param {string} name - Name of the new calculator.
+   * @param {string} projectId
+   * @param {string} name - Name of the calculator.
+   * @param {string} type - Calculator type.
    */
   const addNewCalculator = async (projectId, name, type) => {
     if (!projectId || !name.trim()) return;
-
     try {
       await addCalculator(projectId, name, type);
       await loadCalculators();
@@ -84,14 +78,13 @@ export function useCalculators(projectId) {
 }
 
 /**
- * Custom hook to manage a single calculator's data and mutations.
- * Handles loading, error, and mutation states.
- * Supports optimistic UI updates.
+ * Hook to manage a single calculator's data and mutations.
+ * Supports loading, error handling, optimistic UI updates, and common mutations.
  *
  * @param {string} projectId - The project ID.
  * @param {string} calculatorId - The calculator ID.
- * @param {function} onError - Optional callback for error handling.
- * @returns {object} - Calculator data, loading states, error, and mutation methods.
+ * @param {function} [onError] - Optional error callback.
+ * @returns {object} Calculator state and mutation functions.
  */
 export function useCalculator(projectId, calculatorId, onError) {
   const [calculator, setCalculator] = useState(null);
@@ -99,7 +92,7 @@ export function useCalculator(projectId, calculatorId, onError) {
   const [loadingMutation, setLoadingMutation] = useState(false);
   const [error, setError] = useState(null);
 
-  // Unified error handler: sets error state and calls external callback
+  // Handles setting error state and invoking optional error callback.
   const handleError = useCallback(
     (e) => {
       setError(e);
@@ -109,16 +102,14 @@ export function useCalculator(projectId, calculatorId, onError) {
   );
 
   /**
-   * Loads calculator data from backend.
-   * Uses useCallback to avoid unnecessary reloads.
+   * Loads the calculator data.
+   * Memoized to prevent unnecessary fetches.
    */
   const loadCalculator = useCallback(async () => {
     setLoading(true);
     setError(null);
-
     try {
       const data = await getCalculatorData(projectId, calculatorId);
-
       if (data.exists()) {
         setCalculator({ id: data.id, ...data.data() });
       } else {
@@ -132,17 +123,14 @@ export function useCalculator(projectId, calculatorId, onError) {
     }
   }, [projectId, calculatorId, handleError]);
 
-  // Load calculator data on mount and when dependencies change
+  // Fetch calculator data on mount and when dependencies change.
   useEffect(() => {
     if (!projectId || !calculatorId) return;
 
     let isMounted = true;
-
-    const loadIfMounted = async () => {
+    (async () => {
       if (isMounted) await loadCalculator();
-    };
-
-    loadIfMounted();
+    })();
 
     return () => {
       isMounted = false;
@@ -150,9 +138,9 @@ export function useCalculator(projectId, calculatorId, onError) {
   }, [projectId, calculatorId, loadCalculator]);
 
   /**
-   * Helper to perform mutation with optimistic UI update.
+   * Utility to perform mutations with optimistic UI update and error handling.
    *
-   * @param {Function} mutateFn - The async function performing the mutation.
+   * @param {Function} mutateFn - Async mutation function to call.
    * @param {Function} optimisticUpdateFn - Function to update local state optimistically.
    */
   const performMutation = async (mutateFn, optimisticUpdateFn) => {
@@ -174,7 +162,7 @@ export function useCalculator(projectId, calculatorId, onError) {
     }
   };
 
-  // Mutation methods with optimistic updates:
+  // Mutations with optimistic updates:
 
   const addNewSection = () =>
     performMutation(
@@ -201,7 +189,7 @@ export function useCalculator(projectId, calculatorId, onError) {
   const deleteSection = (sectionId) =>
     performMutation(
       () => deleteSectionById(projectId, calculatorId, sectionId),
-      (sections) => sections.filter((section) => section.id !== sectionId)
+      (sections) => sections.filter((s) => s.id !== sectionId)
     );
 
   const renameSection = (sectionId, newTitle) =>
@@ -220,11 +208,9 @@ export function useCalculator(projectId, calculatorId, onError) {
       (sections) =>
         sections.map((section) => {
           if (section.id !== sectionId) return section;
-
           const updatedLines = (section.lines || []).map((line) =>
             line.id === lineId ? { ...line, description: newDescription ?? "" } : line
           );
-
           return { ...section, lines: updatedLines };
         })
     );
@@ -293,10 +279,8 @@ export function useCalculator(projectId, calculatorId, onError) {
       (sections) =>
         sections.map((section) => {
           if (section.id !== sectionId) return section;
-
           const lines = section.lines || [];
-          const updatedLines = lines.slice(0, Math.max(lines.length - 10, 0));
-          return { ...section, lines: updatedLines };
+          return { ...section, lines: lines.slice(0, Math.max(lines.length - 10, 0)) };
         })
     );
 
@@ -304,11 +288,11 @@ export function useCalculator(projectId, calculatorId, onError) {
     performMutation(() => deleteCalculator(projectId, calculatorId));
 
   /**
-   * Calculates measurement product and updates line optimistically.
+   * Calculate measurement product and update line optimistically.
    *
    * @param {string} sectionId
    * @param {string} lineId
-   * @param {string} measurement - e.g. "60 x 114"
+   * @param {string} measurement - Measurement string (e.g. "60 x 114").
    */
   const calcMeasurement = (sectionId, lineId, measurement) =>
     performMutation(
@@ -317,15 +301,13 @@ export function useCalculator(projectId, calculatorId, onError) {
         sections.map((section) => {
           if (section.id !== sectionId) return section;
 
-          const updatedLines = (section.lines || []).map((line) => {
-            if (line.id !== lineId) return line;
+          const parts = measurement?.split(/x/i).map((p) => p.trim());
+          const nums = parts.map((p) => parseFloat(p));
+          const product = nums[0] * nums[1] || 0;
 
-            const parts = measurement?.split(/x/i).map((p) => p.trim());
-            const nums = parts.map((p) => parseFloat(p));
-            const product = nums[0] * nums[1] || 0;
-
-            return { ...line, amount: product, measurement };
-          });
+          const updatedLines = (section.lines || []).map((line) =>
+            line.id === lineId ? { ...line, amount: product, measurement } : line
+          );
 
           return { ...section, lines: updatedLines };
         })

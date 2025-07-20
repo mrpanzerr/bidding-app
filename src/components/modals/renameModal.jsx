@@ -3,29 +3,30 @@ import NameInputModal from "./nameInputModal";
 
 /**
  * RenameModal Component
- * 
- * This component displays a modal popup that allows the user to rename an existing project.
- * It uses the shared NameInputModal component to provide the input field and buttons.
- * 
- * Props:
- * - newName:       (string) The current input value for the new project name
- * - setNewName:    (function) Updates the input value when the user types
- * - onSave:        (function) Called when the user confirms the rename action
- * - onCancel:      (function) Called when the user cancels and closes the modal
- * - modalType:     (string) A label to indicate the modal mode ("rename" here)
+ *
+ * Displays a modal popup allowing the user to rename an existing project.
+ * Wraps the reusable NameInputModal component for input and action handling.
+ *
+ * @param {Object} props
+ * @param {string} props.newName - Current input value for the new project name.
+ * @param {(value: string) => void} props.setNewName - Function to update the input value.
+ * @param {(value: string) => void} props.onSave - Callback triggered on save with the new name.
+ * @param {() => void} props.onCancel - Callback triggered to cancel/close the modal.
+ * @param {string} props.modalType - A string label indicating the modal type ("rename").
+ *
+ * @returns {JSX.Element} The rename modal UI component.
  */
 function RenameModal({ newName, setNewName, onSave, onCancel, modalType }) {
   return (
     <NameInputModal
-      value={newName}           // Current text inside the input field
-      setValue={setNewName}     // Function to update the input field when the user types
-      onSave={(val) => onSave(val)} // Function called when user clicks "Save"
-      onCancel={onCancel}       // Function called when user clicks "Cancel"
-      modalType={modalType}     // Passes the modal type (affects behavior inside NameInputModal)
-      label="Rename Project:"   // Label shown above the input field
+      value={newName}               // Current text inside the input field
+      setValue={setNewName}         // Update input field when user types
+      onSave={(val) => onSave(val)} // Called when user confirms (saves) the rename
+      onCancel={onCancel}           // Called when user cancels/closes the modal
+      modalType={modalType}         // Passes modal type for internal handling
+      label="Rename Project:"       // Label shown above the input field
     />
   );
 }
 
-// Export this component to be used in other parts of the app (e.g., dashboard)
 export default RenameModal;

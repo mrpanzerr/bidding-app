@@ -1,5 +1,35 @@
 import { useState } from "react";
 
+/**
+ * CalculatorPageUI Component
+ *
+ * UI for displaying and editing a calculator with multiple sections and lines.
+ * Supports renaming sections, editing line descriptions and measurements,
+ * adding/removing lines and sections, calculating amounts, and deleting the calculator.
+ *
+ * @param {Object} props
+ * @param {Object} props.calculator - Calculator data object
+ * @param {string} props.calculator.name - Calculator name
+ * @param {Array<Object>} props.calculator.section - Array of section objects
+ * @param {boolean} props.error - Error state (if any)
+ * @param {boolean} props.loading - Loading state for initial data
+ * @param {boolean} props.loadingMutation - Loading state for mutations (not used here)
+ * @param {boolean} props.isRefreshing - Boolean indicating if a backend call is in progress
+ * @param {function(boolean):void} props.setIsRefreshing - Setter for isRefreshing state
+ * @param {function(): Promise<void>} props.addNewSection - Adds a new section to the calculator
+ * @param {function(string): Promise<void>} props.deleteSection - Deletes a section by ID
+ * @param {function(string, string): Promise<void>} props.renameSection - Renames a section by ID
+ * @param {function(string, string, string): Promise<void>} props.renameDescription - Updates line description
+ * @param {function(string): Promise<void>} props.addLine - Adds a single line to a section by ID
+ * @param {function(string): Promise<void>} props.addTen - Adds ten lines to a section by ID
+ * @param {function(string, string): Promise<void>} props.deleteOne - Deletes one line by section ID and line ID
+ * @param {function(string): Promise<void>} props.deleteTen - Deletes ten lines from a section by ID
+ * @param {function(): Promise<void>} props.deleteCalculatorFunction - Deletes the entire calculator
+ * @param {function(string, string, string): Promise<void>} props.calcMeasurement - Calculates amount from measurement string
+ * @param {function(): void} [props.navigateAfterDelete] - Optional callback after deleting calculator (e.g., navigation)
+ *
+ * @returns {JSX.Element} The calculator page UI
+ */
 export default function CalculatorPageUI({
   calculator,
   error,

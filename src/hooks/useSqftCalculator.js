@@ -1,5 +1,9 @@
 import { useCalculator } from "./useCalculator";
 
+/**
+ * Custom hook for managing Square Foot calculators.
+ * Wraps useCalculator and allows for potential sqft-specific overrides.
+ */
 export function useSqftCalculator(projectId, calculatorId) {
   const {
     calculator,
@@ -17,7 +21,7 @@ export function useSqftCalculator(projectId, calculatorId) {
     calcMeasurement,
   } = useCalculator(projectId, calculatorId);
 
-  // Add typeA specific overrides here if needed
+  // Placeholder for sqft-specific logic if needed later.
 
   return {
     calculator,

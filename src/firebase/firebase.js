@@ -1,14 +1,22 @@
 // sec/firebase/firebase.js
 
-// Import necessary functions from Firebase SDK.
-// initializeApp connects your app to Firebase with your config.
-// getFirestore allows you to use Firestore (Firebase's database service).
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
-// This object contains all the important credentials and identifiers
-// that Firebase needs to connect your app to your specific Firebase project.
-// These are provided when you set up your project on the Firebase Console.
+/**
+ * Firebase project configuration object.
+ * Uses environment variables to keep sensitive info secure.
+ * Replace these variables with your actual Firebase config values if needed.
+ * 
+ * @constant {object}
+ * @property {string} apiKey - API key for Firebase project.
+ * @property {string} authDomain - Authentication domain for Firebase.
+ * @property {string} projectId - Project ID for Firebase.
+ * @property {string} storageBucket - Storage bucket URL.
+ * @property {string} messagingSenderId - Messaging sender ID.
+ * @property {string} appId - Application ID.
+ * @property {string} measurementId - Measurement ID for analytics.
+ */
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
@@ -19,10 +27,18 @@ const firebaseConfig = {
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase app with the config above.
-// This connects your React app to Firebase services.
+/**
+ * Initializes and exports the Firebase app instance.
+ * Connects the React app to Firebase services using the provided config.
+ *
+ * @constant {FirebaseApp} app - Initialized Firebase app instance.
+ */
 const app = initializeApp(firebaseConfig);
 
-// Initialize Firestore database service, using the Firebase app you just initialized.
-// Export this so other parts of your app can use Firestore to read/write data.
+/**
+ * Initializes and exports the Firestore database instance.
+ * Used to read and write data to the Firestore database.
+ *
+ * @constant {Firestore} db - Firestore database instance.
+ */
 export const db = getFirestore(app);

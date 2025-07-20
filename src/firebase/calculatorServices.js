@@ -10,19 +10,17 @@ import {
 import { db } from "./firebase";
 
 /**
- * Fetches all calculator documents under a specific project.
+ * Fetch all calculator documents under a specific project.
  * 
  * @param {string} projectId - The ID of the project whose calculators to retrieve.
  * @returns {Promise<Array<Object>>} Array of calculator objects with `id` and their data.
- * @throws Throws error if Firestore query fails.
+ * @throws Throws if Firestore query fails.
  */
 export async function getAllCalculators(projectId) {
-  // Reference to calculators subcollection of the project
   const calculatorsSnapshot = await getDocs(
     collection(db, "projects", projectId, "calculators")
   );
 
-  // Map each document snapshot to an object with id and data fields
   return calculatorsSnapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
@@ -30,27 +28,17 @@ export async function getAllCalculators(projectId) {
 }
 
 /**
- * Retrieves a single calculator document snapshot.
+ * Retrieve a single calculator document snapshot.
  * 
- * @param {string} projectId - The ID of the parent project.
- * @param {string} calculatorId - The ID of the calculator document.
- * @returns {Promise<DocumentSnapshot>} Firestore document snapshot.
- * @throws Throws error if fetching the document fails.
+ * @param {string} projectId - The parent project ID.
+ * @param {string} calculatorId - The calculator document ID.
+ * @returns {Promise<import("firebase/firestore").DocumentSnapshot>} Document snapshot.
+ * @throws Throws if fetching the document fails.
  */
 export async function getCalculatorData(projectId, calculatorId) {
   try {
-    // Reference to specific calculator document
-    const calculatorRef = doc(
-      db,
-      "projects",
-      projectId,
-      "calculators",
-      calculatorId
-    );
-
-    // Fetch the document snapshot
-    const calculatorSnap = await getDoc(calculatorRef);
-    return calculatorSnap;
+    const calculatorRef = doc(db, "projects", projectId, "calculators", calculatorId);
+    return await getDoc(calculatorRef);
   } catch (error) {
     console.error("Error fetching calculator data:", error);
     throw error;
@@ -58,12 +46,13 @@ export async function getCalculatorData(projectId, calculatorId) {
 }
 
 /**
- * Adds a new calculator document to a project.
+ * Add a new calculator document to a project.
  * 
- * @param {string} projectId - The ID of the parent project.
- * @param {string} name - The name of the new calculator.
+ * @param {string} projectId - The parent project ID.
+ * @param {string} name - Name of the new calculator.
+ * @param {string} type - Type of the new calculator.
  * @returns {Promise<void>}
- * @throws Throws error if adding document fails.
+ * @throws Throws if adding document fails.
  */
 export async function addCalculator(projectId, name, type) {
   try {
@@ -72,10 +61,9 @@ export async function addCalculator(projectId, name, type) {
       "calculators"
     );
 
-    // Add new calculator document with initial data
     await addDoc(calculatorsCollectionRef, {
       name,
-      type: type,
+      type,
       createdAt: new Date(),
       section: [
         {
@@ -83,7 +71,7 @@ export async function addCalculator(projectId, name, type) {
           title: "Section Title",
           lines: [
             {
-              id: crypto.randomUUID(), // generate pseudo-unique id for line
+              id: crypto.randomUUID(),
               measurement: "ex 60 x 114",
               description: "description",
               other: "other",
@@ -102,12 +90,12 @@ export async function addCalculator(projectId, name, type) {
 }
 
 /**
- * Deletes a calculator document.
+ * Delete a calculator document.
  * 
- * @param {string} projectId - The ID of the parent project.
- * @param {string} calculatorId - The ID of the calculator document to delete.
+ * @param {string} projectId - The parent project ID.
+ * @param {string} calculatorId - The calculator document ID.
  * @returns {Promise<void>}
- * @throws Throws error if deleting document fails.
+ * @throws Throws if deleting document fails.
  */
 export async function deleteCalculator(projectId, calculatorId) {
   try {
@@ -120,21 +108,19 @@ export async function deleteCalculator(projectId, calculatorId) {
 }
 
 /**
- * Adds a new section to a calculator document.
+ * Add a new section to a calculator document.
  * 
- * @param {string} projectId - The ID of the parent project.
+ * @param {string} projectId - The parent project ID.
  * @param {string} calculatorId - The calculator document ID.
  * @returns {Promise<void>}
- * @throws Throws error if update fails or calculator not found.
+ * @throws Throws if update fails or calculator not found.
  */
 export async function addSection(projectId, calculatorId) {
   try {
     const calculatorRef = doc(db, "projects", projectId, "calculators", calculatorId);
     const calculatorSnap = await getDoc(calculatorRef);
 
-    if (!calculatorSnap.exists()) {
-      throw new Error("Calculator not found");
-    }
+    if (!calculatorSnap.exists()) throw new Error("Calculator not found");
 
     const calculatorData = calculatorSnap.data();
     const existingSections = calculatorData.section || [];
@@ -154,7 +140,6 @@ export async function addSection(projectId, calculatorId) {
       total: 0,
     };
 
-    // Update sections array by appending new section
     await updateDoc(calculatorRef, {
       section: [...existingSections, newSection],
     });
@@ -165,27 +150,24 @@ export async function addSection(projectId, calculatorId) {
 }
 
 /**
- * Deletes a section from a calculator document by ID.
+ * Delete a section from a calculator document by ID.
  * 
- * @param {string} projectId - The ID of the parent project.
+ * @param {string} projectId - The parent project ID.
  * @param {string} calculatorId - The calculator document ID.
- * @param {number} sectionId - The ID of the section to delete.
+ * @param {string} sectionId - The section ID to delete.
  * @returns {Promise<void>}
- * @throws Throws error if update fails or calculator not found.
+ * @throws Throws if update fails or calculator not found.
  */
 export async function deleteSectionById(projectId, calculatorId, sectionId) {
   try {
     const calculatorRef = doc(db, "projects", projectId, "calculators", calculatorId);
     const calculatorSnap = await getDoc(calculatorRef);
 
-    if (!calculatorSnap.exists()) {
-      throw new Error("Calculator not found");
-    }
+    if (!calculatorSnap.exists()) throw new Error("Calculator not found");
 
     const calculatorData = calculatorSnap.data();
     const existingSections = calculatorData.section || [];
 
-    // Remove section matching the given ID
     const updatedSections = existingSections.filter(
       (section) => section.id !== sectionId
     );
@@ -200,28 +182,25 @@ export async function deleteSectionById(projectId, calculatorId, sectionId) {
 }
 
 /**
- * Updates the title of a section within a calculator document.
+ * Update the title of a section.
  * 
- * @param {string} projectId - The ID of the parent project.
+ * @param {string} projectId - The parent project ID.
  * @param {string} calculatorId - The calculator document ID.
- * @param {number} sectionId - The section ID to update.
+ * @param {string} sectionId - The section ID to update.
  * @param {string} newTitle - The new title for the section.
  * @returns {Promise<void>}
- * @throws Throws error if update fails or calculator not found.
+ * @throws Throws if update fails or calculator not found.
  */
 export async function updateSectionName(projectId, calculatorId, sectionId, newTitle) {
   try {
     const calculatorRef = doc(db, "projects", projectId, "calculators", calculatorId);
     const calculatorSnap = await getDoc(calculatorRef);
 
-    if (!calculatorSnap.exists()) {
-      throw new Error("Calculator not found");
-    }
+    if (!calculatorSnap.exists()) throw new Error("Calculator not found");
 
     const calculatorData = calculatorSnap.data();
     const existingSections = calculatorData.section || [];
 
-    // Update matching section's title
     const updatedSections = existingSections.map((section) =>
       section.id === sectionId ? { ...section, title: newTitle } : section
     );
@@ -236,15 +215,15 @@ export async function updateSectionName(projectId, calculatorId, sectionId, newT
 }
 
 /**
- * Updates the description of a line item within a section.
+ * Update the description of a line item within a section.
  * 
- * @param {string} projectId - The ID of the parent project.
+ * @param {string} projectId - The parent project ID.
  * @param {string} calculatorId - The calculator document ID.
- * @param {number} sectionId - The section containing the line.
- * @param {number} lineId - The line ID to update.
+ * @param {string} sectionId - The section containing the line.
+ * @param {string} lineId - The line ID to update.
  * @param {string} newDescription - The new description text.
  * @returns {Promise<void>}
- * @throws Throws error if update fails or calculator not found.
+ * @throws Throws if update fails or calculator not found.
  */
 export async function updateDescriptionName(
   projectId,
@@ -257,14 +236,11 @@ export async function updateDescriptionName(
     const calculatorRef = doc(db, "projects", projectId, "calculators", calculatorId);
     const calculatorSnap = await getDoc(calculatorRef);
 
-    if (!calculatorSnap.exists()) {
-      throw new Error("Calculator not found");
-    }
+    if (!calculatorSnap.exists()) throw new Error("Calculator not found");
 
     const calculatorData = calculatorSnap.data();
     const existingSections = calculatorData.section || [];
 
-    // Update line description within the matching section and line
     const updatedSections = existingSections.map((section) => {
       if (section.id !== sectionId) return section;
 
@@ -272,10 +248,7 @@ export async function updateDescriptionName(
         line.id === lineId ? { ...line, description: newDescription ?? "" } : line
       );
 
-      return {
-        ...section,
-        lines: updatedLines,
-      };
+      return { ...section, lines: updatedLines };
     });
 
     await updateDoc(calculatorRef, {
@@ -288,27 +261,24 @@ export async function updateDescriptionName(
 }
 
 /**
- * Adds a single line item to a section.
+ * Add a single line item to a section.
  * 
- * @param {string} projectId - The ID of the parent project.
+ * @param {string} projectId - The parent project ID.
  * @param {string} calculatorId - The calculator document ID.
- * @param {number} sectionId - The section ID to add the line to.
+ * @param {string} sectionId - The section ID to add the line to.
  * @returns {Promise<void>}
- * @throws Throws error if update fails or calculator not found.
+ * @throws Throws if update fails or calculator not found.
  */
 export async function addOneLine(projectId, calculatorId, sectionId) {
   try {
     const calculatorRef = doc(db, "projects", projectId, "calculators", calculatorId);
     const calculatorSnap = await getDoc(calculatorRef);
 
-    if (!calculatorSnap.exists()) {
-      throw new Error("Calculator not found");
-    }
+    if (!calculatorSnap.exists()) throw new Error("Calculator not found");
 
     const calculatorData = calculatorSnap.data();
     const existingSections = calculatorData.section || [];
 
-    // Create new line item with pseudo-unique id
     const newLine = {
       id: crypto.randomUUID(),
       description: "description",
@@ -316,14 +286,11 @@ export async function addOneLine(projectId, calculatorId, sectionId) {
       amount: 0,
     };
 
-    const updatedSections = existingSections.map((section) => {
-      if (section.id !== sectionId) return section;
-
-      return {
-        ...section,
-        lines: [...(section.lines || []), newLine],
-      };
-    });
+    const updatedSections = existingSections.map((section) =>
+      section.id === sectionId
+        ? { ...section, lines: [...(section.lines || []), newLine] }
+        : section
+    );
 
     await updateDoc(calculatorRef, {
       section: updatedSections,
@@ -335,27 +302,24 @@ export async function addOneLine(projectId, calculatorId, sectionId) {
 }
 
 /**
- * Adds ten new line items to a section.
+ * Add ten new line items to a section.
  * 
- * @param {string} projectId - The ID of the parent project.
+ * @param {string} projectId - The parent project ID.
  * @param {string} calculatorId - The calculator document ID.
- * @param {number} sectionId - The section ID to add lines to.
+ * @param {string} sectionId - The section ID to add lines to.
  * @returns {Promise<void>}
- * @throws Throws error if update fails or calculator not found.
+ * @throws Throws if update fails or calculator not found.
  */
 export async function addTenLines(projectId, calculatorId, sectionId) {
   try {
     const calculatorRef = doc(db, "projects", projectId, "calculators", calculatorId);
     const calculatorSnap = await getDoc(calculatorRef);
 
-    if (!calculatorSnap.exists()) {
-      throw new Error("Calculator not found");
-    }
+    if (!calculatorSnap.exists()) throw new Error("Calculator not found");
 
     const calculatorData = calculatorSnap.data();
     const existingSections = calculatorData.section || [];
 
-    // Create array of 10 new line items
     const newLines = Array.from({ length: 10 }, () => ({
       id: crypto.randomUUID(),
       description: "description",
@@ -363,14 +327,11 @@ export async function addTenLines(projectId, calculatorId, sectionId) {
       amount: 0,
     }));
 
-    const updatedSections = existingSections.map((section) => {
-      if (section.id !== sectionId) return section;
-
-      return {
-        ...section,
-        lines: [...(section.lines || []), ...newLines],
-      };
-    });
+    const updatedSections = existingSections.map((section) =>
+      section.id === sectionId
+        ? { ...section, lines: [...(section.lines || []), ...newLines] }
+        : section
+    );
 
     await updateDoc(calculatorRef, {
       section: updatedSections,
@@ -382,35 +343,30 @@ export async function addTenLines(projectId, calculatorId, sectionId) {
 }
 
 /**
- * Deletes a single line item from a section.
+ * Delete a single line item from a section.
  * 
- * @param {string} projectId - The ID of the parent project.
+ * @param {string} projectId - The parent project ID.
  * @param {string} calculatorId - The calculator document ID.
- * @param {number} sectionId - The section ID containing the line.
- * @param {number} lineId - The line ID to delete.
+ * @param {string} sectionId - The section ID containing the line.
+ * @param {string} lineId - The line ID to delete.
  * @returns {Promise<void>}
- * @throws Throws error if update fails or calculator not found.
+ * @throws Throws if update fails or calculator not found.
  */
 export async function deleteOneLine(projectId, calculatorId, sectionId, lineId) {
   try {
     const calculatorRef = doc(db, "projects", projectId, "calculators", calculatorId);
     const calculatorSnap = await getDoc(calculatorRef);
 
-    if (!calculatorSnap.exists()) {
-      throw new Error("Calculator not found");
-    }
+    if (!calculatorSnap.exists()) throw new Error("Calculator not found");
 
     const calculatorData = calculatorSnap.data();
     const existingSections = calculatorData.section || [];
 
-    const updatedSections = existingSections.map((section) => {
-      if (section.id !== sectionId) return section;
-
-      return {
-        ...section,
-        lines: (section.lines || []).filter((line) => line.id !== lineId),
-      };
-    });
+    const updatedSections = existingSections.map((section) =>
+      section.id === sectionId
+        ? { ...section, lines: (section.lines || []).filter((line) => line.id !== lineId) }
+        : section
+    );
 
     await updateDoc(calculatorRef, {
       section: updatedSections,
@@ -422,22 +378,20 @@ export async function deleteOneLine(projectId, calculatorId, sectionId, lineId) 
 }
 
 /**
- * Deletes up to ten lines from the end of a section.
+ * Delete up to ten lines from the end of a section.
  * 
- * @param {string} projectId - The ID of the parent project.
+ * @param {string} projectId - The parent project ID.
  * @param {string} calculatorId - The calculator document ID.
- * @param {number} sectionId - The section ID to delete lines from.
+ * @param {string} sectionId - The section ID to delete lines from.
  * @returns {Promise<void>}
- * @throws Throws error if update fails or calculator not found.
+ * @throws Throws if update fails or calculator not found.
  */
 export async function deleteTenLines(projectId, calculatorId, sectionId) {
   try {
     const calculatorRef = doc(db, "projects", projectId, "calculators", calculatorId);
     const calculatorSnap = await getDoc(calculatorRef);
 
-    if (!calculatorSnap.exists()) {
-      throw new Error("Calculator not found");
-    }
+    if (!calculatorSnap.exists()) throw new Error("Calculator not found");
 
     const calculatorData = calculatorSnap.data();
     const existingSections = calculatorData.section || [];
@@ -446,14 +400,9 @@ export async function deleteTenLines(projectId, calculatorId, sectionId) {
       if (section.id !== sectionId) return section;
 
       const lines = section.lines || [];
-
-      // Remove last 10 lines, or all if fewer than 10
       const updatedLines = lines.slice(0, Math.max(lines.length - 10, 0));
 
-      return {
-        ...section,
-        lines: updatedLines,
-      };
+      return { ...section, lines: updatedLines };
     });
 
     await updateDoc(calculatorRef, {
@@ -466,17 +415,16 @@ export async function deleteTenLines(projectId, calculatorId, sectionId) {
 }
 
 /**
- * Calculates the amount for a line based on measurement string.
- * Format assumed: "number x number" (e.g., "60 x 114").
- * Updates the amount field with the product.
+ * Calculate and update the amount for a line based on measurement string.
+ * Expects measurement in the format "number x number" (e.g., "60 x 114").
  * 
- * @param {string} projectId - The ID of the parent project.
+ * @param {string} projectId - The parent project ID.
  * @param {string} calculatorId - The calculator document ID.
- * @param {number} sectionId - The section ID containing the line.
- * @param {number} lineId - The line ID to update.
- * @param {string} measurement - Measurement string to parse.
+ * @param {string} sectionId - The section ID containing the line.
+ * @param {string} lineId - The line ID to update.
+ * @param {string} measurement - Measurement string to parse and calculate.
  * @returns {Promise<void>}
- * @throws Throws error if update fails or calculator not found.
+ * @throws Throws if update fails or calculator not found.
  */
 export async function calculateMeasurement(
   projectId,
@@ -497,29 +445,20 @@ export async function calculateMeasurement(
     const calculatorData = calculatorSnap.data();
     const sections = calculatorData.section || [];
 
-    // Parse measurement string and calculate amount
     const updatedSections = sections.map((section) => {
       if (section.id !== sectionId) return section;
 
       const updatedLines = section.lines.map((line) => {
         if (line.id !== lineId) return line;
 
-        // Split by 'x' or 'X' and parse floats
         const parts = measurement?.split(/x/i).map((p) => p.trim());
         const nums = parts.map((p) => parseFloat(p));
         const product = nums[0] * nums[1] || 0;
 
-        return {
-          ...line,
-          amount: product,
-          measurement, // Update measurement string as well
-        };
+        return { ...line, amount: product, measurement };
       });
 
-      return {
-        ...section,
-        lines: updatedLines,
-      };
+      return { ...section, lines: updatedLines };
     });
 
     await updateDoc(calculatorRef, {

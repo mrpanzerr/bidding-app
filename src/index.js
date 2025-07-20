@@ -1,26 +1,23 @@
-// Importing the core React library.
+// Core React import for building UI components.
 import React from "react";
 
-// Importing a tool from React that allows us to render our app onto the webpage.
+// ReactDOM provides methods to interact with the DOM.
 import ReactDOM from "react-dom/client";
 
-// Importing BrowserRouter from the React Router library.
-// This allows us to set up page navigation without refreshing the page.
+// Enables client-side routing without full page reloads.
 import { BrowserRouter } from "react-router";
 
-// Importing the main App component.
+// Main application component.
 import App from "./App";
 
-// This file allows you to measure how well your app is performing.
-// It’s useful for analyzing performance issues, but optional.
+// Utility for measuring app performance (optional).
 import reportWebVitals from "./reportWebVitals";
 
-// This line finds the HTML element on the page with the ID of "root".
+// Initialize React root rendering at the #root DOM element.
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-// This tells React to render (display) our application inside the root element we found above.
+// Render the app wrapped in BrowserRouter for routing and StrictMode for highlighting potential problems.
 root.render(
-  // BrowserRouter wraps our entire app and enables navigation between different pages.
   <BrowserRouter>
     <React.StrictMode>
       <App />
@@ -28,6 +25,5 @@ root.render(
   </BrowserRouter>
 );
 
-// This optional function can help you track how well your app performs (load times, etc.).
-// You can choose to log the results to the console or send them to an analytics tool.
+// Start measuring app performance (optional; can log results or send to analytics).
 reportWebVitals();
