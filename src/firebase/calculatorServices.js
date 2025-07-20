@@ -72,9 +72,9 @@ export async function addCalculator(projectId, name, type) {
           lines: [
             {
               id: crypto.randomUUID(),
-              measurement: "ex 60 x 114",
-              description: "description",
-              other: "other",
+              measurement: "",
+              description: "",
+              other: "",
               amount: 0,
             },
           ],
@@ -131,9 +131,9 @@ export async function addSection(projectId, calculatorId) {
       lines: [
         {
           id: crypto.randomUUID(),
-          measurement: "ex 60 x 114",
-          description: "description",
-          other: "other",
+          measurement: "",
+          description: "",
+          other: "",
           amount: 0,
         },
       ],
@@ -281,8 +281,8 @@ export async function addOneLine(projectId, calculatorId, sectionId) {
 
     const newLine = {
       id: crypto.randomUUID(),
-      description: "description",
-      measurement: "ex 60 x 114",
+      description: "",
+      measurement: "",
       amount: 0,
     };
 
@@ -322,8 +322,8 @@ export async function addTenLines(projectId, calculatorId, sectionId) {
 
     const newLines = Array.from({ length: 10 }, () => ({
       id: crypto.randomUUID(),
-      description: "description",
-      measurement: "ex 60 x 114",
+      description: "",
+      measurement: "",
       amount: 0,
     }));
 
