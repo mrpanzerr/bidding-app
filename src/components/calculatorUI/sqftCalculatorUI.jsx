@@ -23,6 +23,7 @@ export default function SqftCalculatorUI({
   deleteTen,
   deleteSection,
   sectionTotal,
+  calculateGrandTotal,
 }) {
   return (
     <>
@@ -78,6 +79,7 @@ export default function SqftCalculatorUI({
                           e.preventDefault();
                           await safeAction(() => calcMeasurement(section.id, line.id, measurement.trim()));
                           await safeAction(() => sectionTotal(section.id));
+                          await safeAction(() => calculateGrandTotal());
                           setEditingMeasurementId(null);
                           setEditingTitleId(null);
                         }

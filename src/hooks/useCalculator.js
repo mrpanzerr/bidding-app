@@ -11,6 +11,7 @@ import {
   deleteTenLines,
   getAllCalculators,
   getCalculatorData,
+  grandTotal,
   sectionSum,
   updateDescriptionName,
   updateSectionName,
@@ -232,6 +233,9 @@ export function useCalculator(projectId, calculatorId, onError) {
   const sectionTotal = (sectionId) =>
     performMutation(() => sectionSum(projectId, calculatorId, sectionId));
 
+  const calculateGrandTotal = () =>
+    performMutation(() => grandTotal(projectId, calculatorId));
+
   return {
     calculator,
     loading,
@@ -248,5 +252,6 @@ export function useCalculator(projectId, calculatorId, onError) {
     deleteCalculatorFunction,
     calcMeasurement,
     sectionTotal,
+    calculateGrandTotal
   };
 }

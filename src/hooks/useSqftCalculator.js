@@ -20,6 +20,7 @@ export function useSqftCalculator(projectId, calculatorId) {
     deleteCalculatorFunction,
     calcMeasurement,
     sectionTotal,
+    calculateGrandTotal,
   } = useCalculator(projectId, calculatorId);
 
   // Placeholder for sqft-specific logic if needed later.
@@ -39,5 +40,6 @@ export function useSqftCalculator(projectId, calculatorId) {
     deleteCalculatorFunction,
     calcMeasurement,
     sectionTotal,
+    calculateGrandTotal
   };
 }

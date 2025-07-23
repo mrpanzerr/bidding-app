@@ -510,3 +510,28 @@ export async function sectionSum(projectId, calculatorId, sectionId) {
     throw error;
   }
 }
+
+export async function grandTotal(projectId, calculatorId) {
+  try {
+    const calculatorRef = doc(db, "projects", projectId, "calculators", calculatorId);
+    const calculatorSnap = await getDoc(calculatorRef);
+
+    if (!calculatorSnap.exists()) {
+      throw new Error("Calculator not found");
+    }
+
+    const calculatorData = calculatorSnap.data();
+    const existingSections = calculatorData.section || [];
+
+    const grandTotal = existingSections.reduce((sum, section) => {
+      return sum + (typeof section.total === "number" ? section.total : 0);
+    }, 0);
+
+    await updateDoc(calculatorRef, {
+      grandTotal,
+    });
+  } catch (error) {
+    console.error("Error calculating grand total:", error);
+    throw error;
+  }
+}

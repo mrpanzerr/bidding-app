@@ -46,6 +46,7 @@ export default function CalculatorPageUI(props) {
     calcMeasurement,
     navigateAfterDelete,
     sectionTotal,
+    calculateGrandTotal,
   } = props;
 
   // Local state for editing titles, descriptions, and measurements
@@ -126,6 +127,7 @@ export default function CalculatorPageUI(props) {
               deleteTen,
               deleteSection,
               sectionTotal,
+              calculateGrandTotal
             }}
           />
 
