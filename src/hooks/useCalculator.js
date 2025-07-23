@@ -11,6 +11,7 @@ import {
   deleteTenLines,
   getAllCalculators,
   getCalculatorData,
+  sectionSum,
   updateDescriptionName,
   updateSectionName,
 } from "../firebase/calculatorServices";
@@ -165,124 +166,42 @@ export function useCalculator(projectId, calculatorId, onError) {
   // Mutations with optimistic updates:
 
   const addNewSection = () =>
-    performMutation(
-      () => addSection(projectId, calculatorId),
-      (sections) => [
-        ...sections,
-        {
-          id: crypto.randomUUID(),
-          title: "Section Title",
-          lines: [
-            {
-              id: crypto.randomUUID(),
-              measurement: "ex 60 x 114",
-              description: "description",
-              other: "other",
-              amount: 0,
-            },
-          ],
-          total: 0,
-        },
-      ]
-    );
+    performMutation(() => addSection(projectId, calculatorId));
 
   const deleteSection = (sectionId) =>
-    performMutation(
-      () => deleteSectionById(projectId, calculatorId, sectionId),
-      (sections) => sections.filter((s) => s.id !== sectionId)
+    performMutation(() =>
+      deleteSectionById(projectId, calculatorId, sectionId)
     );
 
   const renameSection = (sectionId, newTitle) =>
-    performMutation(
-      () => updateSectionName(projectId, calculatorId, sectionId, newTitle),
-      (sections) =>
-        sections.map((section) =>
-          section.id === sectionId ? { ...section, title: newTitle } : section
-        )
+    performMutation(() =>
+      updateSectionName(projectId, calculatorId, sectionId, newTitle)
     );
 
   const renameDescription = (sectionId, lineId, newDescription) =>
-    performMutation(
-      () =>
-        updateDescriptionName(projectId, calculatorId, sectionId, lineId, newDescription),
-      (sections) =>
-        sections.map((section) => {
-          if (section.id !== sectionId) return section;
-          const updatedLines = (section.lines || []).map((line) =>
-            line.id === lineId ? { ...line, description: newDescription ?? "" } : line
-          );
-          return { ...section, lines: updatedLines };
-        })
+    performMutation(() =>
+      updateDescriptionName(
+        projectId,
+        calculatorId,
+        sectionId,
+        lineId,
+        newDescription
+      )
     );
 
   const addLine = (sectionId) =>
-    performMutation(
-      () => addOneLine(projectId, calculatorId, sectionId),
-      (sections) =>
-        sections.map((section) =>
-          section.id === sectionId
-            ? {
-                ...section,
-                lines: [
-                  ...(section.lines || []),
-                  {
-                    id: crypto.randomUUID(),
-                    description: "description",
-                    measurement: "ex 60 x 114",
-                    amount: 0,
-                  },
-                ],
-              }
-            : section
-        )
-    );
+    performMutation(() => addOneLine(projectId, calculatorId, sectionId));
 
   const addTen = (sectionId) =>
-    performMutation(
-      () => addTenLines(projectId, calculatorId, sectionId),
-      (sections) =>
-        sections.map((section) =>
-          section.id === sectionId
-            ? {
-                ...section,
-                lines: [
-                  ...(section.lines || []),
-                  ...Array.from({ length: 10 }, () => ({
-                    id: crypto.randomUUID(),
-                    description: "description",
-                    measurement: "ex 60 x 114",
-                    amount: 0,
-                  })),
-                ],
-              }
-            : section
-        )
-    );
+    performMutation(() => addTenLines(projectId, calculatorId, sectionId));
 
   const deleteOne = (sectionId, lineId) =>
-    performMutation(
-      () => deleteOneLine(projectId, calculatorId, sectionId, lineId),
-      (sections) =>
-        sections.map((section) =>
-          section.id === sectionId
-            ? {
-                ...section,
-                lines: (section.lines || []).filter((line) => line.id !== lineId),
-              }
-            : section
-        )
+    performMutation(() =>
+      deleteOneLine(projectId, calculatorId, sectionId, lineId)
     );
 
   const deleteTen = (sectionId) =>
-    performMutation(
-      () => deleteTenLines(projectId, calculatorId, sectionId),
-      (sections) =>
-        sections.map((section) => {
-          if (section.id !== sectionId) return section;
-          const lines = section.lines || [];
-          return { ...section, lines: lines.slice(0, Math.max(lines.length - 10, 0)) };
-        })
-    );
+    performMutation(() => deleteTenLines(projectId, calculatorId, sectionId));
 
   const deleteCalculatorFunction = () =>
     performMutation(() => deleteCalculator(projectId, calculatorId));
@@ -295,23 +214,23 @@ export function useCalculator(projectId, calculatorId, onError) {
    * @param {string} measurement - Measurement string (e.g. "60 x 114").
    */
   const calcMeasurement = (sectionId, lineId, measurement) =>
-    performMutation(
-      () => calculateMeasurement(projectId, calculatorId, sectionId, lineId, measurement),
-      (sections) =>
-        sections.map((section) => {
-          if (section.id !== sectionId) return section;
-
-          const parts = measurement?.split(/x/i).map((p) => p.trim());
-          const nums = parts.map((p) => parseFloat(p));
-          const product = nums[0] * nums[1] || 0;
-
-          const updatedLines = (section.lines || []).map((line) =>
-            line.id === lineId ? { ...line, amount: product, measurement } : line
-          );
-
-          return { ...section, lines: updatedLines };
-        })
+    performMutation(() =>
+      calculateMeasurement(
+        projectId,
+        calculatorId,
+        sectionId,
+        lineId,
+        measurement
+      )
     );
+
+  /**
+   * Calculate total for a section and update Firestore.
+   *
+   * @param {string} sectionId - ID of the section to total.
+   */
+  const sectionTotal = (sectionId) =>
+    performMutation(() => sectionSum(projectId, calculatorId, sectionId));
 
   return {
     calculator,
@@ -328,5 +247,6 @@ export function useCalculator(projectId, calculatorId, onError) {
     deleteTen,
     deleteCalculatorFunction,
     calcMeasurement,
+    sectionTotal,
   };
 }

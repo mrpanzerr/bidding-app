@@ -469,3 +469,44 @@ export async function calculateMeasurement(
     throw error;
   }
 }
+
+/**
+ * Calculate the sum of all 'amount' fields in a section's lines,
+ * and update the section's 'total' field.
+ *
+ * @param {string} projectId - The parent project ID.
+ * @param {string} calculatorId - The calculator document ID.
+ * @param {string} sectionId - The section ID to sum.
+ * @returns {Promise<void>}
+ * @throws Throws if update fails or calculator not found.
+ */
+export async function sectionSum(projectId, calculatorId, sectionId) {
+  try {
+    const calculatorRef = doc(db, "projects", projectId, "calculators", calculatorId);
+    const calculatorSnap = await getDoc(calculatorRef);
+
+    if (!calculatorSnap.exists()) {
+      throw new Error("Calculator not found");
+    }
+
+    const calculatorData = calculatorSnap.data();
+    const existingSections = calculatorData.section || [];
+
+    const updatedSections = existingSections.map((section) => {
+      if (section.id !== sectionId) return section;
+
+      const total = (section.lines || []).reduce((sum, line) => {
+        return sum + (typeof line.amount === "number" ? line.amount : 0);
+      }, 0);
+
+      return { ...section, total };
+    });
+
+    await updateDoc(calculatorRef, {
+      section: updatedSections,
+    });
+  } catch (error) {
+    console.error("Error calculating section total:", error);
+    throw error;
+  }
+}

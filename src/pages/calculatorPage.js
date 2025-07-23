@@ -34,6 +34,7 @@ export default function CalculatorPage() {
     deleteTen,
     deleteCalculatorFunction,
     calcMeasurement,
+    sectionTotal,
   } = config.useCalculatorData(projectId, calculatorId);
 
   // Navigate back to the project dashboard after deleting a calculator
@@ -60,6 +61,7 @@ export default function CalculatorPage() {
       deleteCalculatorFunction={deleteCalculatorFunction}
       calcMeasurement={calcMeasurement}
       navigateAfterDelete={navigateAfterDelete}
+      sectionTotal={sectionTotal}
     />
   );
 }
