@@ -40,7 +40,7 @@ export default function CalculatorPage() {
 
   // Navigate back to the project dashboard after deleting a calculator
   const navigateAfterDelete = () => {
-    navigate(`/project/${projectId}`);
+    navigate(`/project/${projectId}`, { replace: true });
   };
 
   // Pass all necessary props to the UI component

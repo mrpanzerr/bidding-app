@@ -1,0 +1,31 @@
+/* SqftCalculatorUI.module.css */
+
+.sectionBox {
+  border: 1px solid gray;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+}
+
+.titleInput {
+  font-size: 1.5rem;
+  font-weight: bold;
+  border: none;
+  border-bottom: 1px solid lightgray;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.lineStyle {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  align-items: center;
+}
+
+.sectionButtonGroup {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
