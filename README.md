@@ -8,7 +8,7 @@
 
 A streamlined bidding tool built for general contractors. This project replaces the slow, error-prone process of handwritten estimates with a faster, digital alternative. Built from the ground up to reflect how real contractors think, work, and price.
 
-🔗 [Live Site](https://bidding-cwj5ldmyw-mrpanzerrs-projects.vercel.app)
+🔗 [Live Site](https://bidding-i81vx3i2u-mrpanzerrs-projects.vercel.app)
 
 ---
 
@@ -120,7 +120,7 @@ npm start
 
 [Portfolio](https://mrpanzerr.github.io/gaetano.github.io/)  
 [Email](mailto:gaetanopanzer01@gmail.com)  
-[Live Site](https://bidding-cwj5ldmyw-mrpanzerrs-projects.vercel.app/)
+[Live Site](https://bidding-i81vx3i2u-mrpanzerrs-projects.vercel.app)
 
 ---
 
