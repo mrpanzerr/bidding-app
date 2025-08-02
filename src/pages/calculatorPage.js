@@ -4,6 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import CalculatorPageUI from "../components/calculatorPageUI";
 import { calculatorConfigs } from "../config/calculatorConfig";
 
+import { updateCalculatorName } from "../firebase/calculatorServices";
+
 /**
  * CalculatorPage component
  * Displays a calculator based on project ID, calculator ID, and calculator type from the URL.
@@ -11,6 +13,10 @@ import { calculatorConfigs } from "../config/calculatorConfig";
  */
 export default function CalculatorPage() {
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [renaming, setRenaming] = useState(false);
+  const [editingCalculatorName, setEditingCalculatorName] = useState(false);
+  const [newCalculatorName, setNewCalculatorName] = useState("");
+
   const { id: projectId, calculatorId, type } = useParams();
   const navigate = useNavigate();
 
@@ -38,6 +44,34 @@ export default function CalculatorPage() {
     calculateGrandTotal,
   } = config.useCalculatorData(projectId, calculatorId);
 
+  // Keep newCalculatorName in sync with the calculator's name
+  if (calculator?.name && !editingCalculatorName && newCalculatorName !== calculator.name) {
+    setNewCalculatorName(calculator.name);
+  }
+
+  // Function to handle renaming the calculator
+  const handleRenameCalculator = async () => {
+    const trimmed = newCalculatorName.trim();
+    if(!projectId || !calculatorId || !trimmed) return;
+
+    if (trimmed === calculator?.name) {
+      setEditingCalculatorName(false);
+      return;
+    }
+
+    try {
+      setRenaming(true);
+      await updateCalculatorName(projectId, calculatorId, trimmed);
+    } catch (error) {
+      console.error("Error renaming calculator:", error);
+    } finally {
+      setRenaming(false);
+      setEditingCalculatorName(false);
+      setNewCalculatorName("");
+      navigate(0); // Refresh the page to reflect changes
+    }
+  };
+  
   // Navigate back to the project dashboard after deleting a calculator
   const navigateAfterDelete = () => {
     navigate(`/project/${projectId}`, { replace: true });
@@ -64,6 +98,12 @@ export default function CalculatorPage() {
       navigateAfterDelete={navigateAfterDelete}
       sectionTotal={sectionTotal}
       calculateGrandTotal={calculateGrandTotal}
+      editingCalculatorName={editingCalculatorName}
+      setEditingCalculatorName={setEditingCalculatorName}
+      newCalculatorName={newCalculatorName}
+      setNewCalculatorName={setNewCalculatorName}
+      handleRenameCalculator={handleRenameCalculator}
+      renaming={renaming}
     />
   );
 }

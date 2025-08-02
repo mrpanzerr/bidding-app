@@ -48,6 +48,12 @@ export default function CalculatorPageUI(props) {
     navigateAfterDelete,
     sectionTotal,
     calculateGrandTotal,
+    editingCalculatorName,
+    setEditingCalculatorName,
+    newCalculatorName,
+    setNewCalculatorName,
+    handleRenameCalculator,
+    renaming,
   } = props;
 
   // Normalize calculator data to ensure `section` is always an array
@@ -105,7 +111,26 @@ export default function CalculatorPageUI(props) {
     case "SqftCalculator":
       return (
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-          <h1>{safeCalculator.name || "Calculator"}</h1>
+          {editingCalculatorName ? (
+            <input
+              type="text"
+              value={newCalculatorName}
+              onChange={(e) => setNewCalculatorName(e.target.value)}
+              onBlur={handleRenameCalculator}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  e.target.blur();
+                }
+              }}
+              autoFocus
+              disabled={renaming}
+            />
+          ) : (
+            <h1 onClick={() => setEditingCalculatorName(true)}>
+              {safeCalculator.name}
+            </h1>
+          )}
           <SqftCalculatorUI
             {...{
               calculator: safeCalculator,

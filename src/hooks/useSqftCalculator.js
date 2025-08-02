@@ -23,8 +23,6 @@ export function useSqftCalculator(projectId, calculatorId) {
     calculateGrandTotal,
   } = useCalculator(projectId, calculatorId);
 
-  // Placeholder for sqft-specific logic if needed later.
-
   return {
     calculator,
     loading,

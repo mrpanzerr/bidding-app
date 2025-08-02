@@ -182,6 +182,31 @@ export async function deleteSectionById(projectId, calculatorId, sectionId) {
 }
 
 /**
+ * Update the name of a calcualtor.
+ * 
+ * @param {string} projectId - The parent project ID.
+ * @param {string} calculatorId - The calculator document ID.
+ * @param {string} newName - The new title for the calculator.
+ * @returns {Promise<void>}
+ * @throws Throws if update fails or calculator not found.
+ */
+export async function updateCalculatorName(projectId, calculatorId, newName) {
+  try {
+    const calculatorRef = doc(db, "projects", projectId, "calculators", calculatorId);
+    const calculatorSnap = await getDoc(calculatorRef);
+
+    if (!calculatorSnap.exists()) throw new Error("Calculator not found");
+
+    await updateDoc(calculatorRef, {
+      name: newName,
+    });
+  } catch (error) {
+    console.error("Error updating calculator title:", error);
+    throw error;
+  }
+}
+
+/**
  * Update the title of a section.
  * 
  * @param {string} projectId - The parent project ID.
