@@ -102,6 +102,7 @@ npm start
 - Worked with a real contractor to build a tool that solves *his actual problems*  
 - Translated real-world workflows into usable software without losing the human logic behind them  
 - Learned how to ship working software that trades polish for usefulness
+- Prioritized clear scoping and thoughtful planning to reduce rework, align features with real needs, and support long-term scalability.
 
 ---
 
