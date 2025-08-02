@@ -1,72 +1,130 @@
-# 🛠️ Bidding Application
+# Bidding App
 
-A simple and intuitive web app for managing construction bidding projects. Built with **React**, **Firebase**, and a focus on clean, accessible UI/UX.
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT) | 
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D16-brightgreen)](https://nodejs.org/) | 
+[![React](https://img.shields.io/badge/React-18-blue.svg)](https://reactjs.org/) | 
+[![Firebase](https://img.shields.io/badge/Firebase-Active-yellowgreen)](https://firebase.google.com/) | 
+[![Vercel](https://img.shields.io/badge/Hosting-Vercel-black?logo=vercel)](https://vercel.com/)
 
-This project is designed for small teams or individuals who want to track projects with options to **create**, **rename**, and **delete** them — all stored in the cloud via Firebase.
+A streamlined bidding tool built for general contractors. This project replaces the slow, error-prone process of handwritten estimates with a faster, digital alternative. Built from the ground up to reflect how real contractors think, work, and price.
 
----
-
-## ✨ Features
-
-- ✅ View a list of all projects
-- ➕ Create new projects with a custom name
-- ✏️ Rename existing projects
-- 🗑️ Delete projects with confirmation
-- 🔐 All data is stored securely in **Cloud Firestore**
-- ⚡ Responsive and keyboard-accessible UI
-- 🔁 Automatic refresh on create, rename, or delete
+🔗 [Live Site](https://bidding-cwj5ldmyw-mrpanzerrs-projects.vercel.app)
 
 ---
 
-<!-- ## 📸 Preview 
+## What It Does
 
-![screenshot of app](./screenshot.png) <!-- Add this later when you have a screenshot -->
+This app helps general contractors:
+
+- Manage multiple construction projects at once  
+- Create custom calculators within each project for:
+  - Square footage and price estimates  
+  - Descriptions and work breakdowns  
+  - Real-time total calculations  
+- Rename or delete projects and calculators instantly  
+- (Coming soon) Generate a printable bid-ready document with full cost breakdown
+
+It’s built to feel familiar to contractors — simple, clear, and focused — while saving them hours of manual work.
 
 ---
 
-## 🧠 Tech Stack
+## Current Status
 
-| Frontend | Backend  |   Deployment    |
-|----------|----------|-----------------|
-| React    | Firebase | Netlify(planned)|
+- Core functionality is working and deployed  
+- Firebase backend is fully connected for real-time data sync  
+- UI is clean but minimal — visual polish is on the roadmap  
+- User authentication is set up on Firebase but not yet integrated  
+- Roadmap features (printable summaries, role-based access, import/export tools) are planned and in progress  
+- ESLint is configured and enforced  
+- App is manually tested across workflows to ensure reliability; automated tests will be added later
 
 ---
 
-## 🚀 Getting Started
+## Features
 
-### 1. Clone the Repo
+> **Project & Calculator Management**
+- Create, rename, and delete projects  
+- Add calculators per project with nested pricing and descriptions  
+- Real-time total calculations
 
-git clone https://github.com/mrpanzerr/bidding-app.git
-cd bidding-application
+> **Data Handling**
+- Firestore-backed database for live sync  
+- All calculations persist instantly — no refresh needed  
+- Vercel deployment with live updates
 
-### 2. Install Dependencies
+> **Roadmap**
+- PDF export for client-ready bids  
+- Role-based login (e.g., estimator vs. admin)  
+- New calculator types (materials, labor, transportation)  
+- Firebase seed data for easier setup  
+- Full UI redesign focused on readability and mobile usability
+
+---
+
+## Tech Stack
+
+- **Frontend:** React, React Router  
+- **Backend / Database:** Firebase Firestore  
+- **Hosting:** Vercel  
+- **Styling:** Vanilla CSS  
+- **Tooling:** ESLint
+
+---
+
+## Getting Started
+
+### Prerequisites
+- Node.js (v16+)
+- Firebase project with Firestore (authentication optional for now)
+
+### Installation
+
+```bash
+git clone https://github.com/mrpanzerr/bidding-app
+cd bidding-app
 npm install
+cp .env.example .env
+# Add your Firebase config to .env
+npm start
+```
 
-### 3. Set Up Firebase
-Create a file called .env.local and add your Firebase credentials:
+## Screenshots / Demo
 
-VITE_FIREBASE_API_KEY=your_api_key
+(Coming soon — but you can explore it live at the link above.)
 
-VITE_FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
+---
 
-VITE_FIREBASE_PROJECT_ID=your_project_id
+## What I Learned
 
-VITE_FIREBASE_STORAGE_BUCKET=your_project_id.appspot.com
+- Built a full CRUD app with nested state and real-time sync  
+- Integrated Firebase Firestore for live data updates with minimal config  
+- Designed flexible, reusable React components that scale as projects grow  
+- Worked with a real contractor to build a tool that solves *his actual problems*  
+- Translated real-world workflows into usable software without losing the human logic behind them  
+- Learned how to ship working software that trades polish for usefulness
 
-VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+---
 
-VITE_FIREBASE_APP_ID=your_app_id
+## Roadmap
 
-VITE_FIREBASE_MEASUREMENT_ID=your_measurement_id
+- 🔧 PDF export  
+- 🔐 User authentication with roles  
+- 💾 Default Firebase seed data  
+- 🎨 UI/UX polish  
+- 🧮 More calculator types  
+- 🧪 Unit + integration testing
 
-⚠️ Make sure .env.local is in your .gitignore so secrets are not pushed to GitHub.
+---
 
-### 4. Start the Development Server
-npm run dev
+## Contact
 
-## Future Plans
- - Add data import/export functionality
+[Portfolio](https://mrpanzerr.github.io/gaetano.github.io/)  
+[Email](mailto:gaetanopanzer01@gmail.com)  
+[Live Site](https://bidding-cwj5ldmyw-mrpanzerrs-projects.vercel.app/)
 
- - Build calculator pages for project estimations on material, material cost and labor cost
+---
 
- - Improve styling and animations
+## License
+
+MIT
+
