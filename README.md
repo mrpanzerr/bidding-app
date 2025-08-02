@@ -2,7 +2,7 @@
 
 A project bidding and estimation tool designed for general contractors. Built to modernize the manual process of creating bids by offering a faster, digital alternative. Currently functional with core features implemented and actively in development.
 
-🔗 [Visit the Live Site](https://bidding-app-mrpanzerr.vercel.app)
+🔗 [Visit the Live Site](https://bidding-cwj5ldmyw-mrpanzerrs-projects.vercel.app/)
 
 ---
 
@@ -98,7 +98,9 @@ npm start
 
 ## Contact 
 [My Portfolio](https://mrpanzerr.github.io/gaetano.github.io/)
-[Live Site](https://bidding-app-mrpanzerr.vercel.app)
+
+[Live Site](https://bidding-cwj5ldmyw-mrpanzerrs-projects.vercel.app/)
+
 [Email](gaetanopanzer01@gmail.com)
 
 ## License
