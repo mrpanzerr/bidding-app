@@ -27,6 +27,12 @@ import DeleteCalculatorModal from "./modals/deleteCalculatorModal";
  * @param {function(string, string, string): Promise<void>} props.calcMeasurement - Calculates and updates a measurement
  * @param {function(string): number} props.sectionTotal - Returns the total value of a section
  * @param {function(): number} props.calculateGrandTotal - Returns the overall total of the calculator
+ * @param {boolean} props.editingCalculatorName - Indicates if the calculator name is being edited
+ * @param {function(boolean): void} props.setEditingCalculatorName - Sets the editing state
+ * @param {string} props.newCalculatorName - The new name for the calculator
+ * @param {function(string): void} props.setNewCalculatorName - Updates the new calculator name
+ * @param {function(): Promise<void>} props.handleRenameCalculator - Handles renaming the calculator
+ * @param {boolean} props.renaming - Indicates if the calculator is currently being renamed
  *
  * @returns {JSX.Element} Rendered calculator UI or fallback loading message
  */
