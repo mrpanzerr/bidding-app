@@ -90,11 +90,12 @@ npm start
 - Collaborate with a real client to solve practical problems for the construction industry
 
 ## Roadmap
+- Add more calculator types (e.g, materials, labor, mobilization)
+- Provide default Firebase seed data to simplify setup for other users
+- Improve UI styling and layout consistency
+- Authentication with user roles
 - Totals page with combined project summary
 - Print-to-PDF functionality
-- Authentication with user roles
-- Export and import project templates
-- Mobile optimization and dark mode
 
 ## Contact 
 [My Portfolio](https://mrpanzerr.github.io/gaetano.github.io/)
