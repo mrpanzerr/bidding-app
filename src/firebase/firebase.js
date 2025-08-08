@@ -1,13 +1,14 @@
 // sec/firebase/firebase.js
 
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 /**
  * Firebase project configuration object.
  * Uses environment variables to keep sensitive info secure.
  * Replace these variables with your actual Firebase config values if needed.
- * 
+ *
  * @constant {object}
  * @property {string} apiKey - API key for Firebase project.
  * @property {string} authDomain - Authentication domain for Firebase.
@@ -34,6 +35,13 @@ const firebaseConfig = {
  * @constant {FirebaseApp} app - Initialized Firebase app instance.
  */
 const app = initializeApp(firebaseConfig);
+
+/**
+ * Initializes Firebase Authentication and gets a reference to the service.
+ *
+ * @constant {Auth} auth - Firebase Authentication instance.
+ */
+export const auth = getAuth(app);
 
 /**
  * Initializes and exports the Firestore database instance.
