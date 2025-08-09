@@ -4,11 +4,13 @@
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D16-brightgreen)](https://nodejs.org/) | 
 [![React](https://img.shields.io/badge/React-18-blue.svg)](https://reactjs.org/) | 
 [![Firebase](https://img.shields.io/badge/Firebase-Active-yellowgreen)](https://firebase.google.com/) | 
-[![Vercel](https://img.shields.io/badge/Hosting-Vercel-black?logo=vercel)](https://vercel.com/)
+[![Vercel](https://img.shields.io/badge/Hosting-Vercel-black?logo=vercel)](https://vercel.com/) |
+![Test](https://github.com/<username>/<repo>/actions/workflows/<workflow-file>.yml/badge.svg)
+
 
 A streamlined bidding tool built for general contractors. This project replaces the slow, error-prone process of handwritten estimates with a faster, digital alternative. Built from the ground up to reflect how real contractors think, work, and price.
 
-🔗 [Live Site](https://bidding-i81vx3i2u-mrpanzerrs-projects.vercel.app)
+🔗 [Live Site](https://bidding-rizl3auoi-mrpanzerrs-projects.vercel.app)
 
 ---
 
@@ -36,7 +38,7 @@ It’s built to feel familiar to contractors — simple, clear, and focused — 
 - User authentication is set up on Firebase but not yet integrated  
 - Roadmap features (printable summaries, role-based access, import/export tools) are planned and in progress  
 - ESLint is configured and enforced  
-- App is manually tested across workflows to ensure reliability; automated tests will be added later
+- App currently relies on a combination of manual testing across workflows to ensure reliability, with plans to focus on automated testing in the future
 
 ---
 
@@ -68,6 +70,7 @@ It’s built to feel familiar to contractors — simple, clear, and focused — 
 - **Hosting:** Vercel  
 - **Styling:** Vanilla CSS  
 - **Tooling:** ESLint
+- **Testing:** Jest
 
 ---
 
@@ -121,7 +124,7 @@ npm start
 
 [Portfolio](https://mrpanzerr.github.io/gaetano.github.io/)  
 [Email](mailto:gaetanopanzer01@gmail.com)  
-[Live Site](https://bidding-i81vx3i2u-mrpanzerrs-projects.vercel.app)
+[Live Site](https://bidding-rizl3auoi-mrpanzerrs-projects.vercel.app)
 
 ---
 
