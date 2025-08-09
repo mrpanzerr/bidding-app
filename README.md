@@ -5,7 +5,7 @@
 [![React](https://img.shields.io/badge/React-18-blue.svg)](https://reactjs.org/) | 
 [![Firebase](https://img.shields.io/badge/Firebase-Active-yellowgreen)](https://firebase.google.com/) | 
 [![Vercel](https://img.shields.io/badge/Hosting-Vercel-black?logo=vercel)](https://vercel.com/) |
-![Test](https://github.com/<username>/<repo>/actions/workflows/<workflow-file>.yml/badge.svg)
+[![Jest](https://img.shields.io/badge/jest-26.6.3-blue.svg)](https://jestjs.io/)
 
 
 A streamlined bidding tool built for general contractors. This project replaces the slow, error-prone process of handwritten estimates with a faster, digital alternative. Built from the ground up to reflect how real contractors think, work, and price.
