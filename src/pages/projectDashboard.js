@@ -19,8 +19,6 @@ function ProjectDashboard() {
 
   const navigate = useNavigate();
 
-  const openTitlePage = () => navigate(`/project/${id}/titlePage`);
-
   const openCalculator = (calculatorId, type) => {
     navigate(`/project/${id}/calculator/${calculatorId}/${type}`);
   };
@@ -54,12 +52,6 @@ function ProjectDashboard() {
         }}
       >
         <h3>Actions</h3>
-        <button
-          onClick={openTitlePage}
-          style={{ display: "block", marginBottom: "1rem" }}
-        >
-          Open Title Page
-        </button>
         <button onClick={openNewCalculatorModal} style={{ display: "block" }}>
           Add Square Foot Calculator
         </button>
