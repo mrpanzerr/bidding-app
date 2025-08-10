@@ -1,10 +1,5 @@
 import { useState } from "react";
 
-/**
- * InputField component for rendering a labeled input field
- * @param {*} param0
- * @returns {JSX.Element}
- */
 function InputField({
   id,
   label,
@@ -30,11 +25,6 @@ function InputField({
   );
 }
 
-/**
- * AuthForm component for user authentication
- * @param {*} param0
- * @returns {JSX.Element}
- */
 export default function AuthForm({
   initialValues = { email: "", password: "", confirmPassword: "" },
   onSubmit,

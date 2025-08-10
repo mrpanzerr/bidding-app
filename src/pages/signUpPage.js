@@ -1,7 +1,7 @@
 import { useState } from "react";
 import SignUpForm from "../components/auth/SignUpForm";
 import { useAuth } from "../contexts/AuthContext";
-import { validateSignUpForm } from "../utils/auth/validateSignUpForm";
+import { validateAuthForm } from "../utils/auth/validateAuthForm";
 
 /**
  * SignUpPage component for user registration
@@ -17,27 +17,27 @@ export default function SignUpPage() {
   const { signUp } = useAuth();
 
   const handleSignUp = async (email, password, confirmPassword) => {
-    const fieldErrors = validateSignUpForm(email, password, confirmPassword);
+    const validationErrors = validateAuthForm(
+      { email, password, confirmPassword },
+      "signup"
+    );
 
-    if (
-      fieldErrors.email ||
-      fieldErrors.password ||
-      fieldErrors.confirmPassword
+    if (validationErrors.email ||
+      validationErrors.password ||
+      validationErrors.confirmPassword
     ) {
-      setErrors({ ...fieldErrors });
+      setErrors(validationErrors);
       return;
     }
 
     try {
       await signUp(email, password);
       // Redirect or show success message after successful sign-up
-
     } catch (error) {
       // Handle sign-up errors
       setErrors({
-        email: "",
-        password: "",
-        confirmPassword: "",
+        ...validationErrors,
+        general: "Sign up failed. Please try again.",
       });
     }
   };

@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { validateAuthForm } from "../../utils/auth/validateAuthForm";
 import AuthForm from "./AuthForm";
 
 /**
@@ -7,20 +5,9 @@ import AuthForm from "./AuthForm";
  * @param {object} props
  * @param {(formData: {email: string, password: string}) => Promise<void>} props.onSubmit
  */
-export default function SignUpForm({ onSubmit }) {
-  const [errors, setErrors] = useState({});
-
+export default function SignUpForm({ onSubmit, errors }) {
   // Wrap onSubmit to handle form validation if needed
   const handleSubmit = async ({ email, password, confirmPassword }) => {
-    // Example validation (you can replace this with your own)
-    const newErrors = validateAuthForm({ email, password, confirmPassword }, "signup");
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-
-    setErrors({});
     onSubmit(email, password, confirmPassword);
   };
 

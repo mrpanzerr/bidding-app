@@ -8,11 +8,12 @@ export function validateAuthForm(formData, formType) {
     errors.email = "Email is invalid.";
   }
 
+  // Additional validations based on form type
   if (formType === "signup") {
     if (!formData.password) {
       errors.password = "Password is required.";
     } else if (formData.password.length < 6) {
-      errors.password = "Password must be at least 6 characters";
+      errors.password = "Password must be at least 6 characters.";
     }
 
     if (!formData.confirmPassword) {
@@ -24,7 +25,6 @@ export function validateAuthForm(formData, formType) {
     if (!formData.password) {
       errors.password = "Password is required.";
     }
-    // You could add other login-specific validations here
   }
 
   return errors;

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { validateAuthForm } from "../../utils/auth/validateAuthForm";
 import AuthForm from "./AuthForm";
 
 /**
@@ -10,9 +11,7 @@ export default function LoginForm({ onSubmit }) {
   const [errors, setErrors] = useState({});
 
   const handleSubmit = async ({ email, password }) => {
-    const newErrors = {};
-    if (!email) newErrors.email = "Email is required";
-    if (!password) newErrors.password = "Password is required";
+    const newErrors = validateAuthForm({ email, password }, "login");
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
