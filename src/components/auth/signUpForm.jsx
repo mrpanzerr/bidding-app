@@ -1,42 +1,38 @@
-export default function SignUpForm({ onSubmit, errors }) {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const { elements } = e.target;
-    const email = elements.email.value;
-    const password = elements.password.value;
-    const confirmPassword = elements.confirmPassword.value;
+import { useState } from "react";
+import AuthForm from "./AuthForm"; // Adjust the path as needed
+
+export default function SignUpForm({ onSubmit }) {
+  const [errors, setErrors] = useState({});
+
+  // Wrap onSubmit to handle form validation if needed
+  const handleSubmit = ({ email, password, confirmPassword }) => {
+    // Example validation (you can replace this with your own)
+    const newErrors = {};
+    if (!email) newErrors.email = "Email is required";
+    if (!password) newErrors.password = "Password is required";
+    if (!confirmPassword)
+      newErrors.confirmPassword = "Confirm Password is required";
+    if (password.length < 6)
+      newErrors.password = "Password must be at least 6 characters";
+    if (password !== confirmPassword)
+      newErrors.confirmPassword = "Passwords do not match";
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setErrors({});
     onSubmit(email, password, confirmPassword);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <input type="email" name="email" placeholder="Email" required />
-        {errors?.email && <p style={{ color: "red" }}>{errors.email}</p>}
-      </div>
-      <div>
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          required
-        />
-        {errors?.password && <p style={{ color: "red" }}>{errors.password}</p>}
-      </div>
-      <div>
-        <input
-          type="password"
-          name="confirmPassword"
-          placeholder="Confirm Password"
-          required
-        />
-        {errors?.confirmPassword && (
-          <p style={{ color: "red" }}>{errors.confirmPassword}</p>
-        )}
-      </div>
-      <button type="submit">Sign Up</button>
-
-      {errors?.general && <p style={{ color: "red" }}>{errors.general}</p>}
-    </form>
+    <AuthForm
+      initialValues={{ email: "", password: "", confirmPassword: "" }}
+      onSubmit={handleSubmit}
+      errors={errors}
+      submitLabel="Sign Up"
+      showConfirmPassword={true}
+    />
   );
 }

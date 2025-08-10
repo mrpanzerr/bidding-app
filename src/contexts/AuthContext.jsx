@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import {
     listenToAuthChanges,
-    signIn as login,
     logout,
+    signIn,
     signUp,
 } from "../firebase/authServices";
 
@@ -21,7 +21,7 @@ export function AuthProvider({ children }) {
     return () => unsubscribe();
   }, []);
 
-  const value = { user, loading, signUp, login, logout };
+  const value = { user, loading, signUp, signIn, logout };
 
   return (
     <AuthContext.Provider value={value}>

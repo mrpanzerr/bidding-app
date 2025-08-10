@@ -1,5 +1,5 @@
 import { useState } from "react";
-import SignUpForm from "../components/auth/signUpForm";
+import SignUpForm from "../components/auth/SignUpForm";
 import { useAuth } from "../contexts/AuthContext";
 import { validateSignUpForm } from "../utils/validateSignUpForm";
 
@@ -9,7 +9,6 @@ export default function SignUpPage() {
     email: "",
     password: "",
     confirmPassword: "",
-    general: "",
   });
 
   const { signUp } = useAuth();
@@ -22,7 +21,7 @@ export default function SignUpPage() {
       fieldErrors.password ||
       fieldErrors.confirmPassword
     ) {
-      setErrors({ ...fieldErrors, general: "" });
+      setErrors({ ...fieldErrors });
       return;
     }
 
@@ -36,7 +35,6 @@ export default function SignUpPage() {
         email: "",
         password: "",
         confirmPassword: "",
-        general: error.message,
       });
     }
   };
