@@ -1,6 +1,11 @@
 import { useState } from "react";
 import AuthForm from "./AuthForm"; // Adjust the path as needed
 
+/**
+ * SignUpForm component for user registration 
+ * @param {*} param0 
+ * @returns 
+ */
 export default function SignUpForm({ onSubmit }) {
   const [errors, setErrors] = useState({});
 

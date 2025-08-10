@@ -3,7 +3,10 @@ import SignUpForm from "../components/auth/SignUpForm";
 import { useAuth } from "../contexts/AuthContext";
 import { validateSignUpForm } from "../utils/validateSignUpForm";
 
-// SignUpPage component for user registration
+/**
+ * SignUpPage component for user registration
+ * @returns {JSX.Element}
+ */
 export default function SignUpPage() {
   const [errors, setErrors] = useState({
     email: "",

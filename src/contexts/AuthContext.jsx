@@ -8,6 +8,11 @@ import {
 
 const AuthContext = createContext();
 
+/**
+ * AuthProvider component for providing authentication context
+ * @param {*} param0
+ * @returns {JSX.Element}
+ */
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
