@@ -1,7 +1,7 @@
 import { useState } from "react";
 import SignUpForm from "../components/auth/SignUpForm";
 import { useAuth } from "../contexts/AuthContext";
-import { validateSignUpForm } from "../utils/validateSignUpForm";
+import { validateSignUpForm } from "../utils/auth/validateSignUpForm";
 
 /**
  * SignUpPage component for user registration
@@ -31,7 +31,7 @@ export default function SignUpPage() {
     try {
       await signUp(email, password);
       // Redirect or show success message after successful sign-up
-      alert("User signed up successfully");
+
     } catch (error) {
       // Handle sign-up errors
       setErrors({

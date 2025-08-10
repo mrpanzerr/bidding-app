@@ -38,9 +38,9 @@ describe("SignUpForm", () => {
 
   test("displays error messages if errors are passed", () => {
     const errors = {
-      email: "Email is required",
-      password: "Password must be at least 6 characters",
-      confirmPassword: "Confirm Password is required",
+      email: "Email is required.",
+      password: "Password is required.",
+      confirmPassword: "Confirm Password is required.",
     };
 
     render(<SignUpForm onSubmit={() => {}} errors={errors} />);
