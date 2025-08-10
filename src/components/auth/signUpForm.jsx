@@ -16,7 +16,6 @@ export default function SignUpForm({ onSubmit, errors }) {
       initialValues={{ email: "", password: "", confirmPassword: "" }}
       onSubmit={handleSubmit}
       errors={errors}
-      submitLabel="Sign Up"
       showConfirmPassword={true}
     />
   );

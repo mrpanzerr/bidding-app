@@ -29,7 +29,6 @@ export default function AuthForm({
   initialValues = { email: "", password: "", confirmPassword: "" },
   onSubmit,
   errors = {},
-  submitLabel = "Submit",
   showConfirmPassword = true,
 }) {
   const [formValues, setFormValues] = useState(initialValues);
@@ -77,7 +76,9 @@ export default function AuthForm({
         />
       ))}
 
-      <button type="submit">{submitLabel}</button>
+      {!showConfirmPassword && <button type="submit">Login</button>}
+
+      <button type="submit">Sign Up</button>
 
       {errors.general && <p style={{ color: "red" }}>{errors.general}</p>}
     </form>

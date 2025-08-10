@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { validateAuthForm } from "../../utils/auth/validateAuthForm";
 import AuthForm from "./AuthForm";
 
 /**
@@ -7,27 +5,16 @@ import AuthForm from "./AuthForm";
  * @param {object} props
  * @param {(formData: {email: string, password: string}) => Promise<void>} props.onSubmit
  */
-export default function LoginForm({ onSubmit }) {
-  const [errors, setErrors] = useState({});
-
+export default function LoginForm({ onSubmit, errors }) {
   const handleSubmit = async ({ email, password }) => {
-    const newErrors = validateAuthForm({ email, password }, "login");
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-
-    setErrors({});
-    onSubmit({ email, password });
-  }; 
+    onSubmit(email, password);
+  };
 
   return (
     <AuthForm
       initialValues={{ email: "", password: "" }}
       onSubmit={handleSubmit}
       errors={errors}
-      submitLabel="Log In"
       showConfirmPassword={false}
     />
   );

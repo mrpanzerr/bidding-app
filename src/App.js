@@ -4,7 +4,7 @@ import { Route, Routes } from "react-router-dom";
 // Page components
 import CalculatorPage from "./pages/calculatorPage";
 import Dashboard from './pages/dashboard';
-// import LoginPage from "./pages/LoginPage";
+import LoginPage from "./pages/LoginPage";
 import ProjectDashboard from "./pages/projectDashboard";
 import SignUpPage from "./pages/signUpPage";
 
@@ -14,8 +14,8 @@ function App() {
     <Routes>
       {/* Root route - displays the Dashboard component at "/" */}
       <Route path="/blah" element={<Dashboard />} />
-      {/* <Route path="/" element={<LoginPage />} /> */}
       <Route path="/" element={<SignUpPage />} />
+      <Route path="/l" element={<LoginPage />} />
 
       {/* Dynamic project route - displays ProjectDashboard for a specific project ID */}
       <Route path="/project/:id" element={<ProjectDashboard />} />
