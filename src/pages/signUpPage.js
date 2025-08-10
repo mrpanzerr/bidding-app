@@ -1,6 +1,6 @@
 import { useState } from "react";
 import SignUpForm from "../components/auth/signUpForm";
-import { signUp } from "../firebase/authServices";
+import { useAuth } from "../contexts/AuthContext";
 import { validateSignUpForm } from "../utils/validateSignUpForm";
 
 // SignUpPage component for user registration
@@ -11,6 +11,8 @@ export default function SignUpPage() {
     confirmPassword: "",
     general: "",
   });
+
+  const { signUp } = useAuth();
 
   const handleSignUp = async (email, password, confirmPassword) => {
     const fieldErrors = validateSignUpForm(email, password, confirmPassword);

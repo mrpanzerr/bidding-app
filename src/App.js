@@ -5,15 +5,15 @@ import { Route, Routes } from "react-router-dom";
 import CalculatorPage from "./pages/calculatorPage";
 import Dashboard from './pages/dashboard';
 import ProjectDashboard from "./pages/projectDashboard";
-//import SignUpPage from "./pages/signUpPage";
+import SignUpPage from "./pages/signUpPage";
 
 // Main application component responsible for routing.
 function App() {
   return (
     <Routes>
       {/* Root route - displays the Dashboard component at "/" */}
-      {/* <Route path="/" element={<Dashboard />} /> */}
-      <Route path="/" element={<Dashboard />} />
+      /* <Route path="/blah" element={<Dashboard />} /> */
+      <Route path="/" element={<SignUpPage />} />
 
       {/* Dynamic project route - displays ProjectDashboard for a specific project ID */}
       <Route path="/project/:id" element={<ProjectDashboard />} />

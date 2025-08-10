@@ -10,6 +10,9 @@ import { BrowserRouter } from "react-router";
 // Main application component.
 import App from "./App";
 
+// Auth context provider for managing user authentication state.
+import { AuthProvider } from "./contexts/AuthContext";
+
 // Utility for measuring app performance (optional).
 import reportWebVitals from "./reportWebVitals";
 
@@ -20,7 +23,9 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <React.StrictMode>
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </React.StrictMode>
   </BrowserRouter>
 );
