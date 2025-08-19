@@ -2,8 +2,8 @@ import AuthForm from "./AuthForm";
 
 /**
  * LoginForm component for user login
- * @param {object} props
- * @param {(formData: {email: string, password: string}) => Promise<void>} props.onSubmit
+ * @param {function} onSubmit - Function to handle form submission with email and password
+ * @param {object} errors - Object containing error messages for the form fields
  */
 export default function LoginForm({ onSubmit, errors }) {
   const handleSubmit = async ({ email, password }) => {
@@ -16,6 +16,7 @@ export default function LoginForm({ onSubmit, errors }) {
       onSubmit={handleSubmit}
       errors={errors}
       showConfirmPassword={false}
+      showLogin={true}
     />
   );
 }

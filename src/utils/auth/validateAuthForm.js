@@ -1,30 +1,45 @@
 export function validateAuthForm(formData, formType) {
   const errors = {};
 
-  // Validate email for all form types
-  if (!formData.email) {
-    errors.email = "Email is required.";
-  } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-    errors.email = "Email is invalid.";
+  // Helper functions
+  const isRequired = (field, fieldName) => {
+    if (!formData[field]?.trim()) {
+      errors[field] = `${fieldName} is required.`;
+      return false;
+    }
+    return true;
+  };
+
+  const isValidEmail = (email) => {
+    const emailRegex = /^\S+@\S+\.\S+$/;
+    if (!emailRegex.test(email)) {
+      errors.email = "Please enter a valid email address.";
+    }
+  };
+
+  const minLength = (field, length, fieldName) => {
+    if (formData[field] && formData[field].length < length) {
+      errors[field] = `${fieldName} must be at least ${length} characters long.`;
+    }
+  };
+
+  // Validate email for all forms
+  if (isRequired("email", "Email")) {
+    isValidEmail(formData.email);
   }
 
-  // Additional validations based on form type
+  // Validate password
   if (formType === "signup") {
-    if (!formData.password) {
-      errors.password = "Password is required.";
-    } else if (formData.password.length < 6) {
-      errors.password = "Password must be at least 6 characters.";
+    if (isRequired("password", "Password")) {
+      minLength("password", 6, "Password");
     }
-
-    if (!formData.confirmPassword) {
-      errors.confirmPassword = "Confirm Password is required.";
-    } else if (formData.password !== formData.confirmPassword) {
-      errors.confirmPassword = "Passwords do not match";
+    if (isRequired("confirmPassword", "Confirm Password")) {
+      if (formData.password !== formData.confirmPassword) {
+        errors.confirmPassword = "Passwords must match.";
+      }
     }
   } else if (formType === "login") {
-    if (!formData.password) {
-      errors.password = "Password is required.";
-    }
+    isRequired("password", "Password");
   }
 
   return errors;

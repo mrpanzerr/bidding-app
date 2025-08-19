@@ -1,5 +1,11 @@
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { auth } from "./firebase";
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "./firebase";
 
 /**
  * Signs up a new user with email and password.
@@ -8,8 +14,30 @@ import { auth } from "./firebase";
  * @param {string} password - The password for the user account.
  * @returns {Promise<UserCredential>} - A promise that resolves with the user credential information.
  */
-export function signUp(email, password) {
-  return createUserWithEmailAndPassword(auth, email, password);
+export async function signUp(email, password) {
+  if (!email || !password) {
+    throw new Error("Email and password are required");
+  }
+
+  try {
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const user = userCredential.user;
+
+    await setDoc(doc(db, "users", user.uid), {
+      uid: user.uid,
+      email: user.email,
+      createdAt: new Date(),
+    });
+
+    return userCredential;
+  } catch (error) {
+    console.error("SignUp Error:", error.code, error.message);
+    throw error;
+  }
 }
 
 /**
@@ -19,8 +47,22 @@ export function signUp(email, password) {
  * @param {string} password - The password for the user account.
  * @returns {Promise<UserCredential>} - A promise that resolves with the user credential information.
  */
-export function signIn(email, password) {
-  return signInWithEmailAndPassword(auth, email, password);
+export async function signIn(email, password) {
+  if (!email || !password) {
+    throw new Error("Email and password are required");
+  }
+
+  try {
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    return userCredential;
+  } catch (error) {
+    console.error("SignIn Error:", error.code, error.message);
+    throw error;
+  }
 }
 
 /**
@@ -28,15 +70,26 @@ export function signIn(email, password) {
  *
  * @returns {Promise<void>} - A promise that resolves when the user is signed out.
  */
-export function logout() {
-  return signOut(auth);
+export async function logout() {
+  try {
+    await signOut(auth);
+  } catch (error) {
+    console.error("Logout Error:", error.code, error.message);
+    throw error;
+  }
 }
 
 /**
  * Listens for changes to the user's authentication state.
  *
  * @param {function} callback - A callback function that receives the current user or null.
+ * @returns {function} - Unsubscribe function to stop listening.
  */
 export function listenToAuthChanges(callback) {
-  return onAuthStateChanged(auth, callback);
+  try {
+    return onAuthStateChanged(auth, callback);
+  } catch (error) {
+    console.error("Auth State Listener Error:", error.code, error.message);
+    throw error;
+  }
 }
