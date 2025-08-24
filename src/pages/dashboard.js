@@ -79,7 +79,7 @@ function Dashboard() {
 
   return (
     <div>
-      <h1>Welcome, Gaetano</h1>
+      <h1>Welcome, Guest</h1>
       <ul>
         {sortedProjects.map((project) => (
           <ProjectItem

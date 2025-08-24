@@ -6,7 +6,6 @@ import AuthForm from "./AuthForm";
  * @param {object} errors - Object containing error messages for the form fields
  */
 export default function SignUpForm({ onSubmit, errors }) {
-  // Wrap onSubmit to handle form validation if needed
   const handleSubmit = async ({ email, password, confirmPassword }) => {
     onSubmit(email, password, confirmPassword);
   };
@@ -17,6 +16,7 @@ export default function SignUpForm({ onSubmit, errors }) {
       onSubmit={handleSubmit}
       errors={errors}
       showConfirmPassword={true}
+      pageType="signup"
     />
   );
 }

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import SignUpForm from "../components/auth/SignUpForm";
 import { useAuth } from "../contexts/AuthContext";
 import { validateAuthForm } from "../utils/auth/validateAuthForm";
@@ -15,6 +16,11 @@ export default function SignUpPage() {
   });
 
   const { signUp } = useAuth();
+  const navigate = useNavigate();
+
+  const navigateToDashboard = () => {
+    navigate("/dashboard");
+  };
 
   const handleSignUp = async (email, password, confirmPassword) => {
     const validationErrors = validateAuthForm(
@@ -32,12 +38,11 @@ export default function SignUpPage() {
 
     try {
       await signUp(email, password);
-      // Redirect or show success message after successful sign-up
+      navigateToDashboard();
     } catch (error) {
       // Handle sign-up errors
       setErrors({
         ...validationErrors,
-        general: "Sign up failed. Please try again.",
       });
     }
   };

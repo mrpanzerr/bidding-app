@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 function InputField({
   id,
@@ -28,14 +29,24 @@ function InputField({
 export default function AuthForm({
   initialValues = { email: "", password: "", confirmPassword: "" },
   onSubmit,
-  onGuest,
   errors = {},
   showConfirmPassword = false, // true for signup page
   showLogin = false,           // true for login page
   showSignUp = true,           // always show sign up on signup page
-  showGuest = true,            // optional guest button
+  showGuest = true, 
+  pageType,          
 }) {
   const [formValues, setFormValues] = useState(initialValues);
+
+  const navigate = useNavigate();
+
+  const navigateToGuest = () => {
+    navigate("/guest");
+  };
+
+  const navigateToSignUp = () => {
+    navigate("/signup");
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -48,9 +59,11 @@ export default function AuthForm({
   const handleSubmit = (e, action) => {
     e.preventDefault();
     if (action === "guest") {
-      onGuest && onGuest();
+      navigateToGuest();
+    } else if (action === "routeToSignUp") {
+      navigateToSignUp();
     } else {
-      onSubmit(formValues, action); // pass action so you know login vs signup
+      onSubmit(formValues, action);
     }
   };
 
@@ -92,7 +105,13 @@ export default function AuthForm({
           </button>
         )}
 
-        {showSignUp && (
+        {pageType === "login" && showSignUp && (
+          <button type="submit" onClick={(e) => handleSubmit(e, "routeToSignUp")}>
+            Sign Up
+          </button>
+        )}
+
+        {pageType === "signup" && showSignUp && (
           <button type="submit" onClick={(e) => handleSubmit(e, "signup")}>
             Sign Up
           </button>

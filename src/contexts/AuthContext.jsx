@@ -1,17 +1,21 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import {
-    listenToAuthChanges,
-    logout,
-    signIn,
-    signUp,
+  listenToAuthChanges,
+  logout,
+  signIn,
+  signUp,
 } from "../firebase/authServices";
 
 const AuthContext = createContext();
 
 /**
  * AuthProvider component for providing authentication context
- * @param {*} param0
- * @returns {JSX.Element}
+ * to its child components. It manages the authentication state,
+ * listens for auth changes, and provides auth methods.
+ *
+ * @param {Object} props - The component props.
+ * @param {React.ReactNode} props.children - The child components.
+ * @returns {JSX.Element} The AuthProvider component.
  */
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);

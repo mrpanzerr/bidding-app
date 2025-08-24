@@ -17,6 +17,7 @@ export default function LoginForm({ onSubmit, errors }) {
       errors={errors}
       showConfirmPassword={false}
       showLogin={true}
+      pageType="login"
     />
   );
 }

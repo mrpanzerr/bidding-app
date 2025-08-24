@@ -13,9 +13,10 @@ function App() {
   return (
     <Routes>
       {/* Root route - displays the Dashboard component at "/" */}
-      <Route path="/s" element={<Dashboard />} />
-      <Route path="/" element={<SignUpPage />} />
-      <Route path="/l" element={<LoginPage />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/signup" element={<SignUpPage />} />
+      <Route path="/" element={<LoginPage />} />
+      <Route path="/guest" element={<Dashboard />} />
 
       {/* Dynamic project route - displays ProjectDashboard for a specific project ID */}
       <Route path="/project/:id" element={<ProjectDashboard />} />
