@@ -2,11 +2,11 @@
 import { Route, Routes } from "react-router-dom";
 
 // Page components
-import CalculatorPage from "./pages/calculatorPage";
-import Dashboard from './pages/dashboard';
+import CalculatorPage from "./pages/CalculatorPage";
+import Dashboard from './pages/Dashboard';
 import LoginPage from "./pages/LoginPage";
-import ProjectDashboard from "./pages/projectDashboard";
-import SignUpPage from "./pages/signUpPage";
+import ProjectDashboard from "./pages/ProjectDashboard";
+import SignUpPage from "./pages/SignUpPage";
 
 // Main application component responsible for routing.
 function App() {

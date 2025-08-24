@@ -1,0 +1,93 @@
+/* Fullscreen flex container */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f6f9;
+}
+
+/* Card box */
+.box {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Input fields */
+.field {
+  margin-bottom: 1rem;
+}
+
+.label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.inputError {
+  border-color: #e63946;
+}
+
+.errorText {
+  margin-top: 0.25rem;
+  color: #e63946;
+  font-size: 0.85rem;
+}
+
+/* Buttons */
+.buttonRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.button,
+.secondaryButton {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+  border: none;
+}
+
+.button {
+  background: #007bff;
+  color: white;
+}
+
+.button:hover {
+  background: #0056b3;
+}
+
+.secondaryButton {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.secondaryButton:hover {
+  background: #e2e2e2;
+}
