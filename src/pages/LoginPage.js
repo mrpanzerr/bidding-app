@@ -21,7 +21,7 @@ export default function LoginPage() {
    * Navigate to the dashboard after successful login.
    */
   const navigateToDashboard = () => {
-    navigate("/dashboard");
+    navigate("/user");
   };
 
   /**

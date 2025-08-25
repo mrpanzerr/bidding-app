@@ -148,7 +148,7 @@ export default function AuthForm({
 
           {/* Form action buttons */}
           <div className={styles.buttonRow}>
-            {showLogin && (
+            {pageType === "login" && showLogin && (
               <button
                 type="submit"
                 onClick={(e) => handleSubmit(e, "login")}
