@@ -1,4 +1,4 @@
-# Bidding App
+# BidWise
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT) | 
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D16-brightgreen)](https://nodejs.org/) | 
@@ -111,12 +111,11 @@ npm start
 
 ## Roadmap
 
-- 🔧 PDF export  
-- 🔐 User authentication with roles  
-- 💾 Default Firebase seed data  
-- 🎨 UI/UX polish  
-- 🧮 More calculator types  
-- 🧪 Unit + integration testing
+- PDF export  
+- Default Firebase seed data  
+- UI/UX polish  
+- More calculator types  
+- Unit + integration testing
 
 ---
 
