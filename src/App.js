@@ -4,7 +4,7 @@ import { Route, Routes } from "react-router-dom";
 // Page components
 import { Navigate } from "react-router-dom";
 import CalculatorPage from "./pages/CalculatorPage";
-import GuestDashboard from "./pages/GuestDashboard";
+import Dashboard from "./pages/Dashboard";
 import LoginPage from "./pages/LoginPage";
 import ProjectDashboard from "./pages/ProjectDashboard";
 import SignUpPage from "./pages/SignUpPage";
@@ -36,7 +36,7 @@ function App() {
         path="/dashboard"
         element={
           <ProtectedRoute allowGuest={true}>
-            <GuestDashboard />
+            <Dashboard />
           </ProtectedRoute>
         }
       />
