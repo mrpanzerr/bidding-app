@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import AuthForm from "../components/auth/AuthForm";
 import { useAuth } from "../contexts/AuthContext";
+import { auth } from "../firebase/firebase";
 import { validateAuthForm } from "../utils/auth/validateAuthForm";
 
 /**
@@ -26,7 +27,7 @@ export default function SignupPage() {
    * Navigate to the user dashboard after successful signup.
    */
   const navigateToDashboard = () => {
-    navigate("/dashboard");
+    navigate("/dashboard", { replace: true });
   };
 
   /**
@@ -59,6 +60,10 @@ export default function SignupPage() {
       });
     }
   };
+
+  if (auth.currentUser) {
+    navigateToDashboard();
+  }
 
   return (
     <AuthForm

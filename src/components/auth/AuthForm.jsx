@@ -75,7 +75,7 @@ export default function AuthForm({
    * Navigate to guest access page.
    */
   const navigateToGuest = () => {
-    navigate("/guest");
+    navigate("/dashboard");
   };
 
   /**

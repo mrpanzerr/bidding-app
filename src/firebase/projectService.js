@@ -5,36 +5,38 @@ import {
   doc,
   getDoc,
   getDocs,
+  query,
   setDoc,
   Timestamp,
+  where
 } from "firebase/firestore";
+import { auth, db } from "./firebase";
 
-import { db } from "./firebase";
+/* =======================
+   GENERAL PROJECT FUNCTIONS (GUEST)
+   ======================= */
 
 /**
- * Fetch all projects from the 'projects' collection.
- *
- * @async
- * @returns {Promise<Array<{ id: string; [key: string]: any }>>}  
- *          Array of project objects including their document IDs and data.
+ * Fetch all guest projects (no userId field).
  */
 export async function fetchProjects() {
-  const querySnapshot = await getDocs(collection(db, "projects"));
+  try {
+    // Query projects where userId does not exist
+    const q = query(collection(db, "projects"), where("userId", "==", null));
+    const querySnapshot = await getDocs(q);
 
-  return querySnapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
+    return querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+  } catch (e) {
+    console.error("Error fetching guest projects:", e);
+    return [];
+  }
 }
 
 /**
- * Fetch data for a single project by its document ID.
- *
- * @async
- * @param {string} id - The document ID of the project to retrieve.
- * @returns {Promise<import("firebase/firestore").DocumentSnapshot>}  
- *          Document snapshot containing the project data.
- * @throws Will throw an error if fetching the document fails.
+ * Get a single project by ID
  */
 export async function getProjectData(id) {
   try {
@@ -48,33 +50,7 @@ export async function getProjectData(id) {
 }
 
 /**
- * Rename an existing project by updating its 'name' field.
- *
- * @async
- * @param {string} id - The document ID of the project to rename.
- * @param {string} newName - The new name to assign to the project.
- * @returns {Promise<void>} Resolves when the update is complete.
- * @throws Will log an error if update fails.
- */
-export async function renameProject(id, newName) {
-  try {
-    await setDoc(
-      doc(db, "projects", id),
-      { name: newName },
-      { merge: true }
-    );
-  } catch (e) {
-    console.error("Error updating project name:", e);
-  }
-}
-
-/**
- * Add a new project to the 'projects' collection.
- *
- * @async
- * @param {string} projectName - The name of the new project.
- * @returns {Promise<void>} Resolves when the project has been added.
- * @throws Will log an error if creation fails.
+ * Add a project (guest)
  */
 export async function addProject(projectName) {
   try {
@@ -84,6 +60,7 @@ export async function addProject(projectName) {
       dateSent: "",
       jobAddress: "",
       toAddress: "",
+      userId: null,
     });
   } catch (e) {
     console.error("Error adding project:", e);
@@ -91,18 +68,103 @@ export async function addProject(projectName) {
 }
 
 /**
- * Delete a project from the 'projects' collection by ID.
- *
- * @async
- * @param {string} id - The ID of the project to delete.
- * @returns {Promise<void>} Resolves when the project is deleted.
- * @throws Will log an error if deletion fails.
+ * Rename a project (guest)
+ */
+export async function renameProject(id, newName) {
+  try {
+    await setDoc(doc(db, "projects", id), { name: newName }, { merge: true });
+  } catch (e) {
+    console.error("Error updating project name:", e);
+  }
+}
+
+/**
+ * Delete a project (guest)
  */
 export async function deleteProject(id) {
   try {
-    const docRef = doc(db, "projects", id);
-    await deleteDoc(docRef);
+    await deleteDoc(doc(db, "projects", id));
   } catch (e) {
     console.error("Error deleting project:", e);
+  }
+}
+
+
+/* =======================
+   USER-SPECIFIC PROJECT FUNCTIONS
+   ======================= */
+
+/**
+ * Fetch all projects owned by the current user
+ */
+export async function fetchMyProjects() {
+  const user = auth.currentUser;
+  if (!user) throw new Error("User not authenticated");
+
+  const q = query(collection(db, "projects"), where("userId", "==", user.uid));
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+}
+
+/**
+ * Add a new project for the current user
+ */
+export async function addMyProject(projectName) {
+  const user = auth.currentUser;
+  if (!user) throw new Error("User not authenticated");
+
+  try {
+    await addDoc(collection(db, "projects"), {
+      userId: user.uid,
+      name: projectName,
+      createdAt: Timestamp.now(),
+      dateSent: "",
+      jobAddress: "",
+      toAddress: "",
+    });
+  } catch (e) {
+    console.error("Error adding user project:", e);
+  }
+}
+
+/**
+ * Rename a project owned by the current user
+ */
+export async function renameMyProject(id, newName) {
+  const user = auth.currentUser;
+  if (!user) throw new Error("User not authenticated");
+
+  try {
+    const docRef = doc(db, "projects", id);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists() || docSnap.data().userId !== user.uid) {
+      throw new Error("Project not found or not owned by user");
+    }
+
+    await setDoc(docRef, { name: newName }, { merge: true });
+  } catch (e) {
+    console.error("Error renaming user project:", e);
+  }
+}
+
+/**
+ * Delete a project owned by the current user
+ */
+export async function deleteMyProject(id) {
+  const user = auth.currentUser;
+  if (!user) throw new Error("User not authenticated");
+
+  try {
+    const docRef = doc(db, "projects", id);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists() || docSnap.data().userId !== user.uid) {
+      throw new Error("Project not found or not owned by user");
+    }
+
+    await deleteDoc(docRef);
+  } catch (e) {
+    console.error("Error deleting user project:", e);
   }
 }

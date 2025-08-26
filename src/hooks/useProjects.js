@@ -1,15 +1,20 @@
 import { useEffect, useState } from "react";
+import { auth } from "../firebase/firebase";
 import {
+  addMyProject,
   addProject,
+  deleteMyProject,
   deleteProject,
+  fetchMyProjects,
   fetchProjects,
   getProjectData,
+  renameMyProject,
   renameProject,
 } from "../firebase/projectService";
 
 /**
- * Custom hook for managing all projects.
- * Provides state for loading, error handling, and project list management.
+ * Custom hook for managing projects.
+ * Automatically switches between guest and user-specific projects.
  */
 export function useProjects() {
   const [projects, setProjects] = useState([]);
@@ -20,13 +25,13 @@ export function useProjects() {
     loadProjects();
   }, []);
 
-  // Fetch all projects and update state
   const loadProjects = async () => {
     setLoading(true);
     setError(null);
 
     try {
-      const data = await fetchProjects();
+      const user = auth.currentUser;
+      const data = user ? await fetchMyProjects() : await fetchProjects();
       setProjects(data);
     } catch (e) {
       setError(e);
@@ -35,30 +40,30 @@ export function useProjects() {
     }
   };
 
-  // Add a new project and reload projects
   const addNewProject = async (name) => {
     try {
-      await addProject(name);
+      const user = auth.currentUser;
+      user ? await addMyProject(name) : await addProject(name);
       await loadProjects();
     } catch (e) {
       setError(e);
     }
   };
 
-  // Rename an existing project and reload projects
   const renameExistingProject = async (id, newName) => {
     try {
-      await renameProject(id, newName);
+      const user = auth.currentUser;
+      user ? await renameMyProject(id, newName) : await renameProject(id, newName);
       await loadProjects();
     } catch (e) {
       setError(e);
     }
   };
 
-  // Delete a project and reload projects
   const deleteExistingProject = async (id) => {
     try {
-      await deleteProject(id);
+      const user = auth.currentUser;
+      user ? await deleteMyProject(id) : await deleteProject(id);
       await loadProjects();
     } catch (e) {
       setError(e);
@@ -77,7 +82,7 @@ export function useProjects() {
 
 /**
  * Custom hook for fetching a single project's data by ID.
- * Provides state for loading, error handling, and fetched data.
+ * Works for both guest and user projects.
  */
 export function useProject(id) {
   const [project, setProject] = useState(null);

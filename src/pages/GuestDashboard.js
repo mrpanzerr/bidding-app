@@ -1,16 +1,18 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { logout } from "../firebase/authServices";
+import { auth } from "../firebase/firebase";
 
 import DashboardLayout from "../components/dashboardLayout";
-import ProjectList from "../components/projectList";
-
 import DeleteModal from "../components/modals/deleteModal";
 import NewProjectModal from "../components/modals/newProjectModal";
 import RenameModal from "../components/modals/renameModal";
+import ProjectList from "../components/projectList";
 
 import { useProjectManagement } from "../hooks/useProjectManagement";
 import { useProjects } from "../hooks/useProjects";
 
-function GuestDashboard() {
+function Dashboard() {
   const {
     projects,
     loading,
@@ -22,19 +24,15 @@ function GuestDashboard() {
 
   const navigate = useNavigate();
 
-  const {
-    modalType,
-    setModalType,
-    setSelectedProjectId,
-    projectName,
-    setProjectName,
-    newName,
-    setNewName,
-    originalName,
-    setOriginalName,
-    deleteName,
-    setDeleteName,
+  // Modal / project state
+  const [modalType, setModalType] = useState(null);
+  const [projectName, setProjectName] = useState("");
+  const [newName, setNewName] = useState("");
+  const [originalName, setOriginalName] = useState("");
+  const [deleteName, setDeleteName] = useState("");
+  const [selectedProjectId, setSelectedProjectId] = useState(null);
 
+  const {
     openNewProjectModal,
     handleNewProject,
     handleRename,
@@ -43,24 +41,43 @@ function GuestDashboard() {
     addNewProject,
     renameExistingProject,
     deleteExistingProject,
+    setModalType,
+    setProjectName,
+    setNewName,
+    setOriginalName,
+    setDeleteName,
+    setSelectedProjectId,
   });
 
-  // Sort projects by creation date
+  const openProject = (id) => navigate(`/project/${id}`);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      navigate("/", { replace: true });
+    } catch (e) {
+      console.error("Logout failed:", e);
+    }
+  };
+
+  if (loading) return <p>Loading projects...</p>;
+  if (error) return <p>Error loading projects: {error.message}</p>;
+
   const sortedProjects = [...projects].sort((a, b) => {
     const dateA = a.createdAt?.toDate() || new Date(0);
     const dateB = b.createdAt?.toDate() || new Date(0);
     return dateB - dateA;
   });
 
-  const openProject = (id) => {
-    navigate(`/project/${id}`);
-  };
-
-  if (loading) return <p>Loading projects...</p>;
-  if (error) return <p>Error loading projects: {error.message}</p>;
+  const isUser = !!auth.currentUser;
 
   return (
-    <DashboardLayout title="Welcome, Guest" onAddProject={openNewProjectModal}>
+    <DashboardLayout
+      title={isUser ? `Welcome, ${auth.currentUser.displayName || "User"}` : "Welcome, Guest"}
+      onAddProject={openNewProjectModal}
+    >
+
       <ProjectList
         projects={sortedProjects}
         onOpen={openProject}
@@ -115,8 +132,20 @@ function GuestDashboard() {
           }}
         />
       )}
+
+      {isUser && (
+        <button style={{ marginBottom: 20 }} onClick={handleLogout}>
+          Logout
+        </button>
+      )}
+
+      {!isUser && (
+        <button style={{ marginBottom: 20 }} onClick={() => navigate("/")}>
+          Back to login
+        </button>
+      )}
     </DashboardLayout>
   );
 }
 
-export default GuestDashboard;
+export default Dashboard;
