@@ -1,6 +1,4 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../firebase/authServices";
 import { auth } from "../firebase/firebase";
 
 import DashboardLayout from "../components/dashboardLayout";
@@ -9,47 +7,42 @@ import NewProjectModal from "../components/modals/newProjectModal";
 import RenameModal from "../components/modals/renameModal";
 import ProjectList from "../components/projectList";
 
+import { logout } from "../firebase/authServices";
 import { useProjectManagement } from "../hooks/useProjectManagement";
 import { useProjects } from "../hooks/useProjects";
 
 function Dashboard() {
-  const {
-    projects,
-    loading,
-    error,
-    addNewProject,
-    renameExistingProject,
-    deleteExistingProject,
-  } = useProjects();
-
+  const { projects, loading, error, addNewProject, renameExistingProject, deleteExistingProject } = useProjects();
   const navigate = useNavigate();
 
-  // Modal / project state
-  const [modalType, setModalType] = useState(null);
-  const [projectName, setProjectName] = useState("");
-  const [newName, setNewName] = useState("");
-  const [originalName, setOriginalName] = useState("");
-  const [deleteName, setDeleteName] = useState("");
-  const [selectedProjectId, setSelectedProjectId] = useState(null);
-
+  // Hook that handles modals, input, and calling the useProjects functions
   const {
+    modalType,
+    setModalType,
     openNewProjectModal,
     handleNewProject,
     handleRename,
     handleDelete,
-  } = useProjectManagement({
-    addNewProject,
-    renameExistingProject,
-    deleteExistingProject,
-    setModalType,
+    projectName,
     setProjectName,
+    newName,
     setNewName,
-    setOriginalName,
-    setDeleteName,
     setSelectedProjectId,
-  });
+    originalName,
+    deleteName,
+    setDeleteName
+  } = useProjectManagement({ addNewProject, renameExistingProject, deleteExistingProject });
 
   const openProject = (id) => navigate(`/project/${id}`);
+
+  if (loading) return <p>Loading projects...</p>;
+  if (error) return <p>Error loading projects: {error.message}</p>;
+
+  const sortedProjects = [...projects].sort((a, b) => {
+    const dateA = a.createdAt?.toDate() || new Date(0);
+    const dateB = b.createdAt?.toDate() || new Date(0);
+    return dateB - dateA;
+  });
 
   const handleLogout = async () => {
     try {
@@ -61,23 +54,12 @@ function Dashboard() {
     }
   };
 
-  if (loading) return <p>Loading projects...</p>;
-  if (error) return <p>Error loading projects: {error.message}</p>;
-
-  const sortedProjects = [...projects].sort((a, b) => {
-    const dateA = a.createdAt?.toDate() || new Date(0);
-    const dateB = b.createdAt?.toDate() || new Date(0);
-    return dateB - dateA;
-  });
-
-  const isUser = !!auth.currentUser;
 
   return (
     <DashboardLayout
-      title={isUser ? `Welcome, ${auth.currentUser.displayName || "User"}` : "Welcome, Guest"}
+      title={auth.currentUser ? `Welcome, ${auth.currentUser.email || "User"}` : "Welcome, Guest"}
       onAddProject={openNewProjectModal}
     >
-
       <ProjectList
         projects={sortedProjects}
         onOpen={openProject}
@@ -88,7 +70,6 @@ function Dashboard() {
         }}
         onDelete={(id, name) => {
           setSelectedProjectId(id);
-          setOriginalName(name);
           setModalType("delete");
         }}
       />
@@ -98,10 +79,7 @@ function Dashboard() {
           projectName={projectName}
           setProjectName={setProjectName}
           onSave={handleNewProject}
-          onCancel={() => {
-            setModalType(null);
-            setProjectName("");
-          }}
+          onCancel={() => setModalType(null)}
         />
       )}
 
@@ -110,11 +88,7 @@ function Dashboard() {
           newName={newName}
           setNewName={setNewName}
           onSave={handleRename}
-          onCancel={() => {
-            setSelectedProjectId(null);
-            setNewName("");
-            setModalType(null);
-          }}
+          onCancel={() => setModalType(null)}
         />
       )}
 
@@ -124,28 +98,18 @@ function Dashboard() {
           setDeleteName={setDeleteName}
           originalName={originalName}
           onSave={handleDelete}
-          onCancel={() => {
-            setSelectedProjectId(null);
-            setOriginalName("");
-            setDeleteName("");
-            setModalType(null);
-          }}
+          onCancel={() => setModalType(null)}
         />
       )}
 
-      {isUser && (
-        <button style={{ marginBottom: 20 }} onClick={handleLogout}>
-          Logout
-        </button>
+      {auth.currentUser && (
+        <button onClick={handleLogout}>Logout</button>
       )}
 
-      {!isUser && (
-        <button style={{ marginBottom: 20 }} onClick={() => navigate("/")}>
-          Back to login
-        </button>
+      {!auth.currentUser && (
+        <button onClick={() => navigate("/")}>Back to Login</button>
       )}
     </DashboardLayout>
   );
 }
-
 export default Dashboard;
