@@ -66,8 +66,6 @@ export function useProjectManagement({ addNewProject, renameExistingProject, del
     if (!selectedProjectId) return;
     await deleteExistingProject(selectedProjectId);
     setSelectedProjectId(null);
-    setOriginalName("");
-    setDeleteName("");
     setModalType(null);
   };
 

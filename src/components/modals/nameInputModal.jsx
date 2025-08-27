@@ -4,9 +4,8 @@ import styles from "../../styles/nameInputModal.module.css";
 /**
  * NameInputModal Component
  *
- * A reusable modal for renaming or deleting a project.
+ * A reusable modal for renaming a project.
  * Shows an input field and Save/Cancel buttons.
- * When deleting, requires exact name match for confirmation.
  *
  * @param {Object} props
  * @param {string} [props.originalName=""] - Current project name (for delete confirmation)

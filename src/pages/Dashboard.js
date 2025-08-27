@@ -28,10 +28,6 @@ function Dashboard() {
     newName,
     setNewName,
     setSelectedProjectId,
-    originalName,
-    setOriginalName,
-    deleteName,
-    setDeleteName
   } = useProjectManagement({ addNewProject, renameExistingProject, deleteExistingProject });
 
   const openProject = (id) => navigate(`/project/${id}`);
@@ -69,9 +65,8 @@ function Dashboard() {
           setNewName(name);
           setModalType("rename");
         }}
-        onDelete={(id, name) => {
+        onDelete={(id) => {
           setSelectedProjectId(id);
-          setOriginalName(name);
           setModalType("delete");
         }}
       />
@@ -96,9 +91,6 @@ function Dashboard() {
 
       {modalType === "delete" && (
         <DeleteModal
-          deleteName={deleteName}
-          setDeleteName={setDeleteName}
-          originalName={originalName}
           onSave={handleDelete}
           onCancel={() => setModalType(null)}
         />
