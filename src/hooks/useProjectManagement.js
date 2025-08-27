@@ -1,32 +1,34 @@
 import { useState } from "react";
 
 /**
- * Custom hook for managing project modals and actions.
- * Encapsulates the state and logic for creating, renaming, and deleting projects.
+ * Custom hook for managing project modals and related actions.
+ * Centralizes state and logic for creating, renaming, and deleting projects.
  *
  * @param {Object} params - The project action handlers.
- * @param {function(string): Promise<void>} params.addNewProject - Function to add a new project.
- * @param {function(string, string): Promise<void>} params.renameExistingProject - Function to rename an existing project.
- * @param {function(string): Promise<void>} params.deleteExistingProject - Function to delete an existing project.
+ * @param {function(string): Promise<void>} params.addNewProject - Adds a new project with the given name.
+ * @param {function(string, string): Promise<void>} params.renameExistingProject - Renames a project by ID and new name.
+ * @param {function(string): Promise<void>} params.deleteExistingProject - Deletes a project by ID.
  *
- * @returns {Object} - An object containing modal state, project state, and handler functions.
+ * @returns {Object} - Modal state, project state, and handler functions for project management.
  */
 export function useProjectManagement({ addNewProject, renameExistingProject, deleteExistingProject }) {
-  // Modal state: null, 'new', 'rename', or 'delete'
+  // Tracks which modal is open: null, "new", "rename", or "delete"
   const [modalType, setModalType] = useState(null);
 
-  // Currently selected project ID for rename or delete operations
+  // The project currently targeted for rename or delete
   const [selectedProjectId, setSelectedProjectId] = useState(null);
 
-  // Input states
-  const [projectName, setProjectName] = useState(""); // New project name
-  const [newName, setNewName] = useState("");         // Renamed project name
-  const [originalName, setOriginalName] = useState(""); // Original project name before deletion/rename
-  const [deleteName, setDeleteName] = useState("");   // Name confirmation for deletion modal
+  // Input states for different modals
+  const [projectName, setProjectName] = useState("");   // For creating a new project
+  const [newName, setNewName] = useState("");           // For renaming a project
+  const [originalName, setOriginalName] = useState(""); // Original project name (useful for rename/delete confirmation UIs)
+  const [deleteName, setDeleteName] = useState("");     // Name typed by user to confirm deletion
 
   /**
-   * Opens the "New Project" modal and clears the input field.
-   * @param {React.SyntheticEvent} e - The event object to prevent propagation.
+   * Opens the "New Project" modal.
+   * Resets the project name input to ensure a clean state.
+   *
+   * @param {React.SyntheticEvent} e - Event object (propagation is stopped).
    */
   const openNewProjectModal = (e) => {
     e.stopPropagation();
@@ -35,8 +37,8 @@ export function useProjectManagement({ addNewProject, renameExistingProject, del
   };
 
   /**
-   * Handles creating a new project using the provided name.
-   * Clears input and closes modal upon completion.
+   * Creates a new project if the input name is valid.
+   * Resets input and closes modal on success.
    */
   const handleNewProject = async () => {
     const trimmed = projectName.trim();
@@ -47,8 +49,8 @@ export function useProjectManagement({ addNewProject, renameExistingProject, del
   };
 
   /**
-   * Handles renaming the selected project.
-   * Clears input and resets selection/modal state upon completion.
+   * Renames the currently selected project.
+   * Resets input and modal state on success.
    */
   const handleRename = async () => {
     if (!selectedProjectId || !newName) return;
@@ -59,8 +61,8 @@ export function useProjectManagement({ addNewProject, renameExistingProject, del
   };
 
   /**
-   * Handles deleting the selected project.
-   * Clears input and resets selection/modal state upon completion.
+   * Deletes the currently selected project.
+   * Resets selection and modal state on success.
    */
   const handleDelete = async () => {
     if (!selectedProjectId) return;
