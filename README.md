@@ -91,10 +91,6 @@ cp .env.example .env
 npm start
 ```
 
-## Screenshots / Demo
-
-(Coming soon — but you can explore it live at the link above.)
-
 ---
 
 ## What I Learned
