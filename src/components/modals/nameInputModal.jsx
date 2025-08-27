@@ -20,7 +20,7 @@ import styles from "../../styles/nameInputModal.module.css";
  * @returns {JSX.Element}
  */
 function NameInputModal({
-  originalName = "",
+  originalName,
   value,
   setValue,
   onSave,

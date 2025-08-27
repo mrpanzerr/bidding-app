@@ -20,7 +20,7 @@ function DeleteModal({ originalName, deleteName, setDeleteName, onSave, onCancel
       value={deleteName}
       setValue={setDeleteName}
       originalName={originalName}
-      onSave={onSave}
+      onSave={(val) => onSave(val)}
       onCancel={onCancel}
       modalType={modalType}
       label="Delete Project:"

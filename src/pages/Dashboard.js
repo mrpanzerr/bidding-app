@@ -29,6 +29,7 @@ function Dashboard() {
     setNewName,
     setSelectedProjectId,
     originalName,
+    setOriginalName,
     deleteName,
     setDeleteName
   } = useProjectManagement({ addNewProject, renameExistingProject, deleteExistingProject });
@@ -70,6 +71,7 @@ function Dashboard() {
         }}
         onDelete={(id, name) => {
           setSelectedProjectId(id);
+          setOriginalName(name);
           setModalType("delete");
         }}
       />

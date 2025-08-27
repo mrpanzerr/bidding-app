@@ -47,7 +47,7 @@ function App() {
       <Route
         path="/project/:id"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute allowGuest={true}>
             <ProjectDashboard />
           </ProtectedRoute>
         }
