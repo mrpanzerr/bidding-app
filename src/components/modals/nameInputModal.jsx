@@ -19,34 +19,16 @@ import styles from "../../styles/nameInputModal.module.css";
  * @returns {JSX.Element}
  */
 function NameInputModal({
-  originalName,
   value,
   setValue,
   onSave,
   onCancel,
-  modalType,
   label = "Name Project:",
 }) {
   const [loading, setLoading] = useState(false);
 
   const handleRenameSave = async () => {
     setLoading(true);
-    try {
-      await onSave();
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDeleteSave = async () => {
-    setLoading(true);
-
-    if (value.trim() !== originalName.trim()) {
-      alert("Names must match to delete");
-      setLoading(false);
-      return;
-    }
-
     try {
       await onSave();
     } finally {
@@ -72,9 +54,7 @@ function NameInputModal({
             onKeyDown={(e) => {
               if (e.key === "Enter" && !loading) {
                 e.preventDefault();
-                modalType === "delete"
-                  ? handleDeleteSave()
-                  : handleRenameSave();
+                handleRenameSave();
               }
             }}
             placeholder="Enter name"
@@ -89,9 +69,7 @@ function NameInputModal({
               e.preventDefault();
               if (loading) return;
 
-              modalType === "delete"
-                ? handleDeleteSave()
-                : handleRenameSave();
+              handleRenameSave();
             }}
             disabled={loading}
           >
