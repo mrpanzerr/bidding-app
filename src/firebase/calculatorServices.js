@@ -12,7 +12,7 @@ import { db } from "./firebase";
 /**
  * Fetch all calculator documents under a specific project.
  *
- * @param {string} projectId - The ID of the project whose calculators to retrieve.
+ * @param {string} projectId - Project ID.
  * @returns {Promise<Array<Object>>} Array of calculator objects with id and their data.
  */
 export async function getAllCalculators(projectId) {
@@ -28,8 +28,8 @@ export async function getAllCalculators(projectId) {
 /**
  * Retrieve a single calculator document snapshot.
  *
- * @param {string} projectId - The parent project ID.
- * @param {string} calculatorId - The calculator document ID.
+ * @param {string} projectId - Project ID.
+ * @param {string} calculatorId - Calculator ID.
  * @returns {Promise<import("firebase/firestore").DocumentSnapshot>} Document snapshot.
  */
 export async function getCalculatorData(projectId, calculatorId) {
@@ -46,9 +46,9 @@ export async function getCalculatorData(projectId, calculatorId) {
 /**
  * Add a new calculator document to a project.
  *
- * @param {string} projectId - The parent project ID.
- * @param {string} name - Name of the new calculator.
- * @param {string} type - Type of the new calculator.
+ * @param {string} projectId - Project ID.
+ * @param {string} name - Calculator name.
+ * @param {string} type - Calculator type.
  * @returns {Promise<void>}
  */
 export async function addCalculator(projectId, name, type) {
@@ -83,8 +83,8 @@ export async function addCalculator(projectId, name, type) {
 /**
  * Delete a calculator document.
  *
- * @param {string} projectId - The parent project ID.
- * @param {string} calculatorId - The calculator document ID.
+ * @param {string} projectId - Project ID.
+ * @param {string} calculatorId - Calculator ID.
  * @returns {Promise<void>}
  */
 export async function deleteCalculator(projectId, calculatorId) {
@@ -101,8 +101,8 @@ export async function deleteCalculator(projectId, calculatorId) {
 /**
  * Add a new section to a calculator document.
  *
- * @param {string} projectId - The parent project ID.
- * @param {string} calculatorId - The calculator document ID.
+ * @param {string} projectId - Project ID.
+ * @param {string} calculatorId - Calculator ID.
  * @returns {Promise<void>}
  */
 export async function addSection(projectId, calculatorId) {
@@ -142,9 +142,9 @@ export async function addSection(projectId, calculatorId) {
 /**
  * Delete a section by ID.
  *
- * @param {string} projectId - The parent project ID.
- * @param {string} calculatorId - The calculator document ID.
- * @param {string} sectionId - The section ID to delete.
+ * @param {string} projectId - Project ID.
+ * @param {string} calculatorId - Calculator ID.
+ * @param {string} sectionId - Section ID.
  * @returns {Promise<void>}
  */
 export async function deleteSectionById(projectId, calculatorId, sectionId) {
@@ -170,9 +170,9 @@ export async function deleteSectionById(projectId, calculatorId, sectionId) {
 /**
  * Update calculator name.
  *
- * @param {string} projectId - The parent project ID.
- * @param {string} calculatorId - The calculator document ID.
- * @param {string} newName - The new calculator name.
+ * @param {string} projectId - Project ID.
+ * @param {string} calculatorId - Calculator ID.
+ * @param {string} newName - New calculator name.
  * @returns {Promise<void>}
  */
 export async function updateCalculatorName(projectId, calculatorId, newName) {
@@ -192,10 +192,10 @@ export async function updateCalculatorName(projectId, calculatorId, newName) {
 /**
  * Update section name.
  *
- * @param {string} projectId - The parent project ID.
- * @param {string} calculatorId - The calculator document ID.
- * @param {string} sectionId - The section ID.
- * @param {string} newTitle - The new title.
+ * @param {string} projectId - Project ID.
+ * @param {string} calculatorId - Calculator ID.
+ * @param {string} sectionId - Section ID.
+ * @param {string} newTitle - New section title.
  * @returns {Promise<void>}
  */
 export async function updateSectionName(
@@ -227,11 +227,11 @@ export async function updateSectionName(
 /**
  * Update description of a line item.
  *
- * @param {string} projectId - The parent project ID.
- * @param {string} calculatorId - The calculator document ID.
- * @param {string} sectionId - The section ID.
- * @param {string} lineId - The line ID.
- * @param {string} newDescription - The new description.
+ * @param {string} projectId - Project ID.
+ * @param {string} calculatorId - Calculator ID.
+ * @param {string} sectionId - Section ID.
+ * @param {string} lineId - Line ID.
+ * @param {string} newDescription - New description.
  * @returns {Promise<void>}
  */
 export async function updateDescriptionName(
@@ -270,9 +270,9 @@ export async function updateDescriptionName(
 /**
  * Add one line.
  *
- * @param {string} projectId - The parent project ID.
- * @param {string} calculatorId - The calculator document ID.
- * @param {string} sectionId - The section ID to add a line to.
+ * @param {string} projectId - Project ID.
+ * @param {string} calculatorId - Calculator ID.
+ * @param {string} sectionId - Section ID.
  * @returns {Promise<void>}
  */
 export async function addOneLine(projectId, calculatorId, sectionId) {
@@ -308,9 +308,9 @@ export async function addOneLine(projectId, calculatorId, sectionId) {
 /**
  * Add ten lines.
  *
- * @param {string} projectId - The parent project ID.
- * @param {string} calculatorId - The calculator document ID.
- * @param {string} sectionId - The section ID to add lines to.
+ * @param {string} projectId - Project ID.
+ * @param {string} calculatorId - Calculator ID.
+ * @param {string} sectionId - Section ID.
  * @returns {Promise<void>}
  */
 export async function addTenLines(projectId, calculatorId, sectionId) {
@@ -346,10 +346,10 @@ export async function addTenLines(projectId, calculatorId, sectionId) {
 /**
  * Delete one line.
  *
- * @param {string} projectId - The parent project ID.
- * @param {string} calculatorId - The calculator document ID.
- * @param {string} sectionId - The section ID.
- * @param {string} lineId - The line ID to delete.
+ * @param {string} projectId - Project ID.
+ * @param {string} calculatorId - Calculator ID.
+ * @param {string} sectionId - Section ID.
+ * @param {string} lineId - Line ID.
  * @returns {Promise<void>}
  */
 export async function deleteOneLine(
@@ -386,9 +386,9 @@ export async function deleteOneLine(
 /**
  * Delete up to 10 lines from a section.
  *
- * @param {string} projectId - The parent project ID.
- * @param {string} calculatorId - The calculator document ID.
- * @param {string} sectionId - The section ID.
+ * @param {string} projectId - Project ID.
+ * @param {string} calculatorId - Calculator ID.
+ * @param {string} sectionId - Section ID.
  * @returns {Promise<void>}
  */
 export async function deleteTenLines(projectId, calculatorId, sectionId) {
@@ -418,11 +418,11 @@ export async function deleteTenLines(projectId, calculatorId, sectionId) {
 /**
  * Calculate and update measurement for a line.
  *
- * @param {string} projectId - The parent project ID.
- * @param {string} calculatorId - The calculator document ID.
- * @param {string} sectionId - The section ID.
- * @param {string} lineId - The line ID.
- * @param {string} measurement - The measurement string (e.g., "5x10").
+ * @param {string} projectId - Project ID.
+ * @param {string} calculatorId - Calculator ID.
+ * @param {string} sectionId - Section ID.
+ * @param {string} lineId - Line ID.
+ * @param {string} measurement - Measurement string (e.g., "5x10").
  * @returns {Promise<void>}
  */
 export async function calculateMeasurement(
@@ -467,9 +467,9 @@ export async function calculateMeasurement(
 /**
  * Calculate section total.
  *
- * @param {string} projectId - The parent project ID.
- * @param {string} calculatorId - The calculator document ID.
- * @param {string} sectionId - The section ID.
+ * @param {string} projectId - Project ID.
+ * @param {string} calculatorId - Calculator ID.
+ * @param {string} sectionId - Section ID.
  * @returns {Promise<void>}
  */
 export async function sectionSum(projectId, calculatorId, sectionId) {
@@ -502,8 +502,8 @@ export async function sectionSum(projectId, calculatorId, sectionId) {
 /**
  * Calculate grand total of all sections.
  *
- * @param {string} projectId - The parent project ID.
- * @param {string} calculatorId - The calculator document ID.
+ * @param {string} projectId - Project ID.
+ * @param {string} calculatorId - Calculator ID.
  * @returns {Promise<void>}
  */
 export async function grandTotal(projectId, calculatorId) {
