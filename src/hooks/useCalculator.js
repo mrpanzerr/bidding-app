@@ -1,21 +1,25 @@
 import { useCallback, useEffect, useState } from "react";
 import {
   addCalculator,
-  addOneLine,
-  addSection,
-  addTenLines,
-  calculateMeasurement,
   deleteCalculator,
-  deleteOneLine,
-  deleteSectionById,
-  deleteTenLines,
   getAllCalculators,
   getCalculatorData,
   grandTotal,
-  sectionSum,
-  updateDescriptionName,
-  updateSectionName,
 } from "../firebase/calculatorServices";
+import {
+  addOneLine,
+  addTenLines,
+  calculateMeasurement,
+  deleteOneLine,
+  deleteTenLines,
+  updateDescriptionName,
+} from "../firebase/lineServices";
+import {
+  addSection,
+  deleteSectionById,
+  sectionSum,
+  updateSectionName,
+} from "../firebase/sectionServices";
 
 /**
  * Hook to manage the list of calculators for a project.

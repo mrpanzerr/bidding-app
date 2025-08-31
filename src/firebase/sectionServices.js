@@ -1,0 +1,141 @@
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { db } from "./firebase";
+
+/**
+ * Add a new section to a calculator document.
+ *
+ * @param {string} projectId - Project ID.
+ * @param {string} calculatorId - Calculator ID.
+ * @returns {Promise<void>}
+ */
+export async function addSection(projectId, calculatorId) {
+  const calculatorRef = doc(
+    db,
+    "projects",
+    projectId,
+    "calculators",
+    calculatorId
+  );
+  const calculatorSnap = await getDoc(calculatorRef);
+  if (!calculatorSnap.exists()) throw new Error("Calculator not found");
+
+  const calculatorData = calculatorSnap.data();
+  const existingSections = calculatorData.section || [];
+
+  const newSection = {
+    id: crypto.randomUUID(),
+    title: "Section Title",
+    lines: [
+      {
+        id: crypto.randomUUID(),
+        measurement: "",
+        description: "",
+        other: "",
+        amount: 0,
+      },
+    ],
+    total: 0,
+  };
+
+  await updateDoc(calculatorRef, {
+    section: [...existingSections, newSection],
+  });
+}
+
+/**
+ * Delete a section by ID.
+ *
+ * @param {string} projectId - Project ID.
+ * @param {string} calculatorId - Calculator ID.
+ * @param {string} sectionId - Section ID.
+ * @returns {Promise<void>}
+ */
+export async function deleteSectionById(projectId, calculatorId, sectionId) {
+  const calculatorRef = doc(
+    db,
+    "projects",
+    projectId,
+    "calculators",
+    calculatorId
+  );
+  const calculatorSnap = await getDoc(calculatorRef);
+  if (!calculatorSnap.exists()) throw new Error("Calculator not found");
+
+  const calculatorData = calculatorSnap.data();
+  const existingSections = calculatorData.section || [];
+
+  const updatedSections = existingSections.filter(
+    (section) => section.id !== sectionId
+  );
+  await updateDoc(calculatorRef, { section: updatedSections });
+}
+
+/**
+ * Update section name.
+ *
+ * @param {string} projectId - Project ID.
+ * @param {string} calculatorId - Calculator ID.
+ * @param {string} sectionId - Section ID.
+ * @param {string} newTitle - New section title.
+ * @returns {Promise<void>}
+ */
+export async function updateSectionName(
+  projectId,
+  calculatorId,
+  sectionId,
+  newTitle
+) {
+  const calculatorRef = doc(
+    db,
+    "projects",
+    projectId,
+    "calculators",
+    calculatorId
+  );
+  const calculatorSnap = await getDoc(calculatorRef);
+  if (!calculatorSnap.exists()) throw new Error("Calculator not found");
+
+  const calculatorData = calculatorSnap.data();
+  const existingSections = calculatorData.section || [];
+
+  const updatedSections = existingSections.map((section) =>
+    section.id === sectionId ? { ...section, title: newTitle } : section
+  );
+
+  await updateDoc(calculatorRef, { section: updatedSections });
+}
+
+/**
+ * Calculate section total.
+ *
+ * @param {string} projectId - Project ID.
+ * @param {string} calculatorId - Calculator ID.
+ * @param {string} sectionId - Section ID.
+ * @returns {Promise<void>}
+ */
+export async function sectionSum(projectId, calculatorId, sectionId) {
+  const calculatorRef = doc(
+    db,
+    "projects",
+    projectId,
+    "calculators",
+    calculatorId
+  );
+  const calculatorSnap = await getDoc(calculatorRef);
+  if (!calculatorSnap.exists()) throw new Error("Calculator not found");
+
+  const calculatorData = calculatorSnap.data();
+  const existingSections = calculatorData.section || [];
+
+  const updatedSections = existingSections.map((section) => {
+    if (section.id !== sectionId) return section;
+
+    const total = (section.lines || []).reduce((sum, line) => {
+      return sum + (typeof line.amount === "number" ? line.amount : 0);
+    }, 0);
+
+    return { ...section, total };
+  });
+
+  await updateDoc(calculatorRef, { section: updatedSections });
+}
