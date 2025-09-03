@@ -6,20 +6,6 @@ import {
   getCalculatorData,
   grandTotal,
 } from "../firebase/calculatorServices";
-import {
-  addOneLine,
-  addTenLines,
-  calculateMeasurement,
-  deleteOneLine,
-  deleteTenLines,
-  updateDescriptionName,
-} from "../firebase/lineServices";
-import {
-  addSection,
-  deleteSectionById,
-  sectionSum,
-  updateSectionName,
-} from "../firebase/sectionServices";
 
 /**
  * Hook to manage the list of calculators for a project.
@@ -84,13 +70,21 @@ export function useCalculators(projectId) {
 }
 
 /**
- * Hook to manage a single calculator's data and mutations.
- * Supports loading, error handling, optimistic UI updates, and common mutations.
+ * Hook for managing a single calculator instance.
+ * Supports loading, error handling, mutations, and optimistic UI updates.
  *
- * @param {string} projectId - The project ID.
- * @param {string} calculatorId - The calculator ID.
- * @param {function} [onError] - Optional error callback.
- * @returns {object} Calculator state and mutation functions.
+ * @param {string} projectId - Project ID
+ * @param {string} calculatorId - Calculator ID
+ * @param {function} [onError] - Optional callback for handling errors
+ * @returns {object} 
+ *   - `calculator`: current calculator data
+ *   - `setCalculator`: setter for calculator state
+ *   - `performMutation`: function to perform optimistic mutations
+ *   - `loading`: boolean for data fetch state
+ *   - `loadingMutation`: boolean for mutation state
+ *   - `error`: any error encountered
+ *   - `deleteCalculatorFunction`: function to delete this calculator
+ *   - `calculateGrandTotal`: function to calculate the calculator’s total
  */
 export function useCalculator(projectId, calculatorId, onError) {
   const [calculator, setCalculator] = useState(null);
@@ -168,94 +162,20 @@ export function useCalculator(projectId, calculatorId, onError) {
     }
   };
 
-  // Mutations with optimistic updates:
-
-  const addNewSection = () =>
-    performMutation(() => addSection(projectId, calculatorId));
-
-  const deleteSection = (sectionId) =>
-    performMutation(() =>
-      deleteSectionById(projectId, calculatorId, sectionId)
-    );
-
-  const renameSection = (sectionId, newTitle) =>
-    performMutation(() =>
-      updateSectionName(projectId, calculatorId, sectionId, newTitle)
-    );
-
-  const renameDescription = (sectionId, lineId, newDescription) =>
-    performMutation(() =>
-      updateDescriptionName(
-        projectId,
-        calculatorId,
-        sectionId,
-        lineId,
-        newDescription
-      )
-    );
-
-  const addLine = (sectionId) =>
-    performMutation(() => addOneLine(projectId, calculatorId, sectionId));
-
-  const addTen = (sectionId) =>
-    performMutation(() => addTenLines(projectId, calculatorId, sectionId));
-
-  const deleteOne = (sectionId, lineId) =>
-    performMutation(() =>
-      deleteOneLine(projectId, calculatorId, sectionId, lineId)
-    );
-
-  const deleteTen = (sectionId) =>
-    performMutation(() => deleteTenLines(projectId, calculatorId, sectionId));
-
   const deleteCalculatorFunction = () =>
     performMutation(() => deleteCalculator(projectId, calculatorId));
-
-  /**
-   * Calculate measurement product and update line optimistically.
-   *
-   * @param {string} sectionId
-   * @param {string} lineId
-   * @param {string} measurement - Measurement string (e.g. "60 x 114").
-   */
-  const calcMeasurement = (sectionId, lineId, measurement) =>
-    performMutation(() =>
-      calculateMeasurement(
-        projectId,
-        calculatorId,
-        sectionId,
-        lineId,
-        measurement
-      )
-    );
-
-  /**
-   * Calculate total for a section and update Firestore.
-   *
-   * @param {string} sectionId - ID of the section to total.
-   */
-  const sectionTotal = (sectionId) =>
-    performMutation(() => sectionSum(projectId, calculatorId, sectionId));
 
   const calculateGrandTotal = () =>
     performMutation(() => grandTotal(projectId, calculatorId));
 
   return {
     calculator,
+    setCalculator,
+    performMutation,
     loading,
     loadingMutation,
     error,
-    addNewSection,
-    deleteSection,
-    renameSection,
-    renameDescription,
-    addLine,
-    addTen,
-    deleteOne,
-    deleteTen,
     deleteCalculatorFunction,
-    calcMeasurement,
-    sectionTotal,
     calculateGrandTotal
   };
 }
