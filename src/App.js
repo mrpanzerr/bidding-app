@@ -56,7 +56,11 @@ function App() {
       {/* Nested routes for specific project pages */}
       <Route
         path="/project/:id/calculator/:calculatorId/:type"
-        element={<CalculatorPage />}
+        element={
+          <ProtectedRoute allowGuest={true}>
+            <CalculatorPage />
+          </ProtectedRoute>
+        }
       />
     </Routes>
   );

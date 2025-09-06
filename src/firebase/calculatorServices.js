@@ -5,20 +5,30 @@ import {
   doc,
   getDoc,
   getDocs,
+  query,
   updateDoc,
+  where
 } from "firebase/firestore";
-import { db } from "./firebase";
+import { auth, db } from "./firebase";
+
+/* =======================
+   GENERAL CALCULATOR FUNCTIONS 
+   ======================= */
 
 /**
- * Fetch all calculator documents under a specific project.
+ * Fetch all guest calculator documents under a specific project.
  *
  * @param {string} projectId - Project ID.
- * @returns {Promise<Array<Object>>} Array of calculator objects with id and their data.
+ * @returns {Promise<Array>} Array of calculator objects.
  */
 export async function getAllCalculators(projectId) {
-  const calculatorsSnapshot = await getDocs(
-    collection(db, "projects", projectId, "calculators")
+  // Query Calculators where userId does not exist
+  const q = query(
+    collection(db, "projects", projectId, "calculators"),
+    where("userId", "==", null)
   );
+  const calculatorsSnapshot = await getDocs(q);
+
   return calculatorsSnapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
@@ -44,7 +54,7 @@ export async function getCalculatorData(projectId, calculatorId) {
 }
 
 /**
- * Add a new calculator document to a project.
+ * Add a new calculator document to a project (guest).
  *
  * @param {string} projectId - Project ID.
  * @param {string} name - Calculator name.
@@ -59,6 +69,7 @@ export async function addCalculator(projectId, name, type) {
   await addDoc(calculatorsCollectionRef, {
     name,
     type,
+    userId: null,
     createdAt: new Date(),
     section: [
       {
@@ -118,6 +129,71 @@ export async function updateCalculatorName(projectId, calculatorId, newName) {
   if (!calculatorSnap.exists()) throw new Error("Calculator not found");
 
   await updateDoc(calculatorRef, { name: newName });
+}
+
+/* =======================
+   USER-SPECIFIC CALCULATOR FUNCTIONS
+   ======================= */
+
+/**
+ * Fetch all calculators owned by the current user
+ * 
+ * @param {string} projectId - Project ID.
+ * @returns {Promise<Array>} Array of calculator objects.
+ */
+export async function fetchMyCalculators(projectId) {
+  const user = auth.currentUser;
+  if (!user) throw new Error("No authenticated user");
+  
+  const q = query(
+    collection(db, "projects", projectId, "calculators"),
+    where("userId", "==", user.uid)
+  );
+  const calculatorsSnapshot = await getDocs(q);
+  return calculatorsSnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+}
+
+/**
+ * Add a new calculator owned by the current user.
+ *
+ * @param {string} projectId - Project ID.
+ * @param {string} name - Calculator name.
+ * @returns {Promise<void>}
+ */
+export async function addMyCalculator(projectId, name, type) {
+  const user = auth.currentUser;
+  if (!user) throw new Error("No authenticated user");
+
+  const calculatorsCollectionRef = collection(
+    doc(db, "projects", projectId),
+    "calculators"
+  );
+  await addDoc(calculatorsCollectionRef, {
+    name,
+    type,
+    createdAt: new Date(),
+    userId: user.uid,
+    section: [
+      {
+        id: crypto.randomUUID(),
+        title: "Section Title",
+        lines: [
+          {
+            id: crypto.randomUUID(),
+            measurement: "",
+            description: "",
+            other: "",
+            amount: 0,
+          },
+        ],
+        total: 0,
+      },
+    ],
+    grandTotal: 0,
+  });
 }
 
 /**

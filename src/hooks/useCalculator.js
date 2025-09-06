@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import {
   addCalculator,
+  addMyCalculator,
   deleteCalculator,
+  fetchMyCalculators,
   getAllCalculators,
   getCalculatorData,
-  grandTotal,
+  grandTotal
 } from "../firebase/calculatorServices";
+import { auth } from "../firebase/firebase";
 
 /**
  * Hook to manage the list of calculators for a project.
@@ -28,7 +31,8 @@ export function useCalculators(projectId) {
     setLoading(true);
     setError(null);
     try {
-      const data = await getAllCalculators(projectId);
+      const user = auth.currentUser;
+      const data = user ? await fetchMyCalculators(projectId) : await getAllCalculators(projectId);
       setCalculators(data);
     } catch (e) {
       console.error("Error loading calculators:", e);
@@ -52,7 +56,10 @@ export function useCalculators(projectId) {
   const addNewCalculator = async (projectId, name, type) => {
     if (!projectId || !name.trim()) return;
     try {
-      await addCalculator(projectId, name, type);
+      const user = auth.currentUser;
+      user
+        ? await addMyCalculator(projectId, name, type)
+        : await addCalculator(projectId, name, type);
       await loadCalculators();
     } catch (e) {
       console.error("Error adding calculator:", e);
