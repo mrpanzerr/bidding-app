@@ -1,7 +1,7 @@
-import { useSqftCalculator } from "../hooks/useSqftCalculator.js";
+import { useMeasurementCalculator } from "../hooks/useMeasurementCalculator.js";
 
 export const calculatorConfigs = {
-    SqftCalculator: {
-        useCalculatorData: useSqftCalculator,
+    MeasurementCalculator: {
+        useCalculatorData: useMeasurementCalculator,
     }
 };

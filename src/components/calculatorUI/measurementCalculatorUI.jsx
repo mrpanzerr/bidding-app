@@ -1,7 +1,7 @@
 import styles from "../../styles/calculatorModules/calculatorUI.module.css";
 
 /**
- * SqftCalculatorUI Component
+ * measurementCalculatorUI Component
  *
  * Renders the UI for a square footage calculator, displaying sections and their lines.
  * Supports inline editing of section titles, line descriptions, and measurements.
@@ -36,7 +36,7 @@ import styles from "../../styles/calculatorModules/calculatorUI.module.css";
  *
  * @returns {JSX.Element} Rendered calculator UI with editable sections and lines
  */
-export default function SqftCalculatorUI({
+export default function MeasurementCalculatorUI({
   calculator,
   editingTitleId,
   setEditingTitleId,

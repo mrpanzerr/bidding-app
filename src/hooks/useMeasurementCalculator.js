@@ -20,7 +20,7 @@ import { useSection } from "./useSection";
  *   - Line management methods: `renameDescription`, `addLine`, `addTen`, `deleteOne`, `deleteTen`
  *   - Calculator-level methods: `deleteCalculatorFunction`, `calcMeasurement`, `sectionTotal`, `calculateGrandTotal`
  */
-export function useSqftCalculator(projectId, calculatorId) {
+export function useMeasurementCalculator(projectId, calculatorId) {
   const calc = useCalculator(projectId, calculatorId);
   const section = useSection(projectId, calculatorId, calc.performMutation);
   const line = useLine(projectId, calculatorId, calc.performMutation);

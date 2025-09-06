@@ -1,5 +1,5 @@
 import { useState } from "react";
-import SqftCalculatorUI from "./calculatorUI/sqftCalculatorUI";
+import MeasurementCalculatorUI from "./calculatorUI/measurementCalculatorUI";
 import DeleteCalculatorModal from "./modals/deleteCalculatorModal";
 
 /**
@@ -114,7 +114,7 @@ export default function CalculatorPageUI(props) {
 
   // Render UI based on calculator type
   switch (safeCalculator.type) {
-    case "SqftCalculator":
+    case "MeasurementCalculator":
       return (
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
           {editingCalculatorName ? (
@@ -137,7 +137,7 @@ export default function CalculatorPageUI(props) {
               {safeCalculator.name}
             </h1>
           )}
-          <SqftCalculatorUI
+          <MeasurementCalculatorUI
             {...{
               calculator: safeCalculator,
               editingTitleId,

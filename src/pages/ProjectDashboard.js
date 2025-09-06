@@ -29,10 +29,10 @@ function ProjectDashboard() {
     setNewCalculator(true); // Show modal
   };
 
-  const handleNewSqftCalculator = async () => {
+  const handleNewMeasurementCalculator = async () => {
     const trimmed = calculatorName.trim();
     if (!trimmed) return;
-    await addNewCalculator(id, trimmed, "SqftCalculator");
+    await addNewCalculator(id, trimmed, "MeasurementCalculator");
     setCalculatorName("");
     setNewCalculator(false);
   };
@@ -53,7 +53,7 @@ function ProjectDashboard() {
       >
         <h3>Actions</h3>
         <button onClick={openNewCalculatorModal} style={{ display: "block" }}>
-          Add Square Foot Calculator
+          Add Measurement Calculator
         </button>
       </aside>
 
@@ -91,7 +91,7 @@ function ProjectDashboard() {
         <NewCalculatorModal
           calculatorName={calculatorName}
           setCalculatorName={setCalculatorName}
-          onSave={handleNewSqftCalculator}
+          onSave={handleNewMeasurementCalculator}
           onCancel={() => {
             setNewCalculator(false);
             setCalculatorName("");
