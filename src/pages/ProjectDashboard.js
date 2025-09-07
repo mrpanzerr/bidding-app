@@ -12,9 +12,13 @@ import { useProject } from "../hooks/useProjects";
 function ProjectDashboard() {
   const { id } = useParams();
   const { project, loading, error } = useProject(id);
-  const { calculators, addNewCalculator, loading: calcLoading } = useCalculators(id);
+  const {
+    calculators,
+    addNewCalculator,
+    loading: calcLoading,
+  } = useCalculators(id);
 
-  const [newCalculator, setNewCalculator] = useState(false);
+  const [activeModal, setActiveModal] = useState(null); // 'measurement' or 'twoField' or null
   const [calculatorName, setCalculatorName] = useState("");
 
   const navigate = useNavigate();
@@ -23,18 +27,25 @@ function ProjectDashboard() {
     navigate(`/project/${id}/calculator/${calculatorId}/${type}`);
   };
 
-  const openNewCalculatorModal = (e) => {
-    e.stopPropagation();
-    setCalculatorName(""); // Reset calculator name input
-    setNewCalculator(true); // Show modal
+  const openModal = (type) => {
+    setCalculatorName("");
+    setActiveModal(type);
+  };
+
+  const closeModal = () => {
+    setActiveModal(null);
+    setCalculatorName("");
   };
 
   const handleNewMeasurementCalculator = async () => {
-    const trimmed = calculatorName.trim();
-    if (!trimmed) return;
-    await addNewCalculator(id, trimmed, "MeasurementCalculator");
-    setCalculatorName("");
-    setNewCalculator(false);
+    if (!calculatorName.trim()) return;
+    await addNewCalculator(id, calculatorName, "MeasurementCalculator");
+    closeModal();
+  };
+  const handleNewTwoFieldCalculator = async () => {
+    if (!calculatorName.trim()) return;
+    await addNewCalculator(id, calculatorName, "TwoFieldCalculator");
+    closeModal();
   };
 
   if (loading) return <p>Loading project...</p>;
@@ -52,8 +63,17 @@ function ProjectDashboard() {
         }}
       >
         <h3>Actions</h3>
-        <button onClick={openNewCalculatorModal} style={{ display: "block" }}>
+        <button
+          onClick={() => openModal("MeasurementCalculator")}
+          style={{ display: "block" }}
+        >
           Add Measurement Calculator
+        </button>
+        <button
+          onClick={() => openModal("TwoFieldCalculator")}
+          style={{ display: "block", marginTop: "0.5rem" }}
+        >
+          Add Two Field Calculator
         </button>
       </aside>
 
@@ -87,13 +107,26 @@ function ProjectDashboard() {
       </main>
 
       {/* Modal for creating new calculator */}
-      {newCalculator && (
+      {activeModal === "MeasurementCalculator" && (
         <NewCalculatorModal
           calculatorName={calculatorName}
           setCalculatorName={setCalculatorName}
           onSave={handleNewMeasurementCalculator}
           onCancel={() => {
-            setNewCalculator(false);
+            setActiveModal(null);
+            setCalculatorName("");
+          }}
+        />
+      )}
+
+      {/* Modal for creating new two field calculator */}
+      {activeModal === "TwoFieldCalculator" && (
+        <NewCalculatorModal
+          calculatorName={calculatorName}
+          setCalculatorName={setCalculatorName}
+          onSave={handleNewTwoFieldCalculator}
+          onCancel={() => {
+            setActiveModal(null);
             setCalculatorName("");
           }}
         />

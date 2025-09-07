@@ -11,6 +11,45 @@ import {
 } from "firebase/firestore";
 import { auth, db } from "./firebase";
 
+const calculatorTemplates = {
+  MeasurementCalculator: {
+    section: [
+      {
+        id: crypto.randomUUID(),
+        title: "Section Title",
+        lines: [
+          {
+            id: crypto.randomUUID(),
+            measurement: "",
+            description: "",
+            other: "",
+            amount: 0,
+          },
+        ],
+        total: 0,
+      },
+    ],
+    grandTotal: 0,
+  },
+  TwoFieldCalculator: {
+    section: [
+      {
+        id: crypto.randomUUID(),
+        title: "Section Title",
+        lines: [
+          {
+            id: crypto.randomUUID(),
+            description: "",
+            amount: 0,
+          },
+        ],
+        total: 0,
+      },
+    ],
+    grandTotal: 0,
+  },
+};
+
 /* =======================
    GENERAL CALCULATOR FUNCTIONS 
    ======================= */
@@ -66,28 +105,15 @@ export async function addCalculator(projectId, name, type) {
     doc(db, "projects", projectId),
     "calculators"
   );
+
+  const template = calculatorTemplates[type];
+
   await addDoc(calculatorsCollectionRef, {
     name,
     type,
     userId: null,
     createdAt: new Date(),
-    section: [
-      {
-        id: crypto.randomUUID(),
-        title: "Section Title",
-        lines: [
-          {
-            id: crypto.randomUUID(),
-            measurement: "",
-            description: "",
-            other: "",
-            amount: 0,
-          },
-        ],
-        total: 0,
-      },
-    ],
-    grandTotal: 0,
+    ...template,
   });
 }
 
@@ -167,6 +193,8 @@ export async function addMyCalculator(projectId, name, type) {
   const user = auth.currentUser;
   if (!user) throw new Error("No authenticated user");
 
+  const template = calculatorTemplates[type]?.() || {};
+
   const calculatorsCollectionRef = collection(
     doc(db, "projects", projectId),
     "calculators"
@@ -176,23 +204,7 @@ export async function addMyCalculator(projectId, name, type) {
     type,
     createdAt: new Date(),
     userId: user.uid,
-    section: [
-      {
-        id: crypto.randomUUID(),
-        title: "Section Title",
-        lines: [
-          {
-            id: crypto.randomUUID(),
-            measurement: "",
-            description: "",
-            other: "",
-            amount: 0,
-          },
-        ],
-        total: 0,
-      },
-    ],
-    grandTotal: 0,
+    ...template,
   });
 }
 

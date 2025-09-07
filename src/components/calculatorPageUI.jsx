@@ -1,5 +1,6 @@
 import { useState } from "react";
 import MeasurementCalculatorUI from "./calculatorUI/measurementCalculatorUI";
+import TwoFieldCalculatorUI from "./calculatorUI/twoFieldCalculatorUI";
 import DeleteCalculatorModal from "./modals/deleteCalculatorModal";
 
 /**
@@ -42,6 +43,7 @@ export default function CalculatorPageUI(props) {
     setNewCalculatorName,
     handleRenameCalculator,
     renaming,
+    updateAmount,
   } = props;
 
   // -----------------------
@@ -63,11 +65,14 @@ export default function CalculatorPageUI(props) {
   const [lineDescription, setLineDescription] = useState("");
   const [editingMeasurementId, setEditingMeasurementId] = useState(null);
   const [measurement, setMeasurement] = useState("");
+  const [editingAmount, setEditingAmount] = useState(null);
+  const [amountInput, setAmountInput] = useState("");
 
   const editingState = {
     title: { id: editingTitleId, setId: setEditingTitleId, value: titleInput, setValue: setTitleInput },
     description: { id: editingDescriptionId, setId: setEditingDescriptionId, value: lineDescription, setValue: setLineDescription },
     measurement: { id: editingMeasurementId, setId: setEditingMeasurementId, value: measurement, setValue: setMeasurement },
+    amount: { id: editingAmount, setId: setEditingAmount, value: amountInput, setValue: setAmountInput },
   };
 
   // Calculator action wrappers
@@ -80,6 +85,7 @@ export default function CalculatorPageUI(props) {
     deleteOne,
     deleteTen,
     deleteSection,
+    updateAmount,
   };
 
   // State for delete confirmation modal
@@ -195,8 +201,32 @@ export default function CalculatorPageUI(props) {
         </div>
       );
 
-    case "OtherCalculatorType":
-      return <p>Other calculator type UI goes here.</p>;
+    case "TwoFieldCalculator":
+      return (
+        <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+          {renderHeader()}
+          <TwoFieldCalculatorUI
+            calculator={safeCalculator}
+            editingState={editingState}
+            actions={calculatorActions}
+            sectionTotal={sectionTotal}
+            calculateGrandTotal={calculateGrandTotal}
+            isRefreshing={isRefreshing}
+            safeAction={safeAction}
+          />
+          {renderFooter()}
+          {showDeleteModal && (
+            <DeleteCalculatorModal
+              safeCalculator={safeCalculator}
+              deleteConfirmInput={deleteConfirmInput}
+              setDeleteConfirmInput={setDeleteConfirmInput}
+              isRefreshing={isRefreshing}
+              setShowDeleteModal={setShowDeleteModal}
+              handleDeleteCalculator={handleDeleteCalculator}
+            />
+          )}
+        </div>
+      );
 
     default:
       return <p>Unknown calculator type.</p>;

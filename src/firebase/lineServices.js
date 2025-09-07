@@ -240,3 +240,46 @@ export async function calculateMeasurement(
 
   await updateDoc(calculatorRef, { section: updatedSections });
 }
+
+/**
+ * Edit the price of a line item.
+ *
+ * @param {string} projectId - Project ID.  
+ * @param {string} calculatorId - Calculator ID.
+ * @param {string} sectionId - Section ID.
+ * @param {string} lineId - Line ID.
+ * @param {number} newPrice - New price.
+ * @returns {Promise<void>}
+*/
+export async function updateLineAmount(
+  projectId,
+  calculatorId,
+  sectionId,
+  lineId,
+  newAmount
+) {
+  const calculatorRef = doc(
+    db,
+    "projects",
+    projectId,
+    "calculators",
+    calculatorId
+  );
+  const calculatorSnap = await getDoc(calculatorRef);
+  if (!calculatorSnap.exists()) throw new Error("Calculator not found");
+
+  const calculatorData = calculatorSnap.data();
+  const existingSections = calculatorData.section || [];
+
+  const updatedSections = existingSections.map((section) => {
+    if (section.id !== sectionId) return section;
+
+    const updatedLines = (section.lines || []).map((line) =>
+      line.id === lineId ? { ...line, amount: newAmount ?? 0 } : line
+    );
+
+    return { ...section, lines: updatedLines };
+  });
+
+  await updateDoc(calculatorRef, { section: updatedSections });
+}
