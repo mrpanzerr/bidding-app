@@ -5,38 +5,20 @@ import DeleteCalculatorModal from "./modals/deleteCalculatorModal";
 /**
  * CalculatorPageUI Component
  *
- * Renders the appropriate calculator interface based on the provided `calculator.type`.
- * This component manages local UI state related to section title editing, line description editing,
- * measurement input, and calculator deletion. It also handles user interactions for modifying
- * sections and lines, and for triggering calculations.
+ * Top-level UI for rendering a calculator of a given type.
+ * Manages:
+ * - Editing states for calculator name, section titles, line descriptions, and measurements
+ * - Calculator operations like adding/removing sections or lines
+ * - Calculation updates
+ * - Deletion confirmation modal
  *
  * @param {Object} props - Component props
- * @param {Object|null} props.calculator - Calculator data object; may be null while loading
- * @param {boolean} props.isRefreshing - Indicates if an async operation is in progress
- * @param {function(boolean): void} props.setIsRefreshing - Updates the `isRefreshing` state
- * @param {function(): Promise<void>} props.addNewSection - Adds a new section to the calculator
- * @param {function(string): Promise<void>} props.deleteSection - Deletes a section by ID
- * @param {function(string, string): Promise<void>} props.renameSection - Renames a section by ID
- * @param {function(string, string, string): Promise<void>} props.renameDescription - Renames a line description
- * @param {function(string): Promise<void>} props.addLine - Adds one line to a section
- * @param {function(string): Promise<void>} props.addTen - Adds ten lines to a section
- * @param {function(string, string): Promise<void>} props.deleteOne - Deletes a single line
- * @param {function(string): Promise<void>} props.deleteTen - Deletes ten lines from a section
- * @param {function(): Promise<void>} props.deleteCalculatorFunction - Deletes the entire calculator
- * @param {function(): void} [props.navigateAfterDelete] - Optional callback to run after calculator deletion
- * @param {function(string, string, string): Promise<void>} props.calcMeasurement - Calculates and updates a measurement
- * @param {function(string): number} props.sectionTotal - Returns the total value of a section
- * @param {function(): number} props.calculateGrandTotal - Returns the overall total of the calculator
- * @param {boolean} props.editingCalculatorName - Indicates if the calculator name is being edited
- * @param {function(boolean): void} props.setEditingCalculatorName - Sets the editing state
- * @param {string} props.newCalculatorName - The new name for the calculator
- * @param {function(string): void} props.setNewCalculatorName - Updates the new calculator name
- * @param {function(): Promise<void>} props.handleRenameCalculator - Handles renaming the calculator
- * @param {boolean} props.renaming - Indicates if the calculator is currently being renamed
- *
- * @returns {JSX.Element} Rendered calculator UI or fallback loading message
+ * @returns {JSX.Element} Rendered calculator UI or loading/fallback messages
  */
 export default function CalculatorPageUI(props) {
+  // -----------------------
+  // Props Destructuring
+  // -----------------------
   const {
     calculator,
     isRefreshing,
@@ -62,38 +44,55 @@ export default function CalculatorPageUI(props) {
     renaming,
   } = props;
 
-  // Normalize calculator data to ensure `section` is always an array
+  // -----------------------
+  // Normalize Calculator Data
+  // -----------------------
   const safeCalculator = {
     ...calculator,
     section: Array.isArray(calculator?.section) ? calculator.section : [],
   };
 
-  // State for editing section titles
+  // -----------------------
+  // Local State Management
+  // -----------------------
+
+  // Editing state for sections, lines, and measurements
   const [editingTitleId, setEditingTitleId] = useState(null);
   const [titleInput, setTitleInput] = useState("");
-
-  // State for editing line descriptions
   const [editingDescriptionId, setEditingDescriptionId] = useState(null);
   const [lineDescription, setLineDescription] = useState("");
-
-  // State for editing measurement values
   const [editingMeasurementId, setEditingMeasurementId] = useState(null);
   const [measurement, setMeasurement] = useState("");
 
-  // State for delete confirmation modal and input
+  const editingState = {
+    title: { id: editingTitleId, setId: setEditingTitleId, value: titleInput, setValue: setTitleInput },
+    description: { id: editingDescriptionId, setId: setEditingDescriptionId, value: lineDescription, setValue: setLineDescription },
+    measurement: { id: editingMeasurementId, setId: setEditingMeasurementId, value: measurement, setValue: setMeasurement },
+  };
+
+  // Calculator action wrappers
+  const calculatorActions = {
+    renameSection,
+    renameDescription,
+    calcMeasurement,
+    addLine,
+    addTen,
+    deleteOne,
+    deleteTen,
+    deleteSection,
+  };
+
+  // State for delete confirmation modal
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteConfirmInput, setDeleteConfirmInput] = useState("");
 
-  // Show fallback if calculator data hasn't loaded yet
-  if (!calculator) {
-    return <p>Loading or no calculator data available.</p>;
-  }
+  // -----------------------
+  // Helper Functions
+  // -----------------------
 
   /**
-   * Wraps an async function to safely handle loading state
-   * and ensure consistent UI feedback during the operation.
-   *
-   * @param {Function} action - The async action to execute
+   * Wraps async actions with loading state management
+   * @param {Function} action - Async function to execute
    */
   const safeAction = async (action) => {
     setIsRefreshing(true);
@@ -105,84 +104,84 @@ export default function CalculatorPageUI(props) {
   };
 
   /**
-   * Handles full calculator deletion and optional navigation afterward.
+   * Handles full calculator deletion and optional navigation afterward
    */
   const handleDeleteCalculator = async () => {
-    await safeAction(() => deleteCalculatorFunction());
+    await safeAction(deleteCalculatorFunction);
     if (navigateAfterDelete) navigateAfterDelete();
   };
 
-  // Render UI based on calculator type
+  // -----------------------
+  // Rendering Helpers
+  // -----------------------
+
+  /**
+   * Renders the calculator header, supporting inline renaming
+   */
+  const renderHeader = () =>
+    editingCalculatorName ? (
+      <input
+        type="text"
+        value={newCalculatorName}
+        onChange={(e) => setNewCalculatorName(e.target.value)}
+        onBlur={handleRenameCalculator}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            e.target.blur();
+          }
+        }}
+        autoFocus
+        disabled={renaming}
+      />
+    ) : (
+      <h1 onClick={() => setEditingCalculatorName(true)}>{safeCalculator.name}</h1>
+    );
+
+  /**
+   * Renders the footer with total display and section addition/deletion
+   */
+  const renderFooter = () => (
+    <>
+      <button onClick={() => safeAction(addNewSection)} disabled={isRefreshing}>
+        + Add Section
+      </button>
+      <h2 style={{ textAlign: "right" }}>Total: {safeCalculator.grandTotal || 0}</h2>
+      <button
+        onClick={() => setShowDeleteModal(true)}
+        disabled={isRefreshing}
+        style={{ float: "right" }}
+      >
+        Delete Calculator
+      </button>
+    </>
+  );
+
+  // -----------------------
+  // Fallback UI
+  // -----------------------
+  if (!calculator) {
+    return <p>Loading or no calculator data available.</p>;
+  }
+
+  // -----------------------
+  // Calculator Type Switch
+  // -----------------------
   switch (safeCalculator.type) {
     case "MeasurementCalculator":
       return (
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-          {editingCalculatorName ? (
-            <input
-              type="text"
-              value={newCalculatorName}
-              onChange={(e) => setNewCalculatorName(e.target.value)}
-              onBlur={handleRenameCalculator}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  e.target.blur();
-                }
-              }}
-              autoFocus
-              disabled={renaming}
-            />
-          ) : (
-            <h1 onClick={() => setEditingCalculatorName(true)}>
-              {safeCalculator.name}
-            </h1>
-          )}
+          {renderHeader()}
           <MeasurementCalculatorUI
-            {...{
-              calculator: safeCalculator,
-              editingTitleId,
-              setEditingTitleId,
-              titleInput,
-              setTitleInput,
-              editingDescriptionId,
-              setEditingDescriptionId,
-              lineDescription,
-              setLineDescription,
-              editingMeasurementId,
-              setEditingMeasurementId,
-              measurement,
-              setMeasurement,
-              isRefreshing,
-              safeAction,
-              renameSection,
-              renameDescription,
-              calcMeasurement,
-              addLine,
-              addTen,
-              deleteOne,
-              deleteTen,
-              deleteSection,
-              sectionTotal,
-              calculateGrandTotal,
-            }}
+            calculator={safeCalculator}
+            editingState={editingState}
+            actions={calculatorActions}
+            sectionTotal={sectionTotal}
+            calculateGrandTotal={calculateGrandTotal}
+            isRefreshing={isRefreshing}
+            safeAction={safeAction}
           />
-          <button
-            onClick={() => safeAction(addNewSection)}
-            disabled={isRefreshing}
-          >
-            + Add Section
-          </button>
-          <h2 style={{ textAlign: "right" }}>
-            Grand Total: {safeCalculator.grandTotal || 0}
-          </h2>
-          <button
-            onClick={() => setShowDeleteModal(true)}
-            disabled={isRefreshing}
-            style={{ float: "right" }}
-          >
-            Delete Calculator
-          </button>
-
+          {renderFooter()}
           {showDeleteModal && (
             <DeleteCalculatorModal
               safeCalculator={safeCalculator}
@@ -196,8 +195,10 @@ export default function CalculatorPageUI(props) {
         </div>
       );
 
+    case "OtherCalculatorType":
+      return <p>Other calculator type UI goes here.</p>;
+
     default:
-      // Fallback for unknown calculator types
       return <p>Unknown calculator type.</p>;
   }
 }

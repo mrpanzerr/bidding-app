@@ -1,65 +1,26 @@
 import styles from "../../styles/calculatorModules/calculatorUI.module.css";
 
 /**
- * measurementCalculatorUI Component
+ * MeasurementCalculatorUI Component
  *
  * Renders the UI for a square footage calculator, displaying sections and their lines.
  * Supports inline editing of section titles, line descriptions, and measurements.
- * Provides buttons to add/delete lines and sections, and calculates totals accordingly.
  *
- * @param {Object} props - Component props
- * @param {Object} props.calculator - Calculator data including sections and lines
- * @param {string|null} props.editingTitleId - ID of the section currently editing its title
- * @param {function(string|null): void} props.setEditingTitleId - Setter for editingTitleId
- * @param {string} props.titleInput - Current input value for editing section title
- * @param {function(string): void} props.setTitleInput - Setter for titleInput
- * @param {string|null} props.editingDescriptionId - ID of the line currently editing description
- * @param {function(string|null): void} props.setEditingDescriptionId - Setter for editingDescriptionId
- * @param {string} props.lineDescription - Current input value for editing line description
- * @param {function(string): void} props.setLineDescription - Setter for lineDescription
- * @param {string|null} props.editingMeasurementId - ID of the line currently editing measurement
- * @param {function(string|null): void} props.setEditingMeasurementId - Setter for editingMeasurementId
- * @param {string} props.measurement - Current input value for editing measurement
- * @param {function(string): void} props.setMeasurement - Setter for measurement
- * @param {boolean} props.isRefreshing - Indicates if async operations are in progress (disables inputs)
- * @param {function(Function): Promise<void>} props.safeAction - Wrapper to safely run async actions with loading state
- * @param {function(string, string): Promise<void>} props.renameSection - Rename a section by ID
- * @param {function(string, string, string): Promise<void>} props.renameDescription - Rename a line description
- * @param {function(string, string, string): Promise<void>} props.calcMeasurement - Calculate and update measurement for a line
- * @param {function(string): Promise<void>} props.addLine - Add a single line to a section by ID
- * @param {function(string): Promise<void>} props.addTen - Add ten lines to a section by ID
- * @param {function(string, string): Promise<void>} props.deleteOne - Delete one line from a section
- * @param {function(string): Promise<void>} props.deleteTen - Delete ten lines from a section
- * @param {function(string): Promise<void>} props.deleteSection - Delete an entire section by ID
- * @param {function(string): number} props.sectionTotal - Calculate total value of a section by ID
- * @param {function(): number} props.calculateGrandTotal - Calculate total value of the entire calculator
- *
- * @returns {JSX.Element} Rendered calculator UI with editable sections and lines
+ * @param {Object} props
+ * @param {Object} props.calculator
+ * @param {Object} props.editingState - { title, description, measurement } objects
+ * @param {boolean} props.isRefreshing
+ * @param {function(Function): Promise<void>} props.safeAction
+ * @param {Object} props.actions - { renameSection, renameDescription, calcMeasurement, addLine, addTen, deleteOne, deleteTen, deleteSection }
+ * @param {function(string): number} props.sectionTotal
+ * @param {function(): number} props.calculateGrandTotal
  */
 export default function MeasurementCalculatorUI({
   calculator,
-  editingTitleId,
-  setEditingTitleId,
-  titleInput,
-  setTitleInput,
-  editingDescriptionId,
-  setEditingDescriptionId,
-  lineDescription,
-  setLineDescription,
-  editingMeasurementId,
-  setEditingMeasurementId,
-  measurement,
-  setMeasurement,
+  editingState,
   isRefreshing,
   safeAction,
-  renameSection,
-  renameDescription,
-  calcMeasurement,
-  addLine,
-  addTen,
-  deleteOne,
-  deleteTen,
-  deleteSection,
+  actions,
   sectionTotal,
   calculateGrandTotal,
 }) {
@@ -68,19 +29,19 @@ export default function MeasurementCalculatorUI({
       {calculator.section?.length ? (
         calculator.section.map((section) => (
           <div key={section.id} className={styles.sectionBox}>
-            {/* Section Title: Editable text input or clickable heading */}
-            {editingTitleId === section.id ? (
+            {/* Section Title */}
+            {editingState.title.id === section.id ? (
               <input
                 type="text"
-                value={titleInput}
-                onChange={(e) => setTitleInput(e.target.value)}
+                value={editingState.title.value}
+                onChange={(e) => editingState.title.setValue(e.target.value)}
                 onBlur={async () => {
-                  if (titleInput.trim() !== "") {
+                  if (editingState.title.value.trim() !== "") {
                     await safeAction(() =>
-                      renameSection(section.id, titleInput.trim())
+                      actions.renameSection(section.id, editingState.title.value.trim())
                     );
                   }
-                  setEditingTitleId(null);
+                  editingState.title.setId(null);
                 }}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
@@ -96,47 +57,37 @@ export default function MeasurementCalculatorUI({
               <h2
                 onClick={() => {
                   if (!isRefreshing) {
-                    setEditingTitleId(section.id);
-                    setTitleInput(section.title || "");
+                    editingState.title.setId(section.id);
+                    editingState.title.setValue(section.title || "");
                   }
                 }}
                 style={{ cursor: isRefreshing ? "default" : "pointer" }}
               >
-                {section.title || (
-                  <em style={{ color: "#999" }}>Click to add title</em>
-                )}
+                {section.title || <em style={{ color: "#999" }}>Click to add title</em>}
               </h2>
             )}
 
-            {/* Lines within the section */}
+            {/* Lines */}
             {Array.isArray(section.lines) &&
               section.lines.map((line) => (
                 <div key={line.id} className={styles.lineStyle}>
-                  {/* Measurement: Editable input or clickable text */}
-                  {editingMeasurementId === line.id ? (
+                  {/* Measurement */}
+                  {editingState.measurement.id === line.id ? (
                     <input
                       type="text"
                       placeholder="ex. 60 x 114"
-                      value={measurement}
-                      onChange={(e) => setMeasurement(e.target.value)}
-                      onBlur={() => {
-                        setEditingMeasurementId(null);
-                        setEditingTitleId(null);
-                      }}
+                      value={editingState.measurement.value}
+                      onChange={(e) => editingState.measurement.setValue(e.target.value)}
+                      onBlur={() => editingState.measurement.setId(null)}
                       onKeyDown={async (e) => {
                         if (e.key === "Enter" || e.key === "Tab") {
                           e.preventDefault();
                           await safeAction(() =>
-                            calcMeasurement(
-                              section.id,
-                              line.id,
-                              measurement.trim()
-                            )
+                            actions.calcMeasurement(section.id, line.id, editingState.measurement.value.trim())
                           );
                           await safeAction(() => sectionTotal(section.id));
                           await safeAction(() => calculateGrandTotal());
-                          setEditingMeasurementId(null);
-                          setEditingTitleId(null);
+                          editingState.measurement.setId(null);
                         }
                       }}
                       autoFocus
@@ -146,8 +97,8 @@ export default function MeasurementCalculatorUI({
                     <p
                       onClick={() => {
                         if (!isRefreshing) {
-                          setEditingMeasurementId(line.id);
-                          setMeasurement(line.measurement || "");
+                          editingState.measurement.setId(line.id);
+                          editingState.measurement.setValue(line.measurement || "");
                         }
                       }}
                       style={{
@@ -162,25 +113,20 @@ export default function MeasurementCalculatorUI({
                     </p>
                   )}
 
-                  {/* Description: Editable input or clickable text */}
-                  {editingDescriptionId === line.id ? (
+                  {/* Description */}
+                  {editingState.description.id === line.id ? (
                     <input
                       type="text"
                       placeholder="description"
-                      value={lineDescription}
-                      onChange={(e) => setLineDescription(e.target.value)}
+                      value={editingState.description.value}
+                      onChange={(e) => editingState.description.setValue(e.target.value)}
                       onBlur={async () => {
-                        if (lineDescription.trim() !== "") {
+                        if (editingState.description.value.trim() !== "") {
                           await safeAction(() =>
-                            renameDescription(
-                              section.id,
-                              line.id,
-                              lineDescription.trim()
-                            )
+                            actions.renameDescription(section.id, line.id, editingState.description.value.trim())
                           );
                         }
-                        setEditingDescriptionId(null);
-                        setEditingTitleId(null);
+                        editingState.description.setId(null);
                       }}
                       onKeyDown={(e) => {
                         if (e.key === "Enter") {
@@ -195,8 +141,8 @@ export default function MeasurementCalculatorUI({
                     <p
                       onClick={() => {
                         if (!isRefreshing) {
-                          setEditingDescriptionId(line.id);
-                          setLineDescription(line.description || "");
+                          editingState.description.setId(line.id);
+                          editingState.description.setValue(line.description || "");
                         }
                       }}
                       style={{
@@ -211,7 +157,7 @@ export default function MeasurementCalculatorUI({
                     </p>
                   )}
 
-                  {/* Amount: read-only numeric input */}
+                  {/* Amount */}
                   <input
                     type="number"
                     placeholder="Amount"
@@ -221,10 +167,10 @@ export default function MeasurementCalculatorUI({
                     disabled={isRefreshing}
                   />
 
-                  {/* Delete single line button */}
+                  {/* Delete Line */}
                   <button
                     onClick={async () => {
-                      await safeAction(() => deleteOne(section.id, line.id));
+                      await safeAction(() => actions.deleteOne(section.id, line.id));
                       await safeAction(() => sectionTotal(section.id));
                       await safeAction(() => calculateGrandTotal());
                     }}
@@ -235,23 +181,17 @@ export default function MeasurementCalculatorUI({
                 </div>
               ))}
 
-            {/* Section action buttons */}
+            {/* Section Buttons */}
             <div className={styles.sectionButtonGroup}>
-              <button
-                onClick={() => safeAction(() => addLine(section.id))}
-                disabled={isRefreshing}
-              >
+              <button onClick={() => safeAction(() => actions.addLine(section.id))} disabled={isRefreshing}>
                 + Add Line
               </button>
-              <button
-                onClick={() => safeAction(() => addTen(section.id))}
-                disabled={isRefreshing}
-              >
+              <button onClick={() => safeAction(() => actions.addTen(section.id))} disabled={isRefreshing}>
                 + 10 Lines
               </button>
               <button
                 onClick={async () => {
-                  await safeAction(() => deleteTen(section.id));
+                  await safeAction(() => actions.deleteTen(section.id));
                   await safeAction(() => sectionTotal(section.id));
                   await safeAction(() => calculateGrandTotal());
                 }}
@@ -261,7 +201,7 @@ export default function MeasurementCalculatorUI({
               </button>
               <button
                 onClick={async () => {
-                  await safeAction(() => deleteSection(section.id));
+                  await safeAction(() => actions.deleteSection(section.id));
                   await safeAction(() => calculateGrandTotal());
                 }}
                 style={{ color: "red" }}
@@ -271,14 +211,8 @@ export default function MeasurementCalculatorUI({
               </button>
             </div>
 
-            {/* Section total display */}
-            <div
-              style={{
-                fontWeight: "bold",
-                marginTop: "0.5rem",
-                textAlign: "right",
-              }}
-            >
+            {/* Section Total */}
+            <div style={{ fontWeight: "bold", marginTop: "0.5rem", textAlign: "right" }}>
               Section Total: {section.total}
             </div>
           </div>
