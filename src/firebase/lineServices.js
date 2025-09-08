@@ -45,6 +45,32 @@ export async function updateDescriptionName(
 }
 
 /**
+ * Create a new line item.
+ *
+ * @param {string} calcType - Calculator type.
+ * @returns {Object} - New line item.
+ */
+function createNewLine(calcType) {
+  switch (calcType) {
+    case "MeasurementCalculator":
+      return {
+        id: crypto.randomUUID(),
+        description: "",
+        measurement: "",
+        amount: 0,
+      };
+    case "TwoFieldCalculator":
+      return {
+        id: crypto.randomUUID(),
+        description: "",
+        amount: 0,
+      };
+    default:
+      throw new Error(`Unsupported calculator type: ${calcType}`);
+  }
+}
+
+/**
  * Add one line.
  *
  * @param {string} projectId - Project ID.
@@ -66,12 +92,7 @@ export async function addOneLine(projectId, calculatorId, sectionId) {
   const calculatorData = calculatorSnap.data();
   const existingSections = calculatorData.section || [];
 
-  const newLine = {
-    id: crypto.randomUUID(),
-    description: "",
-    measurement: "",
-    amount: 0,
-  };
+  const newLine = createNewLine(calculatorData.type);
 
   const updatedSections = existingSections.map((section) =>
     section.id === sectionId
@@ -104,12 +125,9 @@ export async function addTenLines(projectId, calculatorId, sectionId) {
   const calculatorData = calculatorSnap.data();
   const existingSections = calculatorData.section || [];
 
-  const newLines = Array.from({ length: 10 }, () => ({
-    id: crypto.randomUUID(),
-    description: "",
-    measurement: "",
-    amount: 0,
-  }));
+  const newLines = Array.from({ length: 10 }, () => 
+    createNewLine(calculatorData.type)
+  );
 
   const updatedSections = existingSections.map((section) =>
     section.id === sectionId

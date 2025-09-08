@@ -41,6 +41,7 @@ const calculatorTemplates = {
             id: crypto.randomUUID(),
             description: "",
             amount: 0,
+            test: "test",
           },
         ],
         total: 0,

@@ -137,16 +137,17 @@ export default function TwoFieldCalculatorUI({
                         editingState.amount.setValue(e.target.value)
                       }
                       onBlur={async () => {
-                        await safeAction(() =>
-                          actions.updateAmount(
-                            section.id,
-                            line.id,
-                            editingState.amount.value
-                          )
-                        );
+                        const num = Number(editingState.amount.value);
+                        if (!isNaN(num)) {
+                          await safeAction(() =>
+                            actions.updateAmount(section.id, line.id, num)
+                          );
+                        }
+                        await safeAction(() => sectionTotal(section.id));
+                        await safeAction(() => calculateGrandTotal());
                         editingState.amount.setId(null);
                       }}
-                      onKeyDown={(e) => {
+                      onKeyDown={async (e) => {
                         if (e.key === "Enter") {
                           e.preventDefault();
                           e.target.blur();
@@ -171,7 +172,7 @@ export default function TwoFieldCalculatorUI({
                         fontStyle: line.amount ? "normal" : "italic",
                       }}
                     >
-                      {line.amount || "0"}
+                      {line.amount || "$0"}
                     </p>
                   )}
 

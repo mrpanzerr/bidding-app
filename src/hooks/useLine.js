@@ -5,7 +5,7 @@ import {
   deleteOneLine,
   deleteTenLines,
   updateDescriptionName,
-  updateLineAmount,
+  updateLineAmount
 } from "../firebase/lineServices";
 
 /**
