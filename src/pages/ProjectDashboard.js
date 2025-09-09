@@ -18,7 +18,7 @@ function ProjectDashboard() {
     loading: calcLoading,
   } = useCalculators(id);
 
-  const [activeModal, setActiveModal] = useState(null); // 'measurement' or 'twoField' or null
+  const [activeModal, setActiveModal] = useState(null);
   const [calculatorName, setCalculatorName] = useState("");
 
   const navigate = useNavigate();
@@ -45,6 +45,11 @@ function ProjectDashboard() {
   const handleNewTwoFieldCalculator = async () => {
     if (!calculatorName.trim()) return;
     await addNewCalculator(id, calculatorName, "TwoFieldCalculator");
+    closeModal();
+  };
+  const handleNewThreeFieldCalculator = async () => {
+    if (!calculatorName.trim()) return;
+    await addNewCalculator(id, calculatorName, "ThreeFieldCalculator");
     closeModal();
   };
 
@@ -74,6 +79,12 @@ function ProjectDashboard() {
           style={{ display: "block", marginTop: "0.5rem" }}
         >
           Add Two Field Calculator
+        </button>
+        <button
+          onClick={() => openModal("ThreeFieldCalculator")}
+          style={{ display: "block", marginTop: "0.5rem" }}
+        >
+          Add Three Field Calculator
         </button>
       </aside>
 
@@ -106,7 +117,7 @@ function ProjectDashboard() {
         )}
       </main>
 
-      {/* Modal for creating new calculator */}
+      {/* Modal for creating new measurement calculator */}
       {activeModal === "MeasurementCalculator" && (
         <NewCalculatorModal
           calculatorName={calculatorName}
@@ -125,6 +136,19 @@ function ProjectDashboard() {
           calculatorName={calculatorName}
           setCalculatorName={setCalculatorName}
           onSave={handleNewTwoFieldCalculator}
+          onCancel={() => {
+            setActiveModal(null);
+            setCalculatorName("");
+          }}
+        />
+      )}
+
+      {/* Modal for creating new three field calculator */}
+      {activeModal === "ThreeFieldCalculator" && (
+        <NewCalculatorModal
+          calculatorName={calculatorName}
+          setCalculatorName={setCalculatorName}
+          onSave={handleNewThreeFieldCalculator}
           onCancel={() => {
             setActiveModal(null);
             setCalculatorName("");

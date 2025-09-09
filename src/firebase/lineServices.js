@@ -45,6 +45,49 @@ export async function updateDescriptionName(
 }
 
 /**
+ * Update description of a line item.
+ *
+ * @param {string} projectId - Project ID.
+ * @param {string} calculatorId - Calculator ID.
+ * @param {string} sectionId - Section ID.
+ * @param {string} lineId - Line ID.
+ * @param {string} newDescription - New description.
+ * @returns {Promise<void>}
+ */
+export async function updateDescriptionTwoName(
+  projectId,
+  calculatorId,
+  sectionId,
+  lineId,
+  newDescription
+) {
+  const calculatorRef = doc(
+    db,
+    "projects",
+    projectId,
+    "calculators",
+    calculatorId
+  );
+  const calculatorSnap = await getDoc(calculatorRef);
+  if (!calculatorSnap.exists()) throw new Error("Calculator not found");
+
+  const calculatorData = calculatorSnap.data();
+  const existingSections = calculatorData.section || [];
+
+  const updatedSections = existingSections.map((section) => {
+    if (section.id !== sectionId) return section;
+
+    const updatedLines = (section.lines || []).map((line) =>
+      line.id === lineId ? { ...line, descriptionTwo: newDescription ?? "" } : line
+    );
+
+    return { ...section, lines: updatedLines };
+  });
+
+  await updateDoc(calculatorRef, { section: updatedSections });
+}
+
+/**
  * Create a new line item.
  *
  * @param {string} calcType - Calculator type.
@@ -63,6 +106,13 @@ function createNewLine(calcType) {
       return {
         id: crypto.randomUUID(),
         description: "",
+        amount: 0,
+      };
+    case "ThreeFieldCalculator":
+      return {
+        id: crypto.randomUUID(),
+        description: "",
+        descriptionTwo: "",
         amount: 0,
       };
     default:

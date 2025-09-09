@@ -1,5 +1,6 @@
 import { useState } from "react";
 import MeasurementCalculatorUI from "./calculatorUI/measurementCalculatorUI";
+import ThreeFieldCalculatorUI from "./calculatorUI/threeFieldCalculatorUI";
 import TwoFieldCalculatorUI from "./calculatorUI/twoFieldCalculatorUI";
 import DeleteCalculatorModal from "./modals/deleteCalculatorModal";
 
@@ -28,6 +29,7 @@ export default function CalculatorPageUI(props) {
     deleteSection,
     renameSection,
     renameDescription,
+    renameDescriptionTwo,
     addLine,
     addTen,
     deleteOne,
@@ -62,6 +64,8 @@ export default function CalculatorPageUI(props) {
   const [editingTitleId, setEditingTitleId] = useState(null);
   const [titleInput, setTitleInput] = useState("");
   const [editingDescriptionId, setEditingDescriptionId] = useState(null);
+  const [editingDescriptionTwoId, setEditingDescriptionTwoId] = useState(null);
+  const [descriptionTwo, setDescriptionTwo] = useState("");
   const [lineDescription, setLineDescription] = useState("");
   const [editingMeasurementId, setEditingMeasurementId] = useState(null);
   const [measurement, setMeasurement] = useState("");
@@ -73,12 +77,14 @@ export default function CalculatorPageUI(props) {
     description: { id: editingDescriptionId, setId: setEditingDescriptionId, value: lineDescription, setValue: setLineDescription },
     measurement: { id: editingMeasurementId, setId: setEditingMeasurementId, value: measurement, setValue: setMeasurement },
     amount: { id: editingAmount, setId: setEditingAmount, value: amountInput, setValue: setAmountInput },
+    descriptionTwo: { id: editingDescriptionTwoId, setId: setEditingDescriptionTwoId, value: descriptionTwo, setValue: setDescriptionTwo },
   };
 
   // Calculator action wrappers
   const calculatorActions = {
     renameSection,
     renameDescription,
+    renameDescriptionTwo,
     calcMeasurement,
     addLine,
     addTen,
@@ -206,6 +212,33 @@ export default function CalculatorPageUI(props) {
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
           {renderHeader()}
           <TwoFieldCalculatorUI
+            calculator={safeCalculator}
+            editingState={editingState}
+            actions={calculatorActions}
+            sectionTotal={sectionTotal}
+            calculateGrandTotal={calculateGrandTotal}
+            isRefreshing={isRefreshing}
+            safeAction={safeAction}
+          />
+          {renderFooter()}
+          {showDeleteModal && (
+            <DeleteCalculatorModal
+              safeCalculator={safeCalculator}
+              deleteConfirmInput={deleteConfirmInput}
+              setDeleteConfirmInput={setDeleteConfirmInput}
+              isRefreshing={isRefreshing}
+              setShowDeleteModal={setShowDeleteModal}
+              handleDeleteCalculator={handleDeleteCalculator}
+            />
+          )}
+        </div>
+      );
+
+    case "ThreeFieldCalculator":
+      return (
+        <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+          {renderHeader()}
+          <ThreeFieldCalculatorUI
             calculator={safeCalculator}
             editingState={editingState}
             actions={calculatorActions}
