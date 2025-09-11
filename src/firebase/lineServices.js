@@ -16,6 +16,7 @@ export async function updateDescriptionName(
   calculatorId,
   sectionId,
   lineId,
+  field,
   newDescription
 ) {
   const calculatorRef = doc(
@@ -35,7 +36,7 @@ export async function updateDescriptionName(
     if (section.id !== sectionId) return section;
 
     const updatedLines = (section.lines || []).map((line) =>
-      line.id === lineId ? { ...line, description: newDescription ?? "" } : line
+      line.id === lineId ? { ...line, [field]: newDescription ?? "" } : line
     );
 
     return { ...section, lines: updatedLines };
@@ -43,53 +44,6 @@ export async function updateDescriptionName(
 
   await updateDoc(calculatorRef, { section: updatedSections });
 }
-
-/**
- * Update description of a line item.
- *
- * @param {string} projectId - Project ID.
- * @param {string} calculatorId - Calculator ID.
- * @param {string} sectionId - Section ID.
- * @param {string} lineId - Line ID.
- * @param {string} newDescription - New description.
- * @returns {Promise<void>}
- */
-export async function updateDescriptionTwoName(
-  projectId,
-  calculatorId,
-  sectionId,
-  lineId,
-  newDescription
-) {
-  const calculatorRef = doc(
-    db,
-    "projects",
-    projectId,
-    "calculators",
-    calculatorId
-  );
-  const calculatorSnap = await getDoc(calculatorRef);
-  if (!calculatorSnap.exists()) throw new Error("Calculator not found");
-
-  const calculatorData = calculatorSnap.data();
-  const existingSections = calculatorData.section || [];
-
-  const updatedSections = existingSections.map((section) => {
-    if (section.id !== sectionId) return section;
-
-    const updatedLines = (section.lines || []).map((line) =>
-      line.id === lineId ? { ...line, descriptionTwo: newDescription ?? "" } : line
-    );
-
-    return { ...section, lines: updatedLines };
-  });
-
-  await updateDoc(calculatorRef, { section: updatedSections });
-}
-
-/**
- * Update description of a line item
- */
 
 /**
  * Create a new line item.
@@ -122,14 +76,14 @@ function createNewLine(calcType) {
     case "SevenFieldCalculator":
       return {
         id: crypto.randomUUID(),
-            quantity: 0,
-            productCode: "",
-            price: 0,
-            description: "",
-            description2: "",
-            description3: "",
-            amount: 0,
-      }
+        quantity: 0,
+        productCode: "",
+        price: 0,
+        description: "",
+        description2: "",
+        description3: "",
+        amount: 0,
+      };
     default:
       throw new Error(`Unsupported calculator type: ${calcType}`);
   }
@@ -190,7 +144,7 @@ export async function addTenLines(projectId, calculatorId, sectionId) {
   const calculatorData = calculatorSnap.data();
   const existingSections = calculatorData.section || [];
 
-  const newLines = Array.from({ length: 10 }, () => 
+  const newLines = Array.from({ length: 10 }, () =>
     createNewLine(calculatorData.type)
   );
 
@@ -325,15 +279,64 @@ export async function calculateMeasurement(
 }
 
 /**
+ * Calculate and update cost of material.
+ *
+ * @param {string} projectId - Project ID.
+ * @param {string} calculatorId - Calculator ID.
+ * @param {string} sectionId - Section ID.
+ * @param {string} lineId - Line ID.
+ * @param {number} quantity - quantity amount (e.g., "5").
+ * @param {number} price - price of single item (e.g., "4.99")
+ * @returns {Promise<void>}
+ */
+export async function calculateCost(
+  projectId,
+  calculatorId,
+  sectionId,
+  lineId,
+  quantity,
+  price
+) {
+  const calculatorRef = doc(
+    db,
+    "projects",
+    projectId,
+    "calculators",
+    calculatorId
+  );
+  const calculatorSnap = await getDoc(calculatorRef);
+  if (!calculatorSnap.exists()) throw new Error("Calculator not found");
+
+  const calculatorData = calculatorSnap.data();
+  const sections = calculatorData.section || [];
+
+  const updatedSections = sections.map((section) => {
+    if (section.id !== sectionId) return section;
+
+    const updatedLines = section.lines.map((line) => {
+      if (line.id !== lineId) return line;
+
+      const product = quantity * price || 0;
+
+      return { ...line, amount: product };
+    });
+
+    return { ...section, lines: updatedLines };
+  });
+
+  await updateDoc(calculatorRef, { section: updatedSections });
+}
+
+/**
  * Edit the price of a line item.
  *
- * @param {string} projectId - Project ID.  
+ * @param {string} projectId - Project ID.
  * @param {string} calculatorId - Calculator ID.
  * @param {string} sectionId - Section ID.
  * @param {string} lineId - Line ID.
  * @param {number} newPrice - New price.
  * @returns {Promise<void>}
-*/
+ */
 export async function updateLineAmount(
   projectId,
   calculatorId,
@@ -366,4 +369,3 @@ export async function updateLineAmount(
 
   await updateDoc(calculatorRef, { section: updatedSections });
 }
-

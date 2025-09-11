@@ -43,7 +43,6 @@ export default function CalculatorPage() {
     sectionTotal,
     calculateGrandTotal,
     updateAmount,
-    renameDescriptionTwo,
   } = config.useCalculatorData(projectId, calculatorId);
 
   // Keep newCalculatorName in sync with the calculator's name
@@ -91,7 +90,6 @@ export default function CalculatorPage() {
       deleteSection={deleteSection}
       renameSection={renameSection}
       renameDescription={renameDescription}
-      renameDescriptionTwo={renameDescriptionTwo}
       addLine={addLine}
       addTen={addTen}
       deleteOne={deleteOne}

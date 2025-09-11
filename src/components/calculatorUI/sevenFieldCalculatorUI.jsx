@@ -15,7 +15,7 @@ import styles from "../../styles/calculatorModules/calculatorUI.module.css";
  * @param {function(string): number} props.sectionTotal
  * @param {function(): number} props.calculateGrandTotal
  */
-export default function ThreeFieldCalculatorUI({
+export default function SevenFieldCalculatorUI({
   calculator,
   editingState,
   isRefreshing,

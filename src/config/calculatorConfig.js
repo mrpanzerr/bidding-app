@@ -1,4 +1,5 @@
 import { useMeasurementCalculator } from "../hooks/useMeasurementCalculator.js";
+import { useSevenFieldCalculator } from "../hooks/useSevenFieldCalculator.js";
 import { useThreeFieldCalculator } from "../hooks/useThreeFieldCalculator.js";
 import { useTwoFieldCalculator } from "../hooks/useTwoFieldCalculator.js";
 
@@ -11,5 +12,8 @@ export const calculatorConfigs = {
     },
     ThreeFieldCalculator: {
         useCalculatorData: useThreeFieldCalculator,
+    },
+    SevenFieldCalculator: {
+        useCalculatorData: useSevenFieldCalculator,
     },
 };

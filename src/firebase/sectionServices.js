@@ -12,7 +12,7 @@ function createNewSection(calcType) {
     id: crypto.randomUUID(),
     title: "Section Title",
     total: 0,
-};
+  };
 
   switch (calcType) {
     case "MeasurementCalculator":

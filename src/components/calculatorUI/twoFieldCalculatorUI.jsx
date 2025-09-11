@@ -91,7 +91,8 @@ export default function TwoFieldCalculatorUI({
                             actions.renameDescription(
                               section.id,
                               line.id,
-                              editingState.description.value.trim()
+                              editingState.description.value.trim(),
+                              "description"
                             )
                           );
                         }

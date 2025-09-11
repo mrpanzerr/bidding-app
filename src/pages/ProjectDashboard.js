@@ -52,6 +52,11 @@ function ProjectDashboard() {
     await addNewCalculator(id, calculatorName, "ThreeFieldCalculator");
     closeModal();
   };
+  const handleNewSevenFieldCalculator = async () => {
+    if (!calculatorName.trim()) return;
+    await addNewCalculator(id, calculatorName, "SevenFieldCalculator");
+    closeModal();
+  };
 
   if (loading) return <p>Loading project...</p>;
   if (error) return <p>Error loading project: {error.message}</p>;
@@ -69,10 +74,10 @@ function ProjectDashboard() {
       >
         <h3>Actions</h3>
         <button
-          onClick={() => openModal("MeasurementCalculator")}
+          onClick={() => openModal("SevenFieldCalculator")}
           style={{ display: "block" }}
         >
-          Add Measurement Calculator
+          Add Material Calculator
         </button>
         <button
           onClick={() => openModal("TwoFieldCalculator")}
@@ -85,6 +90,12 @@ function ProjectDashboard() {
           style={{ display: "block", marginTop: "0.5rem" }}
         >
           Add Three Field Calculator
+        </button>
+        <button
+          onClick={() => openModal("MeasurementCalculator")}
+          style={{ display: "block", marginTop: "0.5rem"}}
+        >
+          Add Measurement Calculator
         </button>
       </aside>
 
@@ -149,6 +160,19 @@ function ProjectDashboard() {
           calculatorName={calculatorName}
           setCalculatorName={setCalculatorName}
           onSave={handleNewThreeFieldCalculator}
+          onCancel={() => {
+            setActiveModal(null);
+            setCalculatorName("");
+          }}
+        />
+      )}
+
+      {/* Modal for creating new seven field calculator */}
+      {activeModal === "SevenFieldCalculator" && (
+        <NewCalculatorModal
+          calculatorName={calculatorName}
+          setCalculatorName={setCalculatorName}
+          onSave={handleNewSevenFieldCalculator}
           onCancel={() => {
             setActiveModal(null);
             setCalculatorName("");

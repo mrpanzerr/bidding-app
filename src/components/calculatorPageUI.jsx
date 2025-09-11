@@ -1,5 +1,6 @@
 import { useState } from "react";
 import MeasurementCalculatorUI from "./calculatorUI/measurementCalculatorUI";
+import SevenFieldCalculatorUI from "./calculatorUI/sevenFieldCalculatorUI";
 import ThreeFieldCalculatorUI from "./calculatorUI/threeFieldCalculatorUI";
 import TwoFieldCalculatorUI from "./calculatorUI/twoFieldCalculatorUI";
 import DeleteCalculatorModal from "./modals/deleteCalculatorModal";
@@ -29,7 +30,6 @@ export default function CalculatorPageUI(props) {
     deleteSection,
     renameSection,
     renameDescription,
-    renameDescriptionTwo,
     addLine,
     addTen,
     deleteOne,
@@ -73,18 +73,42 @@ export default function CalculatorPageUI(props) {
   const [amountInput, setAmountInput] = useState("");
 
   const editingState = {
-    title: { id: editingTitleId, setId: setEditingTitleId, value: titleInput, setValue: setTitleInput },
-    description: { id: editingDescriptionId, setId: setEditingDescriptionId, value: lineDescription, setValue: setLineDescription },
-    measurement: { id: editingMeasurementId, setId: setEditingMeasurementId, value: measurement, setValue: setMeasurement },
-    amount: { id: editingAmount, setId: setEditingAmount, value: amountInput, setValue: setAmountInput },
-    descriptionTwo: { id: editingDescriptionTwoId, setId: setEditingDescriptionTwoId, value: descriptionTwo, setValue: setDescriptionTwo },
+    title: {
+      id: editingTitleId,
+      setId: setEditingTitleId,
+      value: titleInput,
+      setValue: setTitleInput,
+    },
+    description: {
+      id: editingDescriptionId,
+      setId: setEditingDescriptionId,
+      value: lineDescription,
+      setValue: setLineDescription,
+    },
+    measurement: {
+      id: editingMeasurementId,
+      setId: setEditingMeasurementId,
+      value: measurement,
+      setValue: setMeasurement,
+    },
+    amount: {
+      id: editingAmount,
+      setId: setEditingAmount,
+      value: amountInput,
+      setValue: setAmountInput,
+    },
+    descriptionTwo: {
+      id: editingDescriptionTwoId,
+      setId: setEditingDescriptionTwoId,
+      value: descriptionTwo,
+      setValue: setDescriptionTwo,
+    },
   };
 
   // Calculator action wrappers
   const calculatorActions = {
     renameSection,
     renameDescription,
-    renameDescriptionTwo,
     calcMeasurement,
     addLine,
     addTen,
@@ -147,7 +171,9 @@ export default function CalculatorPageUI(props) {
         disabled={renaming}
       />
     ) : (
-      <h1 onClick={() => setEditingCalculatorName(true)}>{safeCalculator.name}</h1>
+      <h1 onClick={() => setEditingCalculatorName(true)}>
+        {safeCalculator.name}
+      </h1>
     );
 
   /**
@@ -158,7 +184,9 @@ export default function CalculatorPageUI(props) {
       <button onClick={() => safeAction(addNewSection)} disabled={isRefreshing}>
         + Add Section
       </button>
-      <h2 style={{ textAlign: "right" }}>Total: {safeCalculator.grandTotal || 0}</h2>
+      <h2 style={{ textAlign: "right" }}>
+        Total: {safeCalculator.grandTotal || 0}
+      </h2>
       <button
         onClick={() => setShowDeleteModal(true)}
         disabled={isRefreshing}
@@ -261,6 +289,32 @@ export default function CalculatorPageUI(props) {
         </div>
       );
 
+    case "SevenFieldCalculator":
+      return (
+        <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+          {renderHeader()}
+          <SevenFieldCalculatorUI
+            calculator={safeCalculator}
+            editingState={editingState}
+            actions={calculatorActions}
+            sectionTotal={sectionTotal}
+            calculateGrandTotal={calculateGrandTotal}
+            isRefreshing={isRefreshing}
+            safeAction={safeAction}
+          />
+          {renderFooter()}
+          {showDeleteModal && (
+            <DeleteCalculatorModal
+              safeCalculator={safeCalculator}
+              deleteConfirmInput={deleteConfirmInput}
+              setDeleteConfirmInput={setDeleteConfirmInput}
+              isRefreshing={isRefreshing}
+              setShowDeleteModal={setShowDeleteModal}
+              handleDeleteCalculator={handleDeleteCalculator}
+            />
+          )}
+        </div>
+      );
     default:
       return <p>Unknown calculator type.</p>;
   }

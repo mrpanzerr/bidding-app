@@ -123,7 +123,7 @@ export default function MeasurementCalculatorUI({
                       onBlur={async () => {
                         if (editingState.description.value.trim() !== "") {
                           await safeAction(() =>
-                            actions.renameDescription(section.id, line.id, editingState.description.value.trim())
+                            actions.renameDescription(section.id, line.id, editingState.description.value.trim(), "description")
                           );
                         }
                         editingState.description.setId(null);

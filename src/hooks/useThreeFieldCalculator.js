@@ -33,7 +33,6 @@ export function useThreeFieldCalculator(projectId, calculatorId) {
     deleteSection: section.deleteSection,
     renameSection: section.renameSection,
     renameDescription: line.renameDescription,
-    renameDescriptionTwo: line.renameDescriptionTwo,
     updateAmount: line.updateAmount,
     addLine: line.addLine,
     addTen: line.addTen,

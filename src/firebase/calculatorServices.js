@@ -7,7 +7,7 @@ import {
   getDocs,
   query,
   updateDoc,
-  where
+  where,
 } from "firebase/firestore";
 import { auth, db } from "./firebase";
 
@@ -58,6 +58,28 @@ const calculatorTemplates = {
             id: crypto.randomUUID(),
             description: "",
             descriptionTwo: "",
+            amount: 0,
+          },
+        ],
+        total: 0,
+      },
+    ],
+    grandTotal: 0,
+  },
+  SevenFieldCalculator: {
+    section: [
+      {
+        id: crypto.randomUUID(),
+        title: "Section Title",
+        lines: [
+          {
+            id: crypto.randomUUID(),
+            quantity: 0,
+            productCode: "",
+            price: 0,
+            description: "",
+            description2: "",
+            description3: "",
             amount: 0,
           },
         ],
@@ -181,14 +203,14 @@ export async function updateCalculatorName(projectId, calculatorId, newName) {
 
 /**
  * Fetch all calculators owned by the current user
- * 
+ *
  * @param {string} projectId - Project ID.
  * @returns {Promise<Array>} Array of calculator objects.
  */
 export async function fetchMyCalculators(projectId) {
   const user = auth.currentUser;
   if (!user) throw new Error("No authenticated user");
-  
+
   const q = query(
     collection(db, "projects", projectId, "calculators"),
     where("userId", "==", user.uid)

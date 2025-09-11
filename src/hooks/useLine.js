@@ -5,8 +5,7 @@ import {
   deleteOneLine,
   deleteTenLines,
   updateDescriptionName,
-  updateDescriptionTwoName,
-  updateLineAmount,
+  updateLineAmount
 } from "../firebase/lineServices";
 
 /**
@@ -40,27 +39,17 @@ export function useLine(projectId, calculatorId, performMutation) {
   const deleteTen = (sectionId) =>
     performMutation(() => deleteTenLines(projectId, calculatorId, sectionId));
 
-  const renameDescription = (sectionId, lineId, newDescription) =>
+  const renameDescription = (sectionId, lineId, newDescription, field) =>
     performMutation(() =>
       updateDescriptionName(
         projectId,
         calculatorId,
         sectionId,
         lineId,
+        field,
         newDescription
       )
     );
-
-  const renameDescriptionTwo = (sectionId, lineId, newDescription) => 
-    performMutation(() =>
-    updateDescriptionTwoName(
-      projectId,
-      calculatorId,
-      sectionId,
-      lineId,
-      newDescription
-    )
-  );
 
   const calcMeasurement = (sectionId, lineId, measurement) =>
     performMutation(() =>
@@ -90,7 +79,6 @@ export function useLine(projectId, calculatorId, performMutation) {
     deleteOne,
     deleteTen,
     renameDescription,
-    renameDescriptionTwo,
     calcMeasurement,
     updateAmount,
   };
