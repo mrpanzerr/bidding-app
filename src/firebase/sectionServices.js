@@ -50,6 +50,22 @@ function createNewSection(calcType) {
           },
         ],
       };
+    case "SevenFieldCalculator":
+      return {
+        ...sectionDefault,
+        lines: [
+          {
+            id: crypto.randomUUID(),
+            quantity: 0,
+            productCode: "",
+            price: 0,
+            description: "",
+            description2: "",
+            description3: "",
+            amount: 0,
+          },
+        ],
+      };
     default:
       throw new Error(`Unsupported calculator type: ${calcType}`);
   }

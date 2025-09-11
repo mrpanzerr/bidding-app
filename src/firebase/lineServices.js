@@ -88,6 +88,10 @@ export async function updateDescriptionTwoName(
 }
 
 /**
+ * Update description of a line item
+ */
+
+/**
  * Create a new line item.
  *
  * @param {string} calcType - Calculator type.
@@ -115,6 +119,17 @@ function createNewLine(calcType) {
         descriptionTwo: "",
         amount: 0,
       };
+    case "SevenFieldCalculator":
+      return {
+        id: crypto.randomUUID(),
+            quantity: 0,
+            productCode: "",
+            price: 0,
+            description: "",
+            description2: "",
+            description3: "",
+            amount: 0,
+      }
     default:
       throw new Error(`Unsupported calculator type: ${calcType}`);
   }
@@ -351,3 +366,4 @@ export async function updateLineAmount(
 
   await updateDoc(calculatorRef, { section: updatedSections });
 }
+
