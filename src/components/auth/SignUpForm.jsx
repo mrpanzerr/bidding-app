@@ -27,8 +27,8 @@ export default function SignUpForm({ onSubmit, errors = {} }) {
       initialValues={{ email: "", password: "", confirmPassword: "" }}
       onSubmit={handleSubmit}
       errors={errors}
-      showConfirmPassword={true}  // Show confirm password field for signup
-      pageType="signup"            // Sets form title and behavior
+      showConfirmPassword={true} // Show confirm password field for signup
+      pageType="signup" // Sets form title and behavior
     />
   );
 }

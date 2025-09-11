@@ -11,7 +11,11 @@ import { useState } from "react";
  *
  * @returns {Object} - Modal state, project state, and handler functions for project management.
  */
-export function useProjectManagement({ addNewProject, renameExistingProject, deleteExistingProject }) {
+export function useProjectManagement({
+  addNewProject,
+  renameExistingProject,
+  deleteExistingProject,
+}) {
   // Tracks which modal is open: null, "new", "rename", or "delete"
   const [modalType, setModalType] = useState(null);
 
@@ -19,10 +23,10 @@ export function useProjectManagement({ addNewProject, renameExistingProject, del
   const [selectedProjectId, setSelectedProjectId] = useState(null);
 
   // Input states for different modals
-  const [projectName, setProjectName] = useState("");   // For creating a new project
-  const [newName, setNewName] = useState("");           // For renaming a project
+  const [projectName, setProjectName] = useState(""); // For creating a new project
+  const [newName, setNewName] = useState(""); // For renaming a project
   const [originalName, setOriginalName] = useState(""); // Original project name (useful for rename/delete confirmation UIs)
-  const [deleteName, setDeleteName] = useState("");     // Name typed by user to confirm deletion
+  const [deleteName, setDeleteName] = useState(""); // Name typed by user to confirm deletion
 
   /**
    * Opens the "New Project" modal.
@@ -73,12 +77,18 @@ export function useProjectManagement({ addNewProject, renameExistingProject, del
 
   return {
     // State
-    modalType, setModalType,
-    selectedProjectId, setSelectedProjectId,
-    projectName, setProjectName,
-    newName, setNewName,
-    originalName, setOriginalName,
-    deleteName, setDeleteName,
+    modalType,
+    setModalType,
+    selectedProjectId,
+    setSelectedProjectId,
+    projectName,
+    setProjectName,
+    newName,
+    setNewName,
+    originalName,
+    setOriginalName,
+    deleteName,
+    setDeleteName,
 
     // Handlers
     openNewProjectModal,

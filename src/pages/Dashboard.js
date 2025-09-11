@@ -13,7 +13,14 @@ import { useProjects } from "../hooks/useProjects";
 
 function Dashboard() {
   // Fetch project data and expose CRUD functions (create, rename, delete)
-  const { projects, loading, error, addNewProject, renameExistingProject, deleteExistingProject } = useProjects();
+  const {
+    projects,
+    loading,
+    error,
+    addNewProject,
+    renameExistingProject,
+    deleteExistingProject,
+  } = useProjects();
 
   const navigate = useNavigate();
 
@@ -30,7 +37,11 @@ function Dashboard() {
     newName,
     setNewName,
     setSelectedProjectId,
-  } = useProjectManagement({ addNewProject, renameExistingProject, deleteExistingProject });
+  } = useProjectManagement({
+    addNewProject,
+    renameExistingProject,
+    deleteExistingProject,
+  });
 
   // Navigate to a specific project dashboard by ID
   const openProject = (id) => navigate(`/project/${id}`);
@@ -63,7 +74,11 @@ function Dashboard() {
   return (
     <DashboardLayout
       // Show user email if logged in, otherwise display generic welcome
-      title={auth.currentUser ? `Welcome, ${auth.currentUser.email || "User"}` : "Welcome, Guest"}
+      title={
+        auth.currentUser
+          ? `Welcome, ${auth.currentUser.email || "User"}`
+          : "Welcome, Guest"
+      }
       onAddProject={openNewProjectModal}
       onLogout={handleLogout}
     >

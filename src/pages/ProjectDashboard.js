@@ -93,7 +93,7 @@ function ProjectDashboard() {
         </button>
         <button
           onClick={() => openModal("MeasurementCalculator")}
-          style={{ display: "block", marginTop: "0.5rem"}}
+          style={{ display: "block", marginTop: "0.5rem" }}
         >
           Add Measurement Calculator
         </button>

@@ -11,7 +11,7 @@ import styles from "../../styles/calculatorModules/calculatorUI.module.css";
  * @param {Object} props.editingState - { title, description, amount } objects
  * @param {boolean} props.isRefreshing
  * @param {function(Function): Promise<void>} props.safeAction
- * @param {Object} props.actions - { renameSection, renameDescription, updateAmount, addLine, addTen, deleteOne, deleteTen, deleteSection }
+ * @param {Object} props.actions - { renameSection, updateField, addLine, addTen, deleteOne, deleteTen, deleteSection }
  * @param {function(string): number} props.sectionTotal
  * @param {function(): number} props.calculateGrandTotal
  */
@@ -88,7 +88,7 @@ export default function TwoFieldCalculatorUI({
                       onBlur={async () => {
                         if (editingState.description.value.trim() !== "") {
                           await safeAction(() =>
-                            actions.renameDescription(
+                            actions.updateField(
                               section.id,
                               line.id,
                               editingState.description.value.trim(),
@@ -141,7 +141,12 @@ export default function TwoFieldCalculatorUI({
                         const num = Number(editingState.amount.value);
                         if (!isNaN(num)) {
                           await safeAction(() =>
-                            actions.updateAmount(section.id, line.id, num)
+                            actions.updateField(
+                              section.id,
+                              line.id,
+                              num,
+                              "amount"
+                            )
                           );
                         }
                         await safeAction(() => sectionTotal(section.id));

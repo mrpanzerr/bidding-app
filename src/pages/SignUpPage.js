@@ -44,7 +44,11 @@ export default function SignupPage() {
       "signup"
     );
 
-    if (validationErrors.email || validationErrors.password || validationErrors.confirmPassword) {
+    if (
+      validationErrors.email ||
+      validationErrors.password ||
+      validationErrors.confirmPassword
+    ) {
       setErrors(validationErrors);
       return;
     }
@@ -75,11 +79,11 @@ export default function SignupPage() {
         )
       }
       errors={errors}
-      showConfirmPassword={true}   // Show confirm password input for signup
-      showLogin={true}             // Include login button for navigation
-      showSignUp={true}            // Include signup button
-      showGuest={true}             // Optional guest access button
-      pageType="signup"            // Determines form title and behavior
+      showConfirmPassword={true} // Show confirm password input for signup
+      showLogin={true} // Include login button for navigation
+      showSignUp={true} // Include signup button
+      showGuest={true} // Optional guest access button
+      pageType="signup" // Determines form title and behavior
     />
   );
 }

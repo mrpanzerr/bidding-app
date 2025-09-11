@@ -11,7 +11,7 @@ import styles from "../../styles/calculatorModules/calculatorUI.module.css";
  * @param {Object} props.editingState - { title, description, measurement } objects
  * @param {boolean} props.isRefreshing
  * @param {function(Function): Promise<void>} props.safeAction
- * @param {Object} props.actions - { renameSection, renameDescription, calcMeasurement, addLine, addTen, deleteOne, deleteTen, deleteSection }
+ * @param {Object} props.actions - { renameSection, calcMeasurement, updateField, addLine, addTen, deleteOne, deleteTen, deleteSection }
  * @param {function(string): number} props.sectionTotal
  * @param {function(): number} props.calculateGrandTotal
  */
@@ -38,7 +38,10 @@ export default function MeasurementCalculatorUI({
                 onBlur={async () => {
                   if (editingState.title.value.trim() !== "") {
                     await safeAction(() =>
-                      actions.renameSection(section.id, editingState.title.value.trim())
+                      actions.renameSection(
+                        section.id,
+                        editingState.title.value.trim()
+                      )
                     );
                   }
                   editingState.title.setId(null);
@@ -63,7 +66,9 @@ export default function MeasurementCalculatorUI({
                 }}
                 style={{ cursor: isRefreshing ? "default" : "pointer" }}
               >
-                {section.title || <em style={{ color: "#999" }}>Click to add title</em>}
+                {section.title || (
+                  <em style={{ color: "#999" }}>Click to add title</em>
+                )}
               </h2>
             )}
 
@@ -77,13 +82,19 @@ export default function MeasurementCalculatorUI({
                       type="text"
                       placeholder="ex. 60 x 114"
                       value={editingState.measurement.value}
-                      onChange={(e) => editingState.measurement.setValue(e.target.value)}
+                      onChange={(e) =>
+                        editingState.measurement.setValue(e.target.value)
+                      }
                       onBlur={() => editingState.measurement.setId(null)}
                       onKeyDown={async (e) => {
                         if (e.key === "Enter" || e.key === "Tab") {
                           e.preventDefault();
                           await safeAction(() =>
-                            actions.calcMeasurement(section.id, line.id, editingState.measurement.value.trim())
+                            actions.calcMeasurement(
+                              section.id,
+                              line.id,
+                              editingState.measurement.value.trim()
+                            )
                           );
                           await safeAction(() => sectionTotal(section.id));
                           await safeAction(() => calculateGrandTotal());
@@ -98,7 +109,9 @@ export default function MeasurementCalculatorUI({
                       onClick={() => {
                         if (!isRefreshing) {
                           editingState.measurement.setId(line.id);
-                          editingState.measurement.setValue(line.measurement || "");
+                          editingState.measurement.setValue(
+                            line.measurement || ""
+                          );
                         }
                       }}
                       style={{
@@ -119,11 +132,18 @@ export default function MeasurementCalculatorUI({
                       type="text"
                       placeholder="description"
                       value={editingState.description.value}
-                      onChange={(e) => editingState.description.setValue(e.target.value)}
+                      onChange={(e) =>
+                        editingState.description.setValue(e.target.value)
+                      }
                       onBlur={async () => {
                         if (editingState.description.value.trim() !== "") {
                           await safeAction(() =>
-                            actions.renameDescription(section.id, line.id, editingState.description.value.trim(), "description")
+                            actions.updateField(
+                              section.id,
+                              line.id,
+                              editingState.description.value.trim(),
+                              "description"
+                            )
                           );
                         }
                         editingState.description.setId(null);
@@ -142,7 +162,9 @@ export default function MeasurementCalculatorUI({
                       onClick={() => {
                         if (!isRefreshing) {
                           editingState.description.setId(line.id);
-                          editingState.description.setValue(line.description || "");
+                          editingState.description.setValue(
+                            line.description || ""
+                          );
                         }
                       }}
                       style={{
@@ -170,7 +192,9 @@ export default function MeasurementCalculatorUI({
                   {/* Delete Line */}
                   <button
                     onClick={async () => {
-                      await safeAction(() => actions.deleteOne(section.id, line.id));
+                      await safeAction(() =>
+                        actions.deleteOne(section.id, line.id)
+                      );
                       await safeAction(() => sectionTotal(section.id));
                       await safeAction(() => calculateGrandTotal());
                     }}
@@ -183,10 +207,16 @@ export default function MeasurementCalculatorUI({
 
             {/* Section Buttons */}
             <div className={styles.sectionButtonGroup}>
-              <button onClick={() => safeAction(() => actions.addLine(section.id))} disabled={isRefreshing}>
+              <button
+                onClick={() => safeAction(() => actions.addLine(section.id))}
+                disabled={isRefreshing}
+              >
                 + Add Line
               </button>
-              <button onClick={() => safeAction(() => actions.addTen(section.id))} disabled={isRefreshing}>
+              <button
+                onClick={() => safeAction(() => actions.addTen(section.id))}
+                disabled={isRefreshing}
+              >
                 + 10 Lines
               </button>
               <button
@@ -212,7 +242,13 @@ export default function MeasurementCalculatorUI({
             </div>
 
             {/* Section Total */}
-            <div style={{ fontWeight: "bold", marginTop: "0.5rem", textAlign: "right" }}>
+            <div
+              style={{
+                fontWeight: "bold",
+                marginTop: "0.5rem",
+                textAlign: "right",
+              }}
+            >
               Section Total: {section.total}
             </div>
           </div>

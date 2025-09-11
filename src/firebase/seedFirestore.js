@@ -1,5 +1,3 @@
-
 async function seedData() {
-
-    console.log("Seeding complete");
+  console.log("Seeding complete");
 }

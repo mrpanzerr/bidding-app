@@ -17,7 +17,7 @@ import { useSection } from "./useSection";
  *   - `loading`: boolean indicating if the calculator is loading
  *   - `error`: any error encountered during fetch or mutations
  *   - Section management methods: `addNewSection`, `deleteSection`, `renameSection`
- *   - Line management methods: `renameDescription`, `addLine`, `addTen`, `deleteOne`, `deleteTen`
+ *   - Line management methods: `addLine`, `addTen`, `deleteOne`, `deleteTen`, `'updateField`
  *   - Calculator-level methods: `deleteCalculatorFunction`, `calcMeasurement`, `sectionTotal`, `calculateGrandTotal`
  */
 export function useMeasurementCalculator(projectId, calculatorId) {
@@ -32,7 +32,7 @@ export function useMeasurementCalculator(projectId, calculatorId) {
     addNewSection: section.addNewSection,
     deleteSection: section.deleteSection,
     renameSection: section.renameSection,
-    renameDescription: line.renameDescription,
+    updateField: line.updateField,
     addLine: line.addLine,
     addTen: line.addTen,
     deleteOne: line.deleteOne,
@@ -40,6 +40,6 @@ export function useMeasurementCalculator(projectId, calculatorId) {
     deleteCalculatorFunction: calc.deleteCalculatorFunction,
     calcMeasurement: line.calcMeasurement,
     sectionTotal: section.sectionTotal,
-    calculateGrandTotal: calc.calculateGrandTotal
+    calculateGrandTotal: calc.calculateGrandTotal,
   };
 }

@@ -6,7 +6,7 @@ import {
   fetchMyCalculators,
   getAllCalculators,
   getCalculatorData,
-  grandTotal
+  grandTotal,
 } from "../firebase/calculatorServices";
 import { auth } from "../firebase/firebase";
 
@@ -32,7 +32,9 @@ export function useCalculators(projectId) {
     setError(null);
     try {
       const user = auth.currentUser;
-      const data = user ? await fetchMyCalculators(projectId) : await getAllCalculators(projectId);
+      const data = user
+        ? await fetchMyCalculators(projectId)
+        : await getAllCalculators(projectId);
       setCalculators(data);
     } catch (e) {
       console.error("Error loading calculators:", e);
@@ -83,7 +85,7 @@ export function useCalculators(projectId) {
  * @param {string} projectId - Project ID
  * @param {string} calculatorId - Calculator ID
  * @param {function} [onError] - Optional callback for handling errors
- * @returns {object} 
+ * @returns {object}
  *   - `calculator`: current calculator data
  *   - `setCalculator`: setter for calculator state
  *   - `performMutation`: function to perform optimistic mutations
@@ -183,6 +185,6 @@ export function useCalculator(projectId, calculatorId, onError) {
     loadingMutation,
     error,
     deleteCalculatorFunction,
-    calculateGrandTotal
+    calculateGrandTotal,
   };
 }

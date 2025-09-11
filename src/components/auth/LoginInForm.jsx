@@ -27,8 +27,8 @@ export default function LoginForm({ onSubmit, errors = {} }) {
       onSubmit={handleSubmit}
       errors={errors}
       showConfirmPassword={false} // Login form does not require confirm password
-      showLogin={true}            // Show the login button
-      pageType="login"            // Sets form title and behavior
+      showLogin={true} // Show the login button
+      pageType="login" // Sets form title and behavior
     />
   );
 }

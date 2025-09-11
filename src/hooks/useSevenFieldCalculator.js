@@ -32,7 +32,7 @@ export function useSevenFieldCalculator(projectId, calculatorId) {
     addNewSection: section.addNewSection,
     deleteSection: section.deleteSection,
     renameSection: section.renameSection,
-    renameDescription: line.renameDescription,
+    updateField: line.updateField,
     addLine: line.addLine,
     addTen: line.addTen,
     deleteOne: line.deleteOne,

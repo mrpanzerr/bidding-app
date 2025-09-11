@@ -19,7 +19,9 @@ export function validateAuthForm(formData, formType) {
 
   const minLength = (field, length, fieldName) => {
     if (formData[field] && formData[field].length < length) {
-      errors[field] = `${fieldName} must be at least ${length} characters long.`;
+      errors[
+        field
+      ] = `${fieldName} must be at least ${length} characters long.`;
     }
   };
 

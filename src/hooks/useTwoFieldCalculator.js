@@ -17,7 +17,7 @@ import { useSection } from "./useSection";
  *   - `loading`: boolean indicating if the calculator is loading
  *   - `error`: any error encountered during fetch or mutations
  *   - Section management methods: `addNewSection`, `deleteSection`, `renameSection`
- *   - Line management methods: `renameDescription`, `addLine`, `addTen`, `deleteOne`, `deleteTen`
+ *   - Line management methods: `updateField`, `addLine`, `addTen`, `deleteOne`, `deleteTen`
  *   - Calculator-level methods: `deleteCalculatorFunction`, `calcMeasurement`, `sectionTotal`, `calculateGrandTotal`
  */
 export function useTwoFieldCalculator(projectId, calculatorId) {
@@ -32,8 +32,7 @@ export function useTwoFieldCalculator(projectId, calculatorId) {
     addNewSection: section.addNewSection,
     deleteSection: section.deleteSection,
     renameSection: section.renameSection,
-    renameDescription: line.renameDescription,
-    updateAmount: line.updateAmount,
+    updateField: line.updateField,
     addLine: line.addLine,
     addTen: line.addTen,
     deleteOne: line.deleteOne,

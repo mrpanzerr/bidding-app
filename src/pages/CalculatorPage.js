@@ -33,7 +33,7 @@ export default function CalculatorPage() {
     addNewSection,
     deleteSection,
     renameSection,
-    renameDescription,
+    updateField,
     addLine,
     addTen,
     deleteOne,
@@ -42,7 +42,6 @@ export default function CalculatorPage() {
     calcMeasurement,
     sectionTotal,
     calculateGrandTotal,
-    updateAmount,
   } = config.useCalculatorData(projectId, calculatorId);
 
   // Keep newCalculatorName in sync with the calculator's name
@@ -89,7 +88,7 @@ export default function CalculatorPage() {
       addNewSection={addNewSection}
       deleteSection={deleteSection}
       renameSection={renameSection}
-      renameDescription={renameDescription}
+      updateField={updateField}
       addLine={addLine}
       addTen={addTen}
       deleteOne={deleteOne}
@@ -105,7 +104,6 @@ export default function CalculatorPage() {
       setNewCalculatorName={setNewCalculatorName}
       handleRenameCalculator={handleRenameCalculator}
       renaming={renaming}
-      updateAmount={updateAmount}
     />
   );
 }

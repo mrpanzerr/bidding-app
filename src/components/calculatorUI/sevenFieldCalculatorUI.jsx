@@ -1,7 +1,7 @@
 import styles from "../../styles/calculatorModules/calculatorUI.module.css";
 
 /**
- * ThreeFieldCalculatorUI Component
+ * SevenFieldCalculatorUI Component
  *
  * Renders the UI for a three-field calculator, displaying sections and their lines.
  * Supports inline editing of section titles, line descriptions, and three measurements.

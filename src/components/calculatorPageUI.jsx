@@ -29,7 +29,7 @@ export default function CalculatorPageUI(props) {
     addNewSection,
     deleteSection,
     renameSection,
-    renameDescription,
+    updateField,
     addLine,
     addTen,
     deleteOne,
@@ -45,7 +45,6 @@ export default function CalculatorPageUI(props) {
     setNewCalculatorName,
     handleRenameCalculator,
     renaming,
-    updateAmount,
   } = props;
 
   // -----------------------
@@ -108,14 +107,13 @@ export default function CalculatorPageUI(props) {
   // Calculator action wrappers
   const calculatorActions = {
     renameSection,
-    renameDescription,
     calcMeasurement,
     addLine,
     addTen,
     deleteOne,
     deleteTen,
     deleteSection,
-    updateAmount,
+    updateField,
   };
 
   // State for delete confirmation modal

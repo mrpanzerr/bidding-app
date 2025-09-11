@@ -62,10 +62,10 @@ export default function LoginPage() {
         handleSignIn(formValues.email, formValues.password)
       }
       errors={errors}
-      showLogin={true}       // Display login button
-      showSignUp={true}      // Display signup button for navigation
-      showGuest={true}       // Optional guest access button
-      pageType="login"       // Sets form title and behavior
+      showLogin={true} // Display login button
+      showSignUp={true} // Display signup button for navigation
+      showGuest={true} // Optional guest access button
+      pageType="login" // Sets form title and behavior
     />
   );
 }

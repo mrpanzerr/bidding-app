@@ -9,7 +9,7 @@
  * @param {function} props.onAddLine - Callback fired when adding a new line to the section
  * @param {function} props.onDelete - Callback fired when deleting the section
  * @param {function} props.onEdit - Callback fired when editing the section
- * 
+ *
  * @returns {JSX.Element} The rendered section item
  */
 function SectionItem({ section, onRename, onAddLine, onDelete, onEdit }) {

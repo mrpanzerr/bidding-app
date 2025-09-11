@@ -7,7 +7,9 @@ describe("LoginForm", () => {
     render(<LoginForm onSubmit={() => {}} errors={{}} />);
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/^password$/i)).toBeInTheDocument();
-    expect(screen.queryByLabelText(/confirm password/i)).not.toBeInTheDocument();
+    expect(
+      screen.queryByLabelText(/confirm password/i)
+    ).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Login/i })).toBeInTheDocument();
   });
 
@@ -23,7 +25,10 @@ describe("LoginForm", () => {
     fireEvent.change(passwordInput, { target: { value: "password123" } });
     fireEvent.click(loginButton);
 
-    expect(handleSubmit).toHaveBeenCalledWith("user@example.com", "password123");
+    expect(handleSubmit).toHaveBeenCalledWith(
+      "user@example.com",
+      "password123"
+    );
   });
 
   test("displays error messages if errors are passed", () => {

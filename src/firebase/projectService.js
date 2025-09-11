@@ -8,7 +8,7 @@ import {
   query,
   setDoc,
   Timestamp,
-  where
+  where,
 } from "firebase/firestore";
 import { auth, db } from "./firebase";
 
@@ -25,7 +25,7 @@ export async function fetchProjects() {
     const q = query(collection(db, "projects"), where("userId", "==", null));
     const querySnapshot = await getDocs(q);
 
-    return querySnapshot.docs.map(doc => ({
+    return querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));
@@ -89,7 +89,6 @@ export async function deleteProject(id) {
   }
 }
 
-
 /* =======================
    USER-SPECIFIC PROJECT FUNCTIONS
    ======================= */
@@ -103,7 +102,7 @@ export async function fetchMyProjects() {
 
   const q = query(collection(db, "projects"), where("userId", "==", user.uid));
   const querySnapshot = await getDocs(q);
-  return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 }
 
 /**

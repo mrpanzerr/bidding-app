@@ -53,7 +53,9 @@ export function useProjects() {
   const renameExistingProject = async (id, newName) => {
     try {
       const user = auth.currentUser;
-      user ? await renameMyProject(id, newName) : await renameProject(id, newName);
+      user
+        ? await renameMyProject(id, newName)
+        : await renameProject(id, newName);
       await loadProjects();
     } catch (e) {
       setError(e);
