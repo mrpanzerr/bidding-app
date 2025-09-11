@@ -2,6 +2,60 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "./firebase";
 
 /**
+ * Create a new section item.
+ *
+ * @param {string} calcType - Calculator type.
+ * @returns {Object} - New section item.
+ */
+function createNewSection(calcType) {
+  const sectionDefault = {
+    id: crypto.randomUUID(),
+    title: "Section Title",
+    total: 0,
+};
+
+  switch (calcType) {
+    case "MeasurementCalculator":
+      return {
+        ...sectionDefault,
+        lines: [
+          {
+            id: crypto.randomUUID(),
+            measurement: "",
+            description: "",
+            amount: 0,
+          },
+        ],
+      };
+    case "TwoFieldCalculator":
+      return {
+        ...sectionDefault,
+        lines: [
+          {
+            id: crypto.randomUUID(),
+            description: "",
+            amount: 0,
+          },
+        ],
+      };
+    case "ThreeFieldCalculator":
+      return {
+        ...sectionDefault,
+        lines: [
+          {
+            id: crypto.randomUUID(),
+            description: "",
+            description2: "",
+            amount: 0,
+          },
+        ],
+      };
+    default:
+      throw new Error(`Unsupported calculator type: ${calcType}`);
+  }
+}
+
+/**
  * Add a new section to a calculator document.
  *
  * @param {string} projectId - Project ID.
@@ -22,20 +76,7 @@ export async function addSection(projectId, calculatorId) {
   const calculatorData = calculatorSnap.data();
   const existingSections = calculatorData.section || [];
 
-  const newSection = {
-    id: crypto.randomUUID(),
-    title: "Section Title",
-    lines: [
-      {
-        id: crypto.randomUUID(),
-        measurement: "",
-        description: "",
-        other: "",
-        amount: 0,
-      },
-    ],
-    total: 0,
-  };
+  const newSection = createNewSection(calculatorData.type);
 
   await updateDoc(calculatorRef, {
     section: [...existingSections, newSection],
