@@ -63,11 +63,17 @@ export default function CalculatorPageUI(props) {
   const [editingTitleId, setEditingTitleId] = useState(null);
   const [titleInput, setTitleInput] = useState("");
   const [editingDescriptionId, setEditingDescriptionId] = useState(null);
+  const [lineDescription, setLineDescription] = useState("");
   const [editingDescriptionTwoId, setEditingDescriptionTwoId] = useState(null);
   const [descriptionTwo, setDescriptionTwo] = useState("");
-  const [lineDescription, setLineDescription] = useState("");
+  const [editingDescriptionThreeId, setEditingDescriptionThreeId] = useState(null);
+  const [descriptionThree, setDescriptionThree] = useState("");
   const [editingMeasurementId, setEditingMeasurementId] = useState(null);
   const [measurement, setMeasurement] = useState("");
+  const [editingQuantityId, setEditingQuantityId] = useState(null);
+  const [quantity, setQuantity] = useState(0);
+  const [editingProductCodeId, setEditingProjectCodeId] = useState(null);
+  const [productCode, setProductCode] = useState("");
   const [editingAmount, setEditingAmount] = useState(null);
   const [amountInput, setAmountInput] = useState("");
 
@@ -102,6 +108,24 @@ export default function CalculatorPageUI(props) {
       value: descriptionTwo,
       setValue: setDescriptionTwo,
     },
+    descriptionThree: {
+      id: editingDescriptionThreeId,
+      setId: setEditingDescriptionThreeId,
+      value: descriptionThree,
+      setValue: setDescriptionThree,
+    },
+    quantity: {
+      id: editingQuantityId,
+      setId: setEditingQuantityId,
+      value: quantity,
+      setValue: setQuantity,
+    },
+    productCode: {
+      id: editingProductCodeId,
+      setId: setEditingProjectCodeId,
+      value: productCode,
+      setValue: setProductCode,
+    }
   };
 
   // Calculator action wrappers
