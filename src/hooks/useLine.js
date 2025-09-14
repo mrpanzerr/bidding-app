@@ -2,6 +2,7 @@ import {
   addOneLine,
   addTenLines,
   calculateMeasurement,
+  checkProductCode,
   deleteOneLine,
   deleteTenLines,
   updateLineField,
@@ -54,6 +55,8 @@ export function useLine(projectId, calculatorId, performMutation) {
       )
     );
 
+  const checkCode = (code) => performMutation(() => checkProductCode(code));
+
   return {
     addLine,
     addTen,
@@ -61,5 +64,6 @@ export function useLine(projectId, calculatorId, performMutation) {
     deleteTen,
     updateField,
     calcMeasurement,
+    checkCode,
   };
 }

@@ -1,3 +1,4 @@
+import { checkProductCode } from "../../firebase/lineServices";
 import styles from "../../styles/calculatorModules/calculatorUI.module.css";
 import EditableField from "./editableField";
 
@@ -11,7 +12,8 @@ export default function SevenFieldCalculatorUI({
   calculateGrandTotal,
 }) {
   const handleFieldUpdate = async (sectionId, lineId, field, newValue) => {
-    const valueToSave = field === "amount" ? Number(newValue) : newValue;
+    const valueToSave =
+      field === "amount" || field === "price" ? Number(newValue) : newValue;
     await safeAction(() =>
       actions.updateField(sectionId, lineId, valueToSave, field)
     );
@@ -43,27 +45,59 @@ export default function SevenFieldCalculatorUI({
                 fieldState={editingState.quantity}
                 value={{ id: line.id, value: line.quantity }}
                 placeholder="0"
-                onSave={(val) =>
-                  handleFieldUpdate(section.id, line.id, "quantity", val)
-                }
+                onSave={async (val) => {
+                  await handleFieldUpdate(section.id, line.id, "quantity", val);
+
+                  const qty = Number(val) || 0;
+                  const price = Number(line.price) || 0;
+                  const product = qty * price;
+
+                  await handleFieldUpdate(
+                    section.id,
+                    line.id,
+                    "amount",
+                    product
+                  );
+                }}
                 isRefreshing={isRefreshing}
               />
               <EditableField
                 fieldState={editingState.productCode}
                 value={{ id: line.id, value: line.productCode }}
                 placeholder="Product code"
-                onSave={(val) =>
-                  handleFieldUpdate(section.id, line.id, "productCode", val)
-                }
+                onSave={async (val) => {
+                  const codeData = await checkProductCode(val);
+                  if (codeData) {
+                    await handleFieldUpdate(
+                      section.id,
+                      line.id,
+                      "price",
+                      codeData.price
+                    );
+                    await handleFieldUpdate(
+                      section.id,
+                      line.id,
+                      "description",
+                      codeData.name
+                    );
+                  }
+
+                  await handleFieldUpdate(
+                    section.id,
+                    line.id,
+                    "productCode",
+                    val
+                  );
+                }}
                 isRefreshing={isRefreshing}
               />
               <EditableField
                 fieldState={editingState.description}
                 value={{ id: line.id, value: line.description }}
                 placeholder="Product name"
-                onSave={(val) =>
-                  handleFieldUpdate(section.id, line.id, "description", val)
-                }
+                onSave={async (val) => {
+                  handleFieldUpdate(section.id, line.id, "description", val);
+                }}
                 isRefreshing={isRefreshing}
               />
               <EditableField
@@ -105,7 +139,7 @@ export default function SevenFieldCalculatorUI({
                   userSelect: "none",
                 }}
               >
-                ${line.price ?? 0}
+                ${Number(line.price).toFixed(2) ?? 0}
               </div>
 
               {/* Amount (non-editable) */}
@@ -123,7 +157,7 @@ export default function SevenFieldCalculatorUI({
                   userSelect: "none",
                 }}
               >
-                ${line.amount ?? 0}
+                ${Number(line.amount).toFixed(2) ?? 0}
               </div>
 
               <button
@@ -185,7 +219,7 @@ export default function SevenFieldCalculatorUI({
               textAlign: "right",
             }}
           >
-            Section Total: {section.total}
+            Section Total: {Number(section.total).toFixed(2)}
           </div>
         </div>
       ))}

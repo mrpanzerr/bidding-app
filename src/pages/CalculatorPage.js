@@ -40,19 +40,24 @@ export default function CalculatorPage() {
     deleteTen,
     deleteCalculatorFunction,
     calcMeasurement,
+    checkCode,
     sectionTotal,
     calculateGrandTotal,
   } = config.useCalculatorData(projectId, calculatorId);
 
   // Keep newCalculatorName in sync with the calculator's name
-  if (calculator?.name && !editingCalculatorName && newCalculatorName !== calculator.name) {
+  if (
+    calculator?.name &&
+    !editingCalculatorName &&
+    newCalculatorName !== calculator.name
+  ) {
     setNewCalculatorName(calculator.name);
   }
 
   // Function to handle renaming the calculator
   const handleRenameCalculator = async () => {
     const trimmed = newCalculatorName.trim();
-    if(!projectId || !calculatorId || !trimmed) return;
+    if (!projectId || !calculatorId || !trimmed) return;
 
     if (trimmed === calculator?.name) {
       setEditingCalculatorName(false);
@@ -71,7 +76,7 @@ export default function CalculatorPage() {
       navigate(0); // Refresh the page to reflect changes
     }
   };
-  
+
   // Navigate back to the project dashboard after deleting a calculator
   const navigateAfterDelete = () => {
     navigate(`/project/${projectId}`, { replace: true });
@@ -95,6 +100,7 @@ export default function CalculatorPage() {
       deleteTen={deleteTen}
       deleteCalculatorFunction={deleteCalculatorFunction}
       calcMeasurement={calcMeasurement}
+      checkCode={checkCode}
       navigateAfterDelete={navigateAfterDelete}
       sectionTotal={sectionTotal}
       calculateGrandTotal={calculateGrandTotal}

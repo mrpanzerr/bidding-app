@@ -36,6 +36,7 @@ export default function CalculatorPageUI(props) {
     deleteTen,
     deleteCalculatorFunction,
     calcMeasurement,
+    checkCode,
     navigateAfterDelete,
     sectionTotal,
     calculateGrandTotal,
@@ -66,7 +67,8 @@ export default function CalculatorPageUI(props) {
   const [lineDescription, setLineDescription] = useState("");
   const [editingDescriptionTwoId, setEditingDescriptionTwoId] = useState(null);
   const [descriptionTwo, setDescriptionTwo] = useState("");
-  const [editingDescriptionThreeId, setEditingDescriptionThreeId] = useState(null);
+  const [editingDescriptionThreeId, setEditingDescriptionThreeId] =
+    useState(null);
   const [descriptionThree, setDescriptionThree] = useState("");
   const [editingMeasurementId, setEditingMeasurementId] = useState(null);
   const [measurement, setMeasurement] = useState("");
@@ -125,13 +127,14 @@ export default function CalculatorPageUI(props) {
       setId: setEditingProjectCodeId,
       value: productCode,
       setValue: setProductCode,
-    }
+    },
   };
 
   // Calculator action wrappers
   const calculatorActions = {
     renameSection,
     calcMeasurement,
+    checkCode,
     addLine,
     addTen,
     deleteOne,
@@ -207,7 +210,7 @@ export default function CalculatorPageUI(props) {
         + Add Section
       </button>
       <h2 style={{ textAlign: "right" }}>
-        Total: {safeCalculator.grandTotal || 0}
+        Total: {Number(safeCalculator.grandTotal).toFixed(2) || 0}
       </h2>
       <button
         onClick={() => setShowDeleteModal(true)}

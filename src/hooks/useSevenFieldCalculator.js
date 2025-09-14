@@ -40,5 +40,7 @@ export function useSevenFieldCalculator(projectId, calculatorId) {
     deleteCalculatorFunction: calc.deleteCalculatorFunction,
     sectionTotal: section.sectionTotal,
     calculateGrandTotal: calc.calculateGrandTotal,
+    calcCost: line.calcCost,
+    checkCode: line.checkCode,
   };
 }

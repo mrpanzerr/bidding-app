@@ -279,50 +279,17 @@ export async function calculateMeasurement(
 }
 
 /**
- * Calculate and update cost of material.
+ * Check if a product code exists in the database and return its info.
  *
- * @param {string} projectId - Project ID.
- * @param {string} calculatorId - Calculator ID.
- * @param {string} sectionId - Section ID.
- * @param {string} lineId - Line ID.
- * @param {number} quantity - quantity amount (e.g., "5").
- * @param {number} price - price of single item (e.g., "4.99")
- * @returns {Promise<void>}
+ * @param {string} code - Product code to check.
+ * @returns {Promise<{price: number, name?: string} | null>}
  */
-export async function calculateCost(
-  projectId,
-  calculatorId,
-  sectionId,
-  lineId,
-  quantity,
-  price
-) {
-  const calculatorRef = doc(
-    db,
-    "projects",
-    projectId,
-    "calculators",
-    calculatorId
-  );
-  const calculatorSnap = await getDoc(calculatorRef);
-  if (!calculatorSnap.exists()) throw new Error("Calculator not found");
+export async function checkProductCode(code) {
+  const docRef = doc(db, "products", code);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    return docSnap.data(); // e.g., { price: 12.5, name: "concrete" }
+  }
 
-  const calculatorData = calculatorSnap.data();
-  const sections = calculatorData.section || [];
-
-  const updatedSections = sections.map((section) => {
-    if (section.id !== sectionId) return section;
-
-    const updatedLines = section.lines.map((line) => {
-      if (line.id !== lineId) return line;
-
-      const product = quantity * price || 0;
-
-      return { ...line, amount: product };
-    });
-
-    return { ...section, lines: updatedLines };
-  });
-
-  await updateDoc(calculatorRef, { section: updatedSections });
+  return null; // not found
 }
