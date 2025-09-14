@@ -233,7 +233,7 @@ export async function addMyCalculator(projectId, name, type) {
   const user = auth.currentUser;
   if (!user) throw new Error("No authenticated user");
 
-  const template = calculatorTemplates[type]?.() || {};
+  const template = calculatorTemplates[type] || {};
 
   const calculatorsCollectionRef = collection(
     doc(db, "projects", projectId),
