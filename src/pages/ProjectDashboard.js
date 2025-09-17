@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import NewCalculatorModal from "../components/modals/newCalculatorModal";
-import { useCalculators } from "../hooks/useCalculator";
+import { useCalculator, useCalculators } from "../hooks/useCalculator";
 import { useProject } from "../hooks/useProjects";
 
 /**
@@ -17,6 +17,9 @@ function ProjectDashboard() {
     addNewCalculator,
     loading: calcLoading,
   } = useCalculators(id);
+  const {
+    calculateProjectTotal,
+  } = useCalculator(id);
 
   const [activeModal, setActiveModal] = useState(null);
   const [calculatorName, setCalculatorName] = useState("");
@@ -25,6 +28,11 @@ function ProjectDashboard() {
 
   const openCalculator = (calculatorId, type) => {
     navigate(`/project/${id}/calculator/${calculatorId}/${type}`);
+  };
+
+  const openTotalsPage = async () => {
+    await calculateProjectTotal(id);
+    navigate(`/project/${id}/total`);
   };
 
   const openModal = (type) => {
@@ -96,6 +104,11 @@ function ProjectDashboard() {
           style={{ display: "block", marginTop: "0.5rem" }}
         >
           Add Measurement Calculator
+        </button>
+        <button
+          onClick={() => openTotalsPage()}
+          style={{ display: "block", marginTop: "1.5rem" }}>
+            Project Total Page
         </button>
       </aside>
 

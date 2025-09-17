@@ -197,6 +197,57 @@ export async function updateCalculatorName(projectId, calculatorId, newName) {
   await updateDoc(calculatorRef, { name: newName });
 }
 
+/**
+ * Calculate grand total of all sections.
+ *
+ * @param {string} projectId - Project ID.
+ * @param {string} calculatorId - Calculator ID.
+ * @returns {Promise<void>}
+ */
+export async function grandTotal(projectId, calculatorId) {
+  const calculatorRef = doc(
+    db,
+    "projects",
+    projectId,
+    "calculators",
+    calculatorId
+  );
+  const calculatorSnap = await getDoc(calculatorRef);
+  if (!calculatorSnap.exists()) throw new Error("Calculator not found");
+
+  const calculatorData = calculatorSnap.data();
+  const existingSections = calculatorData.section || [];
+
+  const grandTotal = existingSections.reduce((sum, section) => {
+    return sum + (typeof section.total === "number" ? section.total : 0);
+  }, 0);
+
+  await updateDoc(calculatorRef, { grandTotal });
+}
+
+/**
+ * Calculate grand total of all calculators
+ * 
+ * @param {string} projectId - Project ID.
+ * @return {Promise<Void>}
+ */
+export async function projectTotal(projectId) {
+  const calculatorsRef = collection(db, "projects", projectId, "calculators");
+  const calculatorSnap = await getDocs(calculatorsRef);
+
+  let total = 0;
+
+  calculatorSnap.forEach((calculatorDoc) => {
+    const data = calculatorDoc.data();
+    if (data.type !== "MeasurementCalculator" && typeof data.grandTotal === "number") {
+      total += data.grandTotal;
+    }
+  });
+
+  const projectRef = doc(db, "projects", projectId);
+  await updateDoc(projectRef, { total });
+}
+
 /* =======================
    USER-SPECIFIC CALCULATOR FUNCTIONS
    ======================= */
@@ -246,32 +297,4 @@ export async function addMyCalculator(projectId, name, type) {
     userId: user.uid,
     ...template,
   });
-}
-
-/**
- * Calculate grand total of all sections.
- *
- * @param {string} projectId - Project ID.
- * @param {string} calculatorId - Calculator ID.
- * @returns {Promise<void>}
- */
-export async function grandTotal(projectId, calculatorId) {
-  const calculatorRef = doc(
-    db,
-    "projects",
-    projectId,
-    "calculators",
-    calculatorId
-  );
-  const calculatorSnap = await getDoc(calculatorRef);
-  if (!calculatorSnap.exists()) throw new Error("Calculator not found");
-
-  const calculatorData = calculatorSnap.data();
-  const existingSections = calculatorData.section || [];
-
-  const grandTotal = existingSections.reduce((sum, section) => {
-    return sum + (typeof section.total === "number" ? section.total : 0);
-  }, 0);
-
-  await updateDoc(calculatorRef, { grandTotal });
 }

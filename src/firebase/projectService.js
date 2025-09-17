@@ -55,11 +55,9 @@ export async function getProjectData(id) {
 export async function addProject(projectName) {
   try {
     await addDoc(collection(db, "projects"), {
+      total: 0,
       name: projectName,
       createdAt: Timestamp.now(),
-      dateSent: "",
-      jobAddress: "",
-      toAddress: "",
       userId: null,
     });
   } catch (e) {

@@ -7,6 +7,7 @@ import CalculatorPage from "./pages/CalculatorPage";
 import Dashboard from "./pages/Dashboard";
 import LoginPage from "./pages/LoginPage";
 import ProjectDashboard from "./pages/ProjectDashboard";
+import ProjectTotalPage from "./pages/ProjectTotalPage";
 import SignUpPage from "./pages/SignUpPage";
 import { ProtectedRoute } from "./routes/ProtectedRoute";
 import { PublicRoute } from "./routes/PublicRoute";
@@ -62,7 +63,17 @@ function App() {
           </ProtectedRoute>
         }
       />
-    </Routes>
+
+      {/* Route for total project cost page */}
+      <Route
+        path="/project/:id/total"
+        element={
+          <ProtectedRoute allowGuest={true}>
+            <ProjectTotalPage />
+          </ProtectedRoute>
+        }
+      />
+      </Routes>
   );
 }
 
