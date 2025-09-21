@@ -2,6 +2,23 @@ import { checkProductCode } from "../../firebase/lineServices";
 import styles from "../../styles/calculatorModules/calculatorUI.module.css";
 import EditableField from "./editableField";
 
+function calculateProductPrice(val, line) {
+  const qty = Number(val) || 0;
+  const price = Number(line.price) || 0;
+  const length = toFeet(line.descriptionThree) || 1; // convert "X-Y" to feet
+  return qty * price * length;
+}
+
+function toFeet(lengthStr) {
+  if (!lengthStr) return 0;
+
+  const [feetStr, inchesStr] = lengthStr.split("-");
+  const feet = parseInt(feetStr, 10) || 0;
+  const inches = parseInt(inchesStr, 10) || 0;
+
+  return feet + inches / 12;
+}
+
 export default function SevenFieldCalculatorUI({
   calculator,
   editingState,
@@ -41,6 +58,7 @@ export default function SevenFieldCalculatorUI({
           {/* Lines */}
           {section.lines?.map((line) => (
             <div key={line.id} className={styles.lineStyle}>
+              {/* Quantity */}
               <EditableField
                 fieldState={editingState.quantity}
                 value={{ id: line.id, value: line.quantity }}
@@ -48,25 +66,26 @@ export default function SevenFieldCalculatorUI({
                 onSave={async (val) => {
                   await handleFieldUpdate(section.id, line.id, "quantity", val);
 
-                  const qty = Number(val) || 0;
-                  const price = Number(line.price) || 0;
-                  const product = qty * price;
+                  const productPrice = calculateProductPrice(val, line);
 
                   await handleFieldUpdate(
                     section.id,
                     line.id,
                     "amount",
-                    product
+                    productPrice
                   );
                 }}
                 isRefreshing={isRefreshing}
               />
+
+              {/* Product Code */}
               <EditableField
                 fieldState={editingState.productCode}
                 value={{ id: line.id, value: line.productCode }}
                 placeholder="Product code"
                 onSave={async (val) => {
                   const codeData = await checkProductCode(val);
+
                   if (codeData) {
                     await handleFieldUpdate(
                       section.id,
@@ -88,18 +107,39 @@ export default function SevenFieldCalculatorUI({
                     "productCode",
                     val
                   );
+
+                  // 🔥 Recalculate amount after updates
+                  const productPrice = calculateProductPrice(line.quantity, {
+                    ...line,
+                    price: codeData?.price ?? line.price, // use new price if found
+                  });
+
+                  await handleFieldUpdate(
+                    section.id,
+                    line.id,
+                    "amount",
+                    productPrice
+                  );
                 }}
                 isRefreshing={isRefreshing}
               />
-              <EditableField
-                fieldState={editingState.description}
-                value={{ id: line.id, value: line.description }}
-                placeholder="Product name"
-                onSave={async (val) => {
-                  handleFieldUpdate(section.id, line.id, "description", val);
+
+              {/* Product Description */}
+              <div
+                style={{
+                  width: "100px",
+                  padding: "6px 8px",
+                  color: "#333",
+                  textAlign: "right",
+                  fontFamily: "inherit",
+                  fontSize: "0.9rem",
+                  userSelect: "none",
                 }}
-                isRefreshing={isRefreshing}
-              />
+              >
+                {line.description}
+              </div>
+
+              {/* Extra Description */}
               <EditableField
                 fieldState={editingState.descriptionTwo}
                 value={{ id: line.id, value: line.descriptionTwo }}
@@ -109,18 +149,32 @@ export default function SevenFieldCalculatorUI({
                 }
                 isRefreshing={isRefreshing}
               />
+
+              {/* Length */}
               <EditableField
                 fieldState={editingState.descriptionThree}
                 value={{ id: line.id, value: line.descriptionThree }}
                 placeholder="ex. 11-0"
-                onSave={(val) =>
-                  handleFieldUpdate(
+                onSave={async (val) => {
+                  await handleFieldUpdate(
                     section.id,
                     line.id,
                     "descriptionThree",
                     val
-                  )
-                }
+                  );
+
+                  const productPrice = calculateProductPrice(line.quantity, {
+                    ...line,
+                    descriptionThree: val,
+                  });
+
+                  await handleFieldUpdate(
+                    section.id,
+                    line.id,
+                    "amount",
+                    productPrice
+                  );
+                }}
                 isRefreshing={isRefreshing}
               />
 
@@ -129,9 +183,6 @@ export default function SevenFieldCalculatorUI({
                 style={{
                   width: "100px",
                   padding: "6px 8px",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
-                  backgroundColor: "#f9f9f9",
                   color: "#333",
                   textAlign: "right",
                   fontFamily: "inherit",
@@ -147,9 +198,6 @@ export default function SevenFieldCalculatorUI({
                 style={{
                   width: "100px",
                   padding: "6px 8px",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
-                  backgroundColor: "#f9f9f9",
                   color: "#333",
                   textAlign: "right",
                   fontFamily: "inherit",
