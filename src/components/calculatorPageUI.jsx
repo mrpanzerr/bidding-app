@@ -225,7 +225,7 @@ export default function CalculatorPageUI(props) {
   // Fallback UI
   // -----------------------
   if (!calculator) {
-    return <p>Loading or no calculator data available.</p>;
+    return <p></p>;
   }
 
   // -----------------------

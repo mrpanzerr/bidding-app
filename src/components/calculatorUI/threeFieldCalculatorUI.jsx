@@ -35,6 +35,7 @@ export default function ThreeFieldCalculatorUI({
           {/* Lines */}
           {section.lines?.map((line) => (
             <div key={line.id} className={styles.lineStyle}>
+              {/* Description */}
               <EditableField
                 fieldState={editingState.description}
                 value={{ id: line.id, value: line.description }}
@@ -42,6 +43,8 @@ export default function ThreeFieldCalculatorUI({
                 onSave={(val) => handleFieldUpdate(section.id, line.id, "description", val)}
                 isRefreshing={isRefreshing}
               />
+              
+              {/* Description Two*/}
               <EditableField
                 fieldState={editingState.descriptionTwo}
                 value={{ id: line.id, value: line.descriptionTwo }}
@@ -49,6 +52,8 @@ export default function ThreeFieldCalculatorUI({
                 onSave={(val) => handleFieldUpdate(section.id, line.id, "descriptionTwo", val)}
                 isRefreshing={isRefreshing}
               />
+              
+              {/* Amount */}
               <EditableField
                 fieldState={editingState.amount}
                 value={{ id: line.id, value: line.amount }}
