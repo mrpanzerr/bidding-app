@@ -8,20 +8,25 @@ export default function ProjectTotalPage() {
   const { project, loading, error } = useProject(id);
   const { calculators, loading: calcLoading } = useCalculators(id);
 
-  if (loading) return <p>Loading...</p>;
-  if (calcLoading) return <p>Loading...</p>;
+  if (loading || calcLoading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
   if (!project) return <p>No project found</p>;
 
   return (
-    <div>
+    <div style={{ textAlign: "center", marginTop: "20px" }}>
       <h2>{project.name} Totals</h2>
 
-      <table>
+      <table
+        style={{
+          margin: "0 auto", // center the table
+          borderCollapse: "collapse",
+          textAlign: "center",
+        }}
+      >
         <thead>
           <tr>
-            <th style={{ textAlign: "left" }}>Name</th>
-            <th style={{ textAlign: "right" }}>Total</th>
+            <th style={{ borderBottom: "1px solid #000", padding: "8px" }}>Name</th>
+            <th style={{ borderBottom: "1px solid #000", padding: "8px" }}>Total</th>
           </tr>
         </thead>
         <tbody>
@@ -29,24 +34,33 @@ export default function ProjectTotalPage() {
             .filter((calc) => calc.type !== "MeasurementCalculator")
             .map((calc) => (
               <tr key={calc.id}>
-                <td>{calc.name}</td>
-                <td style={{ textAlign: "right" }}>
-                  ${Number(calc.grandTotal).toFixed(2)}
-                </td>
+                <td style={{ padding: "8px" }}>{calc.name}</td>
+                <td style={{ padding: "8px" }}>${Number(calc.grandTotal).toFixed(2)}</td>
               </tr>
             ))}
           <tr>
-            <td>
-              <strong>Grand Total</strong>
-            </td>
-            <td style={{ textAlign: "right" }}>
-              <strong>${Number(project.total).toFixed(2)}</strong>
+            <td style={{ padding: "8px", fontWeight: "bold" }}>Grand Total</td>
+            <td style={{ padding: "8px", fontWeight: "bold" }}>
+              ${Number(project.total).toFixed(2)}
             </td>
           </tr>
         </tbody>
       </table>
-      <button onClick={() => exportToPDF(project, calculators)}>Export PDF</button>
-      <button onClick={() => exportToDocx(project, calculators)}>Export Word</button>
+
+      <div style={{ marginTop: "20px" }}>
+        <button
+          style={{ marginRight: "10px", padding: "10px 20px" }}
+          onClick={() => exportToPDF(project, calculators)}
+        >
+          Export PDF
+        </button>
+        <button
+          style={{ padding: "10px 20px" }}
+          onClick={() => exportToDocx(project, calculators)}
+        >
+          Export Word
+        </button>
+      </div>
     </div>
   );
 }
