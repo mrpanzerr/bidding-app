@@ -2,7 +2,6 @@ import { useState } from "react";
 import MeasurementCalculatorUI from "./calculatorUI/measurementCalculatorUI";
 import SevenFieldCalculatorUI from "./calculatorUI/sevenFieldCalculatorUI";
 import ThreeFieldCalculatorUI from "./calculatorUI/threeFieldCalculatorUI";
-import TwoFieldCalculatorUI from "./calculatorUI/twoFieldCalculatorUI";
 import DeleteCalculatorModal from "./modals/deleteCalculatorModal";
 
 /**
@@ -238,33 +237,6 @@ export default function CalculatorPageUI(props) {
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
           {renderHeader()}
           <MeasurementCalculatorUI
-            calculator={safeCalculator}
-            editingState={editingState}
-            actions={calculatorActions}
-            sectionTotal={sectionTotal}
-            calculateGrandTotal={calculateGrandTotal}
-            isRefreshing={isRefreshing}
-            safeAction={safeAction}
-          />
-          {renderFooter()}
-          {showDeleteModal && (
-            <DeleteCalculatorModal
-              safeCalculator={safeCalculator}
-              deleteConfirmInput={deleteConfirmInput}
-              setDeleteConfirmInput={setDeleteConfirmInput}
-              isRefreshing={isRefreshing}
-              setShowDeleteModal={setShowDeleteModal}
-              handleDeleteCalculator={handleDeleteCalculator}
-            />
-          )}
-        </div>
-      );
-
-    case "TwoFieldCalculator":
-      return (
-        <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-          {renderHeader()}
-          <TwoFieldCalculatorUI
             calculator={safeCalculator}
             editingState={editingState}
             actions={calculatorActions}

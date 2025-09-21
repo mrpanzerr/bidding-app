@@ -31,23 +31,6 @@ const calculatorTemplates = {
     ],
     grandTotal: 0,
   },
-  TwoFieldCalculator: {
-    section: [
-      {
-        id: crypto.randomUUID(),
-        title: "Section Title",
-        lines: [
-          {
-            id: crypto.randomUUID(),
-            description: "",
-            amount: 0,
-          },
-        ],
-        total: 0,
-      },
-    ],
-    grandTotal: 0,
-  },
   ThreeFieldCalculator: {
     section: [
       {

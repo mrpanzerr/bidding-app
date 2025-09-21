@@ -60,12 +60,6 @@ function createNewLine(calcType) {
         measurement: "",
         amount: 0,
       };
-    case "TwoFieldCalculator":
-      return {
-        id: crypto.randomUUID(),
-        description: "",
-        amount: 0,
-      };
     case "ThreeFieldCalculator":
       return {
         id: crypto.randomUUID(),

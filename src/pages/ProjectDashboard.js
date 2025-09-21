@@ -50,11 +50,6 @@ function ProjectDashboard() {
     await addNewCalculator(id, calculatorName, "MeasurementCalculator");
     closeModal();
   };
-  const handleNewTwoFieldCalculator = async () => {
-    if (!calculatorName.trim()) return;
-    await addNewCalculator(id, calculatorName, "TwoFieldCalculator");
-    closeModal();
-  };
   const handleNewThreeFieldCalculator = async () => {
     if (!calculatorName.trim()) return;
     await addNewCalculator(id, calculatorName, "ThreeFieldCalculator");
@@ -86,12 +81,6 @@ function ProjectDashboard() {
           style={{ display: "block" }}
         >
           Add Material Calculator
-        </button>
-        <button
-          onClick={() => openModal("TwoFieldCalculator")}
-          style={{ display: "block", marginTop: "0.5rem" }}
-        >
-          Add Two Field Calculator
         </button>
         <button
           onClick={() => openModal("ThreeFieldCalculator")}
@@ -147,19 +136,6 @@ function ProjectDashboard() {
           calculatorName={calculatorName}
           setCalculatorName={setCalculatorName}
           onSave={handleNewMeasurementCalculator}
-          onCancel={() => {
-            setActiveModal(null);
-            setCalculatorName("");
-          }}
-        />
-      )}
-
-      {/* Modal for creating new two field calculator */}
-      {activeModal === "TwoFieldCalculator" && (
-        <NewCalculatorModal
-          calculatorName={calculatorName}
-          setCalculatorName={setCalculatorName}
-          onSave={handleNewTwoFieldCalculator}
           onCancel={() => {
             setActiveModal(null);
             setCalculatorName("");

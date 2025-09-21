@@ -27,17 +27,6 @@ function createNewSection(calcType) {
           },
         ],
       };
-    case "TwoFieldCalculator":
-      return {
-        ...sectionDefault,
-        lines: [
-          {
-            id: crypto.randomUUID(),
-            description: "",
-            amount: 0,
-          },
-        ],
-      };
     case "ThreeFieldCalculator":
       return {
         ...sectionDefault,
