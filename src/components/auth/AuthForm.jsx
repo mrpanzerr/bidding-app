@@ -86,6 +86,13 @@ export default function AuthForm({
   };
 
   /**
+   * Navigate to login page.
+   */
+  const navigateToLogin = () => {
+    navigate("/");
+  };
+
+  /**
    * Update form state when input changes.
    *
    * @param {Event} e - Input change event
@@ -169,12 +176,22 @@ export default function AuthForm({
             )}
 
             {pageType === "signup" && showSignUp && (
-              <button
+                <button
                 type="submit"
                 onClick={(e) => handleSubmit(e, "signup")}
                 className={styles.button}
               >
                 Sign Up
+              </button>
+            )}
+
+            {pageType === "signup" && showSignUp && (
+                <button
+                type="submit"
+                onClick={navigateToLogin}
+                className={styles.button}
+              >
+                Back to Login
               </button>
             )}
 
