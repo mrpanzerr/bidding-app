@@ -267,7 +267,7 @@ export default function SevenFieldCalculatorUI({
               textAlign: "right",
             }}
           >
-            Section Total: {Number(section.total).toFixed(2)}
+            Section Total: ${Number(section.total).toFixed(2)}
           </div>
         </div>
       ))}

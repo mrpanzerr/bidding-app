@@ -108,7 +108,7 @@ export default function ThreeFieldCalculatorUI({
 
           {/* Section Total */}
           <div style={{ fontWeight: "bold", marginTop: "0.5rem", textAlign: "right" }}>
-            Section Total: {section.total}
+            Section Total: ${Number(section.total).toFixed(2)}
           </div>
         </div>
       ))}

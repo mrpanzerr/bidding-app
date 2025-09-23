@@ -111,7 +111,7 @@ export default function MeasurementCalculatorUI({
 
             {/* Section Total */}
             <div style={{ fontWeight: "bold", marginTop: "0.5rem", textAlign: "right" }}>
-              Section Total: ${section.total}
+              Section Total: {section.total}
             </div>
           </div>
         ))

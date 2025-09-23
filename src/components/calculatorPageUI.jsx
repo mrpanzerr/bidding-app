@@ -209,7 +209,8 @@ export default function CalculatorPageUI(props) {
         + Add Section
       </button>
       <h2 style={{ textAlign: "right" }}>
-        Total: {Number(safeCalculator.grandTotal).toFixed(2) || 0}
+        Total: {safeCalculator.type !== "MeasurementCalculator" && "$"}
+        {Number(safeCalculator.grandTotal).toFixed(2) || 0}
       </h2>
       <button
         onClick={() => setShowDeleteModal(true)}
