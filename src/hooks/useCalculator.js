@@ -8,6 +8,7 @@ import {
   getCalculatorData,
   grandTotal,
   projectTotal,
+  updateCalculatorTax,
 } from "../firebase/calculatorServices";
 import { auth } from "../firebase/firebase";
 
@@ -176,6 +177,12 @@ export function useCalculator(projectId, calculatorId, onError) {
   const deleteCalculatorFunction = () =>
     performMutation(() => deleteCalculator(projectId, calculatorId));
 
+  const updateTax = (rate) =>
+    performMutation(
+      () => updateCalculatorTax(projectId, calculatorId, rate),
+      (sections) => sections 
+    );
+
   const calculateGrandTotal = () =>
     performMutation(() => grandTotal(projectId, calculatorId));
 
@@ -190,6 +197,7 @@ export function useCalculator(projectId, calculatorId, onError) {
     loadingMutation,
     error,
     deleteCalculatorFunction,
+    updateTax,
     calculateGrandTotal,
     calculateProjectTotal,
   };

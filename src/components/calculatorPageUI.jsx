@@ -45,6 +45,7 @@ export default function CalculatorPageUI(props) {
     setNewCalculatorName,
     handleRenameCalculator,
     renaming,
+    updateTax,
   } = props;
 
   // -----------------------
@@ -140,6 +141,7 @@ export default function CalculatorPageUI(props) {
     deleteTen,
     deleteSection,
     updateField,
+    updateTax,
   };
 
   // State for delete confirmation modal

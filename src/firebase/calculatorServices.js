@@ -69,7 +69,10 @@ const calculatorTemplates = {
         total: 0,
       },
     ],
+    taxRate: 0,
+    taxAmount: 0,
     grandTotal: 0,
+    finalTotal: 0,
   },
 };
 
@@ -207,6 +210,41 @@ export async function grandTotal(projectId, calculatorId) {
 
   await updateDoc(calculatorRef, { grandTotal });
 }
+
+/**
+ * Update tax rate, tax amount, and grand total for a calculator.
+ *
+ * @param {string} projectId - Project ID.
+ * @param {string} calculatorId - Calculator ID.
+ * @param {number} rate - New tax rate (as a percent).
+ * @returns {Promise<{ rate: number, tax: number, finalTotal: number }>}
+ */
+export async function updateCalculatorTax(projectId, calculatorId, rate) {
+  const calculatorRef = doc(
+    db,
+    "projects",
+    projectId,
+    "calculators",
+    calculatorId
+  );
+  const calculatorSnap = await getDoc(calculatorRef);
+  if (!calculatorSnap.exists()) throw new Error("Calculator not found");
+
+  const calculatorData = calculatorSnap.data();
+
+  const taxRate = Number(rate) || 0;
+  const taxAmount = calculatorData.grandTotal * (taxRate / 100);
+  const finalTotal = calculatorData.grandTotal + taxAmount;
+
+  await updateDoc(calculatorRef, {
+    taxRate,
+    taxAmount,
+    finalTotal,
+  });
+
+  return { taxRate, taxAmount, finalTotal };
+}
+
 
 /**
  * Calculate grand total of all calculators
