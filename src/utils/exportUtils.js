@@ -4,6 +4,16 @@ import { saveAs } from "file-saver";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
+// Helper to get the correct total
+const getCalculatorTotal = (calc) => {
+  if (calc.type === "SevenFieldCalculator" && typeof calc.finalTotal === "number") {
+    return calc.finalTotal;
+  } else if (typeof calc.grandTotal === "number") {
+    return calc.grandTotal;
+  }
+  return 0;
+};
+
 // Export DOCX
 export const exportToDocx = (project, calculators) => {
   const rows = calculators
@@ -18,7 +28,7 @@ export const exportToDocx = (project, calculators) => {
             }),
             new TableCell({
               width: { size: 30, type: WidthType.PERCENTAGE },
-              children: [new Paragraph(`$${Number(calc.grandTotal).toFixed(2)}`)],
+              children: [new Paragraph(`$${getCalculatorTotal(calc).toFixed(2)}`)],
             }),
           ],
         })
@@ -63,7 +73,7 @@ export const exportToPDF = (project, calculators) => {
   const tableColumn = ["Category", "Total"];
   const tableRows = calculators
     .filter((calc) => calc.type !== "MeasurementCalculator")
-    .map((calc) => [calc.name, `$${Number(calc.grandTotal).toFixed(2)}`]);
+    .map((calc) => [calc.name, `$${getCalculatorTotal(calc).toFixed(2)}`]);
 
   tableRows.push(["Grand Total", `$${Number(project.total).toFixed(2)}`]);
 
