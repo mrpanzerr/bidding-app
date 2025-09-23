@@ -259,11 +259,13 @@ export async function projectTotal(projectId) {
 
   calculatorSnap.forEach((calculatorDoc) => {
     const data = calculatorDoc.data();
-    if (
-      data.type !== "MeasurementCalculator" &&
-      typeof data.grandTotal === "number"
-    ) {
-      total += data.grandTotal;
+    
+    if (data.type !== "MeasurementCalculator") {
+      if (data.type === "SevenFieldCalculator" && typeof data.finalTotal === "number") {
+        total += data.finalTotal;
+      } else if (typeof data.grandTotal === "number") {
+        total += data.grandTotal;
+      }
     }
   });
 
