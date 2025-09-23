@@ -1,5 +1,12 @@
-
-export default function EditableField({ fieldState, value, onSave, placeholder, type = "text", isRefreshing }) {
+export default function EditableField({
+  fieldState,
+  value,
+  onSave,
+  placeholder,
+  type = "text",
+  isRefreshing,
+  boldValue = false, 
+}) {
   return fieldState.id === value.id ? (
     <input
       type={type}
@@ -7,8 +14,9 @@ export default function EditableField({ fieldState, value, onSave, placeholder, 
       value={fieldState.value}
       onChange={(e) => fieldState.setValue(e.target.value)}
       onBlur={async () => {
-        if (fieldState.value.trim() !== "" || type === "number") {
-          await onSave(fieldState.value);
+        const val = fieldState.value;
+        if ((typeof val === "string" && val.trim() !== "") || type === "number") {
+          await onSave(val);
         }
         fieldState.setId(null);
       }}
@@ -37,7 +45,11 @@ export default function EditableField({ fieldState, value, onSave, placeholder, 
         fontStyle: value.value ? "normal" : "italic",
       }}
     >
-      {value.value || placeholder}
+      {value.value ? (
+        boldValue ? <strong>{value.value}%</strong> : value.value
+      ) : (
+        placeholder
+      )}
     </p>
   );
 }

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import EditableField from "./calculatorUI/editableField";
 import MeasurementCalculatorUI from "./calculatorUI/measurementCalculatorUI";
 import SevenFieldCalculatorUI from "./calculatorUI/sevenFieldCalculatorUI";
 import ThreeFieldCalculatorUI from "./calculatorUI/threeFieldCalculatorUI";
@@ -78,6 +79,8 @@ export default function CalculatorPageUI(props) {
   const [productCode, setProductCode] = useState("");
   const [editingAmount, setEditingAmount] = useState(null);
   const [amountInput, setAmountInput] = useState("");
+  const [edittingTaxRateId, setEditingTaxRateId] = useState(null);
+  const [taxRateInput, setTaxRateInput] = useState("");
 
   const editingState = {
     title: {
@@ -128,6 +131,12 @@ export default function CalculatorPageUI(props) {
       value: productCode,
       setValue: setProductCode,
     },
+    taxRate: {
+      id: edittingTaxRateId,
+      setId: setEditingTaxRateId,
+      value: taxRateInput,
+      setValue: setTaxRateInput,
+    },
   };
 
   // Calculator action wrappers
@@ -173,6 +182,13 @@ export default function CalculatorPageUI(props) {
     if (navigateAfterDelete) navigateAfterDelete();
   };
 
+  const handleTaxUpdate = async () => {
+    const numericVal = parseFloat(editingState.taxRate.value);
+    if (isNaN(numericVal) || numericVal < 0) return;
+    await safeAction(() => updateTax(numericVal));
+    await safeAction(() => calculateGrandTotal());
+  };
+
   // -----------------------
   // Rendering Helpers
   // -----------------------
@@ -210,17 +226,61 @@ export default function CalculatorPageUI(props) {
       <button onClick={() => safeAction(addNewSection)} disabled={isRefreshing}>
         + Add Section
       </button>
-      <h2 style={{ textAlign: "right" }}>
-        Total: {safeCalculator.type !== "MeasurementCalculator" && "$"}
-        {Number(safeCalculator.grandTotal).toFixed(2) || 0}
-      </h2>
-      <button
-        onClick={() => setShowDeleteModal(true)}
-        disabled={isRefreshing}
-        style={{ float: "right", color: "white", background: "red"}}
+
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-end",
+          gap: "16px",
+        }}
       >
-        Delete Calculator
-      </button>
+        {/* Total */}
+        <h2 style={{ margin: 0 }}>
+          Total: {safeCalculator.type !== "MeasurementCalculator" && "$"}
+          {Number(safeCalculator.grandTotal).toFixed(2) || 0}
+        </h2>
+
+        {safeCalculator.type === "SevenFieldCalculator" && (
+          <>
+            {/* Tax Rate + Input */}
+            <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+              <h2 style={{ margin: 0 }}>Tax Rate:</h2>
+              <EditableField
+                fieldState={editingState.taxRate}
+                value={{ id: calculator.id, value: calculator.taxRate }}
+                placeholder="Enter Tax Rate"
+                onSave={async (val) => {
+                  await handleTaxUpdate();
+                }}
+                isRefreshing={isRefreshing}
+                boldValue={true}
+              />
+            </div>
+
+            {/* Tax Amount */}
+            <h2 style={{ margin: 0 }}>
+              Tax: {safeCalculator.type !== "MeasurementCalculator" && "$"}
+              {Number(safeCalculator.taxAmount).toFixed(2) || 0}
+            </h2>
+
+            {/* Grand Total */}
+            <h2 style={{ margin: 0 }}>
+              Grand Total: {safeCalculator.type !== "MeasurementCalculator" && "$"}
+              {Number(safeCalculator.finalTotal).toFixed(2) || 0}
+            </h2>
+          </>
+        )}
+
+        {/* Delete Button */}
+        <button
+          onClick={() => setShowDeleteModal(true)}
+          disabled={isRefreshing}
+          style={{ color: "white", background: "red", padding: "4px 8px" }}
+        >
+          Delete Calculator
+        </button>
+      </div>
     </>
   );
 

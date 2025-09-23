@@ -245,10 +245,9 @@ export async function updateCalculatorTax(projectId, calculatorId, rate) {
   return { taxRate, taxAmount, finalTotal };
 }
 
-
 /**
  * Calculate grand total of all calculators
- * 
+ *
  * @param {string} projectId - Project ID.
  * @return {Promise<Void>}
  */
@@ -260,7 +259,10 @@ export async function projectTotal(projectId) {
 
   calculatorSnap.forEach((calculatorDoc) => {
     const data = calculatorDoc.data();
-    if (data.type !== "MeasurementCalculator" && typeof data.grandTotal === "number") {
+    if (
+      data.type !== "MeasurementCalculator" &&
+      typeof data.grandTotal === "number"
+    ) {
       total += data.grandTotal;
     }
   });
