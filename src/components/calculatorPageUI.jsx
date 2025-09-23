@@ -215,7 +215,7 @@ export default function CalculatorPageUI(props) {
       <button
         onClick={() => setShowDeleteModal(true)}
         disabled={isRefreshing}
-        style={{ float: "right" }}
+        style={{ float: "right", color: "white", background: "red"}}
       >
         Delete Calculator
       </button>
