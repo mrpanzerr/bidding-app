@@ -215,6 +215,7 @@ export default function SevenFieldCalculatorUI({
                   );
                   await safeAction(() => sectionTotal(section.id));
                   await safeAction(() => calculateGrandTotal());
+                  await safeAction(() => actions.updateTax(0));
                 }}
                 disabled={isRefreshing}
               >
@@ -251,6 +252,7 @@ export default function SevenFieldCalculatorUI({
               onClick={async () => {
                 await safeAction(() => actions.deleteSection(section.id));
                 await safeAction(() => calculateGrandTotal());
+                await safeAction(() => actions.updateTax(0));
               }}
               style={{ color: "red" }}
               disabled={isRefreshing}
