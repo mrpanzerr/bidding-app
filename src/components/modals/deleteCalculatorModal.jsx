@@ -49,19 +49,6 @@ export default function DeleteCalculatorModal({
         }}
       >
         <h3>Confirm Delete Calculator</h3>
-        <p>
-          Type the calculator name <strong>{safeCalculator.name}</strong> to confirm.
-        </p>
-
-        {/* Confirmation input field */}
-        <input
-          type="text"
-          value={deleteConfirmInput}
-          onChange={(e) => setDeleteConfirmInput(e.target.value)}
-          placeholder="Calculator name"
-          style={{ width: "100%", padding: "8px", marginBottom: "1rem" }}
-          disabled={isRefreshing}
-        />
 
         {/* Action buttons */}
         <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -79,13 +66,9 @@ export default function DeleteCalculatorModal({
           {/* Confirm delete button */}
           <button
             onClick={async () => {
-              if (deleteConfirmInput.trim() === safeCalculator.name) {
-                await handleDeleteCalculator();
-                setShowDeleteModal(false);
-                setDeleteConfirmInput("");
-              } else {
-                alert("Calculator name does not match.");
-              }
+              await handleDeleteCalculator();
+              setShowDeleteModal(false);
+              setDeleteConfirmInput("");
             }}
             style={{ backgroundColor: "red", color: "white" }}
             disabled={isRefreshing}
