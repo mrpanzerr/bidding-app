@@ -2,8 +2,33 @@ import { useState } from "react";
 import styles from "../../styles/productModules/ProductList.module.css";
 import DeleteModal from "../modals/deleteModal";
 
-export default function ProductList({ products, onUpdate, onDelete, searchTerm, setSearchTerm, loading }) {
+export default function ProductList({
+  products,
+  onUpdate,
+  onDelete,
+  onAdd,
+  searchTerm,
+  setSearchTerm,
+  loading,
+}) {
   const [modalProductId, setModalProductId] = useState(null);
+
+  const [newProduct, setNewProduct] = useState({
+    code: "",
+    name: "",
+    price: "",
+  });
+
+  const handleAdd = () => {
+    if (!newProduct.code.trim()) return; // require code field
+    onAdd(newProduct.code.toUpperCase(), {
+      code: newProduct.code.toUpperCase(),
+      name: newProduct.name || "New Product",
+      price: parseFloat(newProduct.price) || 0,
+    });
+    // reset after adding
+    setNewProduct({ code: "", name: "", price: "" });
+  };
 
   return (
     <>
@@ -55,6 +80,43 @@ export default function ProductList({ products, onUpdate, onDelete, searchTerm, 
             </span>
           </li>
         ))}
+
+        {/* New Product Entry Row */}
+        <li className={styles.productItem}>
+          <span>
+            <input
+              type="text"
+              placeholder="Product Code"
+              value={newProduct.code}
+              onChange={(e) =>
+                setNewProduct((prev) => ({ ...prev, code: e.target.value }))
+              }
+            />
+          </span>
+          <span>
+            <input
+              type="text"
+              placeholder="Name"
+              value={newProduct.name}
+              onChange={(e) =>
+                setNewProduct((prev) => ({ ...prev, name: e.target.value }))
+              }
+            />
+          </span>
+          <span>
+            <input
+              type="number"
+              placeholder="Price"
+              value={newProduct.price}
+              onChange={(e) =>
+                setNewProduct((prev) => ({ ...prev, price: e.target.value }))
+              }
+            />
+          </span>
+          <span>
+            <button onClick={handleAdd}>Add</button>
+          </span>
+        </li>
       </ul>
 
       {/* Delete Confirmation Modal */}

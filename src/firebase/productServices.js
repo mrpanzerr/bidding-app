@@ -1,12 +1,12 @@
 import {
-    addDoc,
     collection,
     deleteDoc,
     doc,
     getDocs,
     query,
+    setDoc,
     updateDoc,
-    where,
+    where
 } from "firebase/firestore";
 import { db } from "./firebase";
 
@@ -52,10 +52,10 @@ export async function deleteProductById(productId) {
  * @param {object} data - The data for the new product.
  * @returns {string} The ID of the newly created product.
  */
-export async function addNewProduct(data) {
-  const productsCol = collection(db, "products");
-  const docRef = await addDoc(productsCol, data);
-  return docRef.id;
+export async function addNewProduct(id, data) {
+  const productRef = doc(db, "products", id);
+  await setDoc(productRef, data);
+  return id;
 }
 
 /**

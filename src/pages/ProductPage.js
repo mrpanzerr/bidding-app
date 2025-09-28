@@ -24,7 +24,7 @@ export default function ProductPage() {
     currentPage * pageItemSize
   );
 
-  const displayProducts = searchResults.length > 0 ? searchResults : paginatedProducts;
+  const displayProducts = searchTerm.length > 0 ? searchResults : paginatedProducts;
 
   return (
     <div className={styles.pageContainer}>
