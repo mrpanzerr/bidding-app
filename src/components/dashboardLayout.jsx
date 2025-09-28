@@ -24,6 +24,9 @@ function DashboardLayout({ title, onAddProject, onLogout, children }) {
       {!auth.currentUser && (
         <button onClick={() => navigate("/")}>Back to Login</button>
       )}
+      {auth.currentUser.uid === "u2jMTVW8OccctfVHx88IQs4cE8L2" && (
+        <button onClick={() => navigate("/product")}>Product Code Page</button>
+      )}
     </div>
   );
 }

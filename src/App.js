@@ -6,6 +6,7 @@ import { Navigate } from "react-router-dom";
 import CalculatorPage from "./pages/CalculatorPage";
 import Dashboard from "./pages/Dashboard";
 import LoginPage from "./pages/LoginPage";
+import ProductPage from "./pages/ProductPage";
 import ProjectDashboard from "./pages/ProjectDashboard";
 import ProjectTotalPage from "./pages/ProjectTotalPage";
 import SignUpPage from "./pages/SignUpPage";
@@ -70,6 +71,16 @@ function App() {
         element={
           <ProtectedRoute allowGuest={true}>
             <ProjectTotalPage />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Route for product details page */}
+      <Route
+        path="/product"
+        element={
+          <ProtectedRoute>
+            <ProductPage />
           </ProtectedRoute>
         }
       />
