@@ -55,6 +55,17 @@ export default function SevenFieldCalculatorUI({
             isRefreshing={isRefreshing}
           />
 
+          {/* Section Headers */}
+          <div className={styles.headerRow}>
+            <div>Quantity</div>
+            <div>Product Code</div>
+            <div>Product Description</div>
+            <div>Extra Description</div>
+            <div>Length</div>
+            <div>Price</div>
+            <div>Total Price</div>
+            <div></div> {/* Empty div for the Delete button column */}
+          </div>
           {/* Lines */}
           {section.lines?.map((line) => (
             <div key={line.id} className={styles.lineStyle}>
@@ -219,7 +230,7 @@ export default function SevenFieldCalculatorUI({
                 }}
                 disabled={isRefreshing}
               >
-                Delete Line
+                Delete
               </button>
             </div>
           ))}

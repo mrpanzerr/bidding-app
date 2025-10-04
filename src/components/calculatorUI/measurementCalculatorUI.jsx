@@ -33,6 +33,13 @@ export default function MeasurementCalculatorUI({
               isRefreshing={isRefreshing}
             />
 
+            {/* Section Headers */}
+          <div className={styles.headerRow}>
+            <div>Measurement</div>
+            <div>Description</div>
+            <div>Amount</div>
+            <div></div> {/* Empty div for the Delete button column */}
+          </div>
             {/* Lines */}
             {section.lines?.map((line) => (
               <div key={line.id} className={styles.lineStyle}>
@@ -66,7 +73,7 @@ export default function MeasurementCalculatorUI({
                 />
 
                 {/* Delete Line */}
-                <button
+                <button className={styles.sectionButtonGroup}
                   onClick={async () => {
                     await safeAction(() => actions.deleteOne(section.id, line.id));
                     await safeAction(() => sectionTotal(section.id));
@@ -74,7 +81,7 @@ export default function MeasurementCalculatorUI({
                   }}
                   disabled={isRefreshing}
                 >
-                  Delete Line
+                  Delete
                 </button>
               </div>
             ))}
