@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { exportMaterialListToDocx, exportMaterialListToPDF } from "../utils/exportUtils";
 
 import NewCalculatorModal from "../components/modals/newCalculatorModal";
 import { useCalculator, useCalculators } from "../hooks/useCalculator";
@@ -17,9 +18,7 @@ function ProjectDashboard() {
     addNewCalculator,
     loading: calcLoading,
   } = useCalculators(id);
-  const {
-    calculateProjectTotal,
-  } = useCalculator(id);
+  const { calculateProjectTotal } = useCalculator(id);
 
   const [activeModal, setActiveModal] = useState(null);
   const [calculatorName, setCalculatorName] = useState("");
@@ -75,6 +74,7 @@ function ProjectDashboard() {
           borderRight: "1px solid #ccc",
         }}
       >
+        {/* Calculator creator buttons */}
         <h3>Actions</h3>
         <button
           onClick={() => openModal("SevenFieldCalculator")}
@@ -94,11 +94,29 @@ function ProjectDashboard() {
         >
           Add Measurement Calculator
         </button>
+
+        {/* Project Total Page */}
         <button
           onClick={() => openTotalsPage()}
-          style={{ display: "block", marginTop: "1.5rem" }}>
-            Project Total Page
+          style={{ display: "block", marginTop: "1.5rem" }}
+        >
+          Project Total Page
         </button>
+
+        {/* Export list of materials */}
+        <div style={{ marginTop: "20px" }}>
+          <button
+            style={{ marginRight: "10px", marginBottom: "10px"}}
+            onClick={() => exportMaterialListToPDF(project, calculators)}
+          >
+            Export Material List - PDF
+          </button>
+          <button
+            onClick={() => exportMaterialListToDocx(project, calculators)}
+          >
+            Export Material List - Word
+          </button>
+        </div>
       </aside>
 
       {/* Main content showing calculators */}
