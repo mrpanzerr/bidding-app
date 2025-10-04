@@ -28,4 +28,29 @@
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
+  justify-content: center;
 }
+
+.headerRow {
+  display: flex;
+  gap: 1rem;
+  font-weight: bold;
+  border-bottom: 1px solid lightgray;
+  padding-bottom: 0.25rem;
+  margin-top: 1.0rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Match widths for header and line cells */
+.headerRow > div,
+.lineStyle > * {
+  flex: 1;
+}
+
+/* Optional: for delete button alignment */
+.headerRow > div:last-child,
+.lineStyle > *:last-child {
+  flex: 0.3;
+  text-align: right;
+}
+

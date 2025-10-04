@@ -86,7 +86,7 @@ function ProjectDashboard() {
           onClick={() => openModal("ThreeFieldCalculator")}
           style={{ display: "block", marginTop: "0.5rem" }}
         >
-          Add Three Field Calculator
+          Add Labor Calculator
         </button>
         <button
           onClick={() => openModal("MeasurementCalculator")}

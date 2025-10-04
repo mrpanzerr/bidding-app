@@ -64,7 +64,8 @@ function createNewLine(calcType) {
       return {
         id: crypto.randomUUID(),
         description: "",
-        descriptionTwo: "",
+        pricePerUnit: 0,
+        squarefoot: 0,
         amount: 0,
       };
     case "SevenFieldCalculator":

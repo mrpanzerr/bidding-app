@@ -30,16 +30,8 @@ export default function ProjectTotalPage() {
           </tr>
         </thead>
         <tbody>
-          {calculators
-            .filter((calc) => calc.type !== "MeasurementCalculator" && calc.type !== "SevenFieldCalculator")
-            .map((calc) => (
-              <tr key={calc.id}>
-                <td style={{ padding: "8px" }}>{calc.name}</td>
-                <td style={{ padding: "8px" }}>${Number(calc.grandTotal).toFixed(2)}</td>
-              </tr>
-            ))}
             {calculators
-              .filter((calc) => calc.type === "SevenFieldCalculator")
+              .filter((calc) => calc.type !== "MeasurementCalculator")
               .map((calc) => (
                 <tr key={calc.id}>
                   <td style={{ padding: "8px" }}>{calc.name}</td>

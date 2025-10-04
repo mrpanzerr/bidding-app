@@ -43,5 +43,6 @@ export function useSevenFieldCalculator(projectId, calculatorId) {
     calcCost: line.calcCost,
     checkCode: line.checkCode,
     updateTax: calc.updateTax,
+    laborTotal: calc.laborTotal,
   };
 }

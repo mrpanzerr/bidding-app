@@ -44,6 +44,7 @@ export default function CalculatorPage() {
     sectionTotal,
     calculateGrandTotal,
     updateTax,
+    laborTotal,
   } = config.useCalculatorData(projectId, calculatorId);
 
   // Keep newCalculatorName in sync with the calculator's name
@@ -112,6 +113,7 @@ export default function CalculatorPage() {
       handleRenameCalculator={handleRenameCalculator}
       renaming={renaming}
       updateTax={updateTax}
+      laborTotal={laborTotal}
     />
   );
 }

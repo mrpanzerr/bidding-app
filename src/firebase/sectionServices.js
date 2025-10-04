@@ -34,7 +34,8 @@ function createNewSection(calcType) {
           {
             id: crypto.randomUUID(),
             description: "",
-            description2: "",
+            pricePerUnit: 0,
+            squarefoot: 0,
             amount: 0,
           },
         ],

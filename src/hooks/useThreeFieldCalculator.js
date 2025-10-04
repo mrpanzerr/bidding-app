@@ -40,5 +40,7 @@ export function useThreeFieldCalculator(projectId, calculatorId) {
     deleteCalculatorFunction: calc.deleteCalculatorFunction,
     sectionTotal: section.sectionTotal,
     calculateGrandTotal: calc.calculateGrandTotal,
+    updateTax: calc.updateTax,
+    laborTotal: calc.laborTotal,
   };
 }

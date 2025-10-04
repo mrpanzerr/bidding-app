@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import {
   addCalculator,
   addMyCalculator,
+  calculateLaborTotal,
   deleteCalculator,
   fetchMyCalculators,
   getAllCalculators,
@@ -183,6 +184,12 @@ export function useCalculator(projectId, calculatorId, onError) {
       (sections) => sections 
     );
 
+  const laborTotal = (sectionId) =>
+    performMutation(
+      () => calculateLaborTotal(projectId, calculatorId, sectionId),
+      (sections) => sections 
+    );
+
   const calculateGrandTotal = () =>
     performMutation(() => grandTotal(projectId, calculatorId));
 
@@ -200,5 +207,6 @@ export function useCalculator(projectId, calculatorId, onError) {
     updateTax,
     calculateGrandTotal,
     calculateProjectTotal,
+    laborTotal
   };
 }

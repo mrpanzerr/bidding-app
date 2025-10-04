@@ -47,6 +47,7 @@ export default function CalculatorPageUI(props) {
     handleRenameCalculator,
     renaming,
     updateTax,
+    laborTotal,
   } = props;
 
   // -----------------------
@@ -81,6 +82,10 @@ export default function CalculatorPageUI(props) {
   const [amountInput, setAmountInput] = useState("");
   const [edittingTaxRateId, setEditingTaxRateId] = useState(null);
   const [taxRateInput, setTaxRateInput] = useState("");
+  const [editingSqftId, setEditingSqftId] = useState(null);
+  const [sqftInput, setSqftInput] = useState("");
+  const [editingPricePerUnitId, setEditingPricePerUnitId] = useState(null);
+  const [pricePerUnitInput, setPricePerUnitInput] = useState("");
 
   const editingState = {
     title: {
@@ -137,6 +142,18 @@ export default function CalculatorPageUI(props) {
       value: taxRateInput,
       setValue: setTaxRateInput,
     },
+    sqft: {
+      id: editingSqftId,
+      setId: setEditingSqftId,
+      value: sqftInput,
+      setValue: setSqftInput,
+    },
+    pricePerUnit: {
+      id: editingPricePerUnitId,
+      setId: setEditingPricePerUnitId,
+      value: pricePerUnitInput,
+      setValue: setPricePerUnitInput,
+    },
   };
 
   // Calculator action wrappers
@@ -151,6 +168,7 @@ export default function CalculatorPageUI(props) {
     deleteSection,
     updateField,
     updateTax,
+    laborTotal,
   };
 
   // State for delete confirmation modal
@@ -241,7 +259,7 @@ export default function CalculatorPageUI(props) {
           {Number(safeCalculator.grandTotal).toFixed(2) || 0}
         </h2>
 
-        {safeCalculator.type === "SevenFieldCalculator" && (
+        {safeCalculator.type !== "MeasurementCalculator" && (
           <>
             {/* Tax Rate + Input */}
             <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>

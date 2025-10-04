@@ -40,7 +40,8 @@ const calculatorTemplates = {
           {
             id: crypto.randomUUID(),
             description: "",
-            descriptionTwo: "",
+            squarefoot: 0,
+            pricePerUnit: 0,
             amount: 0,
           },
         ],
@@ -183,6 +184,43 @@ export async function updateCalculatorName(projectId, calculatorId, newName) {
   await updateDoc(calculatorRef, { name: newName });
 }
 
+/** Calculate total for labor
+ *
+ * @param {string} projectId - Project ID.
+ * @param {string} calculatorId - Calculator ID.
+ * @param {string} sectionId - Section ID.
+ * @returns {Promise<void>}
+ */
+export async function calculateLaborTotal(projectId, calculatorId, sectionId) {
+  const calculatorRef = doc(
+    db,
+    "projects",
+    projectId,
+    "calculators",
+    calculatorId
+  );
+  const calculatorSnap = await getDoc(calculatorRef);
+  if (!calculatorSnap.exists()) throw new Error("Calculator not found");
+
+  const calculatorData = calculatorSnap.data();
+  const existingSections = calculatorData.section || [];
+
+  const section = existingSections.find((sec) => sec.id === sectionId);
+  if (!section) throw new Error("Section not found");
+
+  const updatedLines = section.lines.map((line) => ({
+    ...line,
+    amount: Number(line.squarefoot) * Number(line.pricePerUnit) || 0,
+  }));
+
+  const updatedSections = existingSections.map((sec) =>
+    sec.id === sectionId ? { ...sec, lines: updatedLines } : sec
+  );
+
+  // Save the updated sections back to Firestore
+  await updateDoc(calculatorRef, { section: updatedSections });
+}
+
 /**
  * Calculate grand total of all sections.
  *
@@ -259,15 +297,10 @@ export async function projectTotal(projectId) {
 
   calculatorSnap.forEach((calculatorDoc) => {
     const data = calculatorDoc.data();
-    
+
     if (data.type !== "MeasurementCalculator") {
-      if (data.type === "SevenFieldCalculator" && typeof data.finalTotal === "number") {
-        total += data.finalTotal;
-      } else if (typeof data.grandTotal === "number") {
-        total += data.grandTotal;
-      }
-    }
-  });
+      total += data.finalTotal;
+  }});
 
   const projectRef = doc(db, "projects", projectId);
   await updateDoc(projectRef, { total });
