@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { exportMaterialListToDocx, exportMaterialListToPDF } from "../utils/exportUtils";
+import styles from "../styles/projectDashboardModules/projectDashboard.module.css";
+import {
+  exportMaterialListToDocx,
+  exportMaterialListToPDF,
+} from "../utils/exportUtils";
 
 import NewCalculatorModal from "../components/modals/newCalculatorModal";
 import { useCalculator, useCalculators } from "../hooks/useCalculator";
@@ -65,88 +69,75 @@ function ProjectDashboard() {
   if (!project || project === false) return <p>Project not found.</p>;
 
   return (
-    <div style={{ display: "flex", minHeight: "80vh" }}>
-      {/* Sidebar with project actions */}
-      <aside
-        style={{
-          width: "250px",
-          padding: "1rem",
-          borderRight: "1px solid #ccc",
-        }}
-      >
-        {/* Calculator creator buttons */}
-        <h3>Actions</h3>
-        <button
-          onClick={() => openModal("SevenFieldCalculator")}
-          style={{ display: "block" }}
-        >
-          Add Material Calculator
-        </button>
-        <button
-          onClick={() => openModal("ThreeFieldCalculator")}
-          style={{ display: "block", marginTop: "0.5rem" }}
-        >
-          Add Labor Calculator
-        </button>
-        <button
-          onClick={() => openModal("MeasurementCalculator")}
-          style={{ display: "block", marginTop: "0.5rem" }}
-        >
-          Add Measurement Calculator
-        </button>
+    <div className={styles.pageContainer}>
+      <div className={styles.dashboardCard}>
+        <aside className={styles.dashboardSidebar}>
+          <h3 className={styles.sidebarHeader}>Actions</h3>
 
-        {/* Project Total Page */}
-        <button
-          onClick={() => openTotalsPage()}
-          style={{ display: "block", marginTop: "1.5rem" }}
-        >
-          Project Total Page
-        </button>
-
-        {/* Export list of materials */}
-        <div style={{ marginTop: "20px" }}>
+          {/* Add calculator buttons */}
           <button
-            style={{ marginRight: "10px", marginBottom: "10px"}}
-            onClick={() => exportMaterialListToPDF(project, calculators)}
+            className={styles.addCalculatorBtn}
+            onClick={() => openModal("SevenFieldCalculator")}
           >
-            Export Material List - PDF
+            Add Material Calculator
           </button>
           <button
-            onClick={() => exportMaterialListToDocx(project, calculators)}
+            className={styles.addCalculatorBtn}
+            onClick={() => openModal("ThreeFieldCalculator")}
           >
-            Export Material List - Word
+            Add Labor Calculator
           </button>
-        </div>
-      </aside>
+          <button
+            className={styles.addCalculatorBtn}
+            onClick={() => openModal("MeasurementCalculator")}
+          >
+            Add Measurement Calculator
+          </button>
 
-      {/* Main content showing calculators */}
-      <main style={{ flex: 1, padding: "1rem" }}>
-        <h2>{project.name} Calculators</h2>
-        {calcLoading ? (
-          <p>Loading calculators...</p>
-        ) : calculators.length === 0 ? (
-          <p>No calculators yet.</p>
-        ) : (
-          <ul>
-            {calculators.map((calc) => (
-              <li key={calc.id}>
-                <button
-                  onClick={() => openCalculator(calc.id, calc.type)}
-                  style={{
-                    background: "none",
-                    border: "2px",
-                    color: "blue",
-                    textDecoration: "none",
-                    cursor: "pointer",
-                  }}
-                >
-                  {calc.name}
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </main>
+          {/* Project Total Page button */}
+          <button
+            className={styles.projectPageBtn}
+            onClick={() => openTotalsPage()}
+          >
+            Project Total Page
+          </button>
+
+          {/* Export list of materials */}
+          <div className={styles.exportButtons}>
+            <button
+              className={styles.exportBtn}
+              onClick={() => exportMaterialListToPDF(project, calculators)}
+            >
+              Export Material List - PDF
+            </button>
+            <button
+              className={styles.exportBtn}
+              onClick={() => exportMaterialListToDocx(project, calculators)}
+            >
+              Export Material List - Word
+            </button>
+          </div>
+        </aside>
+
+        <main className={styles.dashboardMain}>
+          <h2 className={styles.mainHeader}>{project.name} Calculators</h2>
+          {calcLoading ? (
+            <p>Loading calculators...</p>
+          ) : calculators.length === 0 ? (
+            <p>No calculators yet.</p>
+          ) : (
+            <ul className={styles.calculatorList}>
+              {calculators.map((calc) => (
+                <li key={calc.id}>
+                  <button onClick={() => openCalculator(calc.id, calc.type)}>
+                    {calc.name}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </main>
+      </div>
 
       {/* Modal for creating new measurement calculator */}
       {activeModal === "MeasurementCalculator" && (
