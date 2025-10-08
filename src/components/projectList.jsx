@@ -1,8 +1,9 @@
+import styles from "../styles/dashboardModules/projectList.module.css";
 import ProjectItem from "./projectItem";
 
 function ProjectList({ projects, onOpen, onRename, onDelete }) {
   return (
-    <ul>
+    <ul className={styles.projectGrid}>
       {projects.map((project) => (
         <ProjectItem
           key={project.id}
