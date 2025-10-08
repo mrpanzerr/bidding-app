@@ -13,53 +13,83 @@ export default function ProjectTotalPage() {
   if (!project) return <p>No project found</p>;
 
   return (
-    <div style={{ textAlign: "center", marginTop: "20px" }}>
-      <h2>{project.name} Totals</h2>
-
-      <table
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
+        backgroundColor: "#f3f4f6",
+        padding: "20px",
+      }}
+    >
+      <div
         style={{
-          margin: "0 auto", // center the table
-          borderCollapse: "collapse",
           textAlign: "center",
+          marginTop: "-50px", // shift up by 50px; adjust as needed
+          backgroundColor: "#fff", // optional card background
+          padding: "30px",
+          borderRadius: "10px",
+          boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+          maxWidth: "600px",
+          width: "100%",
         }}
       >
-        <thead>
-          <tr>
-            <th style={{ borderBottom: "1px solid #000", padding: "8px" }}>Name</th>
-            <th style={{ borderBottom: "1px solid #000", padding: "8px" }}>Total</th>
-          </tr>
-        </thead>
-        <tbody>
+        <h2>{project.name} Totals</h2>
+
+        <table
+          style={{
+            margin: "0 auto",
+            borderCollapse: "collapse",
+            textAlign: "center",
+          }}
+        >
+          <thead>
+            <tr>
+              <th style={{ borderBottom: "1px solid #000", padding: "8px" }}>
+                Name
+              </th>
+              <th style={{ borderBottom: "1px solid #000", padding: "8px" }}>
+                Total
+              </th>
+            </tr>
+          </thead>
+          <tbody>
             {calculators
               .filter((calc) => calc.type !== "MeasurementCalculator")
               .map((calc) => (
                 <tr key={calc.id}>
                   <td style={{ padding: "8px" }}>{calc.name}</td>
-                  <td style={{ padding: "8px" }}>${Number(calc.finalTotal).toFixed(2)}</td>
+                  <td style={{ padding: "8px" }}>
+                    ${Number(calc.finalTotal).toFixed(2)}
+                  </td>
                 </tr>
               ))}
-          <tr>
-            <td style={{ padding: "8px", fontWeight: "bold" }}>Grand Total</td>
-            <td style={{ padding: "8px", fontWeight: "bold" }}>
-              ${Number(project.total).toFixed(2)}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            <tr>
+              <td style={{ padding: "8px", fontWeight: "bold" }}>
+                Grand Total
+              </td>
+              <td style={{ padding: "8px", fontWeight: "bold" }}>
+                ${Number(project.total).toFixed(2)}
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-      <div style={{ marginTop: "20px" }}>
-        <button
-          style={{ marginRight: "10px", padding: "10px 20px" }}
-          onClick={() => exportToPDF(project, calculators)}
-        >
-          Export PDF
-        </button>
-        <button
-          style={{ padding: "10px 20px" }}
-          onClick={() => exportToDocx(project, calculators)}
-        >
-          Export Word
-        </button>
+        <div style={{ marginTop: "20px" }}>
+          <button
+            style={{ marginRight: "10px", padding: "10px 20px" }}
+            onClick={() => exportToPDF(project, calculators)}
+          >
+            Export PDF
+          </button>
+          <button
+            style={{ padding: "10px 20px" }}
+            onClick={() => exportToDocx(project, calculators)}
+          >
+            Export Word
+          </button>
+        </div>
       </div>
     </div>
   );

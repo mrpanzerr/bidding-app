@@ -24,51 +24,54 @@ export default function ProductPage() {
     currentPage * pageItemSize
   );
 
-  const displayProducts = searchTerm.length > 0 ? searchResults : paginatedProducts;
+  const displayProducts =
+    searchTerm.length > 0 ? searchResults : paginatedProducts;
 
   return (
     <div className={styles.pageContainer}>
-      <h1>Product Page</h1>
+      <div className={styles.contentBox}>
+        <h1 className={styles.pageHeader}>Product Page</h1>
 
-      {/* Paginated Product List */}
-      <ProductList
-        products={displayProducts}
-        onUpdate={updateProduct}
-        onDelete={deleteProduct}
-        onAdd={addProduct}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        loading={loading}
-      />
+        {/* Paginated Product List */}
+        <ProductList
+          products={displayProducts}
+          onUpdate={updateProduct}
+          onDelete={deleteProduct}
+          onAdd={addProduct}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          loading={loading}
+        />
 
-      {/* Pagination Controls */}
-      {!searchTerm && (
-        <div className={styles.paginationControls}>
-          <button
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage(currentPage - 1)}
-          >
-            Prev
-          </button>
-
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+        {/* Pagination Controls */}
+        {!searchTerm && (
+          <div className={styles.paginationControls}>
             <button
-              key={page}
-              disabled={page === currentPage}
-              onClick={() => setCurrentPage(page)}
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage(currentPage - 1)}
             >
-              {page}
+              Prev
             </button>
-          ))}
 
-          <button
-            disabled={currentPage * pageItemSize >= products.length}
-            onClick={() => setCurrentPage(currentPage + 1)}
-          >
-            Next
-          </button>
-        </div>
-      )}
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                disabled={page === currentPage}
+                onClick={() => setCurrentPage(page)}
+              >
+                {page}
+              </button>
+            ))}
+
+            <button
+              disabled={currentPage * pageItemSize >= products.length}
+              onClick={() => setCurrentPage(currentPage + 1)}
+            >
+              Next
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

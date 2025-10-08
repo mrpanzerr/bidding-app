@@ -1,11 +1,37 @@
+/* Outer page container to center everything */
 .pageContainer {
   display: flex;
   flex-direction: column;
-  align-items: center; 
-  justify-content: flex-start; 
-  padding: 40px;
+  align-items: center;
+  padding: 40px 0;
   font-family: sans-serif;
+  min-height: 80vh;
+  overflow: hidden;
+  background-color: #f3f4f6; /* light gray background */
+}
+
+/* Inner content box */
+.contentBox {
   width: 100%;
+  max-width: 1200px;
+  background-color: #ffffff; /* white card */
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Page header */
+.pageHeader {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1f2937; /* dark gray */
+  border-bottom: 2px solid #2563eb; /* blue accent line */
+  padding-bottom: 6px;
 }
 
 .paginationControls {

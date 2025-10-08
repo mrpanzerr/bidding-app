@@ -302,6 +302,50 @@ export default function CalculatorPageUI(props) {
     </>
   );
 
+  const renderCalculator = (CalculatorComponent) => (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        minHeight: "40vh",
+        padding: "20px",
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: "#fff",
+          padding: "30px",
+          borderRadius: "10px",
+          boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+          width: "100%",
+          maxWidth: "900px", // max width of the calculator card
+        }}
+      >
+        {renderHeader()}
+        <CalculatorComponent
+          calculator={safeCalculator}
+          editingState={editingState}
+          actions={calculatorActions}
+          sectionTotal={sectionTotal}
+          calculateGrandTotal={calculateGrandTotal}
+          isRefreshing={isRefreshing}
+          safeAction={safeAction}
+        />
+        {renderFooter()}
+        {showDeleteModal && (
+          <DeleteCalculatorModal
+            safeCalculator={safeCalculator}
+            deleteConfirmInput={deleteConfirmInput}
+            setDeleteConfirmInput={setDeleteConfirmInput}
+            isRefreshing={isRefreshing}
+            setShowDeleteModal={setShowDeleteModal}
+            handleDeleteCalculator={handleDeleteCalculator}
+          />
+        )}
+      </div>
+    </div>
+  );
+
   // -----------------------
   // Fallback UI
   // -----------------------
@@ -314,85 +358,11 @@ export default function CalculatorPageUI(props) {
   // -----------------------
   switch (safeCalculator.type) {
     case "MeasurementCalculator":
-      return (
-        <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-          {renderHeader()}
-          <MeasurementCalculatorUI
-            calculator={safeCalculator}
-            editingState={editingState}
-            actions={calculatorActions}
-            sectionTotal={sectionTotal}
-            calculateGrandTotal={calculateGrandTotal}
-            isRefreshing={isRefreshing}
-            safeAction={safeAction}
-          />
-          {renderFooter()}
-          {showDeleteModal && (
-            <DeleteCalculatorModal
-              safeCalculator={safeCalculator}
-              deleteConfirmInput={deleteConfirmInput}
-              setDeleteConfirmInput={setDeleteConfirmInput}
-              isRefreshing={isRefreshing}
-              setShowDeleteModal={setShowDeleteModal}
-              handleDeleteCalculator={handleDeleteCalculator}
-            />
-          )}
-        </div>
-      );
-
+      return renderCalculator(MeasurementCalculatorUI);
     case "ThreeFieldCalculator":
-      return (
-        <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-          {renderHeader()}
-          <ThreeFieldCalculatorUI
-            calculator={safeCalculator}
-            editingState={editingState}
-            actions={calculatorActions}
-            sectionTotal={sectionTotal}
-            calculateGrandTotal={calculateGrandTotal}
-            isRefreshing={isRefreshing}
-            safeAction={safeAction}
-          />
-          {renderFooter()}
-          {showDeleteModal && (
-            <DeleteCalculatorModal
-              safeCalculator={safeCalculator}
-              deleteConfirmInput={deleteConfirmInput}
-              setDeleteConfirmInput={setDeleteConfirmInput}
-              isRefreshing={isRefreshing}
-              setShowDeleteModal={setShowDeleteModal}
-              handleDeleteCalculator={handleDeleteCalculator}
-            />
-          )}
-        </div>
-      );
-
+      return renderCalculator(ThreeFieldCalculatorUI);
     case "SevenFieldCalculator":
-      return (
-        <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-          {renderHeader()}
-          <SevenFieldCalculatorUI
-            calculator={safeCalculator}
-            editingState={editingState}
-            actions={calculatorActions}
-            sectionTotal={sectionTotal}
-            calculateGrandTotal={calculateGrandTotal}
-            isRefreshing={isRefreshing}
-            safeAction={safeAction}
-          />
-          {renderFooter()}
-          {showDeleteModal && (
-            <DeleteCalculatorModal
-              safeCalculator={safeCalculator}
-              deleteConfirmInput={deleteConfirmInput}
-              setDeleteConfirmInput={setDeleteConfirmInput}
-              isRefreshing={isRefreshing}
-              setShowDeleteModal={setShowDeleteModal}
-              handleDeleteCalculator={handleDeleteCalculator}
-            />
-          )}
-        </div>
-      );
+      return renderCalculator(SevenFieldCalculatorUI);
     default:
       return <p>Unknown calculator type.</p>;
   }
