@@ -255,7 +255,7 @@ export default function CalculatorPageUI(props) {
       >
         {/* Total */}
         <h2 style={{ margin: 0 }}>
-          Total: {safeCalculator.type == "SevenFieldCalculator" && "$"}
+          Total: {safeCalculator.type === "SevenFieldCalculator" && "$"}
           {Number(safeCalculator.grandTotal).toFixed(2) || 0}
         </h2>
 

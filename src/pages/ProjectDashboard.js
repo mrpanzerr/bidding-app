@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { auth } from "../firebase/firebase";
 import styles from "../styles/projectDashboardModules/projectDashboard.module.css";
 import {
   exportLaborToExcel,
@@ -89,12 +90,12 @@ function ProjectDashboard() {
           >
             Add Labor Calculator
           </button>
-          <button
+          {/* <button
             className={styles.addCalculatorBtn}
             onClick={() => openModal("MeasurementCalculator")}
           >
             Add Measurement Calculator
-          </button>
+          </button> */}
 
           {/* Project Total Page button */}
           <button
@@ -134,6 +135,17 @@ function ProjectDashboard() {
             >
               Export Labor - Excel
             </button>
+          </div>
+
+          <div className={styles.exportButtons}>
+            {auth.currentUser?.uid === "u2jMTVW8OccctfVHx88IQs4cE8L2" && (
+              <button
+                onClick={() => navigate("/product")}
+                className={styles.exportBtn}
+              >
+                Product Code Page
+              </button>
+            )}
           </div>
         </aside>
 

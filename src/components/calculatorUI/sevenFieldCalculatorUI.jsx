@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router";
+import { auth } from "../../firebase/firebase";
 import { checkProductCode } from "../../firebase/lineServices";
 import styles from "../../styles/calculatorModules/calculatorUI.module.css";
 import EditableField from "./editableField";
@@ -40,20 +42,32 @@ export default function SevenFieldCalculatorUI({
     }
   };
 
+  const navigate = useNavigate();
+
   return (
     <>
       {calculator.section.map((section) => (
         <div key={section.id} className={styles.sectionBox}>
-          {/* Section Title */}
-          <EditableField
-            fieldState={editingState.title}
-            value={{ id: section.id, value: section.title }}
-            placeholder="Click to add title"
-            onSave={(val) =>
-              safeAction(() => actions.renameSection(section.id, val.trim()))
-            }
-            isRefreshing={isRefreshing}
-          />
+          <div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
+            {/* Section Title */}
+            <EditableField
+              fieldState={editingState.title}
+              value={{ id: section.id, value: section.title }}
+              placeholder="Click to add title"
+              onSave={(val) =>
+                safeAction(() => actions.renameSection(section.id, val.trim()))
+              }
+              isRefreshing={isRefreshing}
+            />
+
+            {auth.currentUser?.uid === "u2jMTVW8OccctfVHx88IQs4cE8L2" && (
+              <button
+                onClick={() => navigate("/product")}
+              >
+                Product Code Page
+              </button>
+            )}
+          </div>
 
           {/* Section Headers */}
           <div className={styles.headerRow}>
