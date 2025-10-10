@@ -61,7 +61,14 @@ export default function ProjectTotalPage() {
                 <tr key={calc.id}>
                   <td style={{ padding: "8px" }}>{calc.name}</td>
                   <td style={{ padding: "8px" }}>
-                    ${Number(calc.finalTotal).toFixed(2)}
+                    $
+                    {Number(
+                      calc.type === "SevenFieldCalculator"
+                        ? calc.finalTotal
+                        : calc.type === "ThreeFieldCalculator"
+                        ? calc.grandTotal
+                        : 0
+                    ).toFixed(2)}
                   </td>
                 </tr>
               ))}

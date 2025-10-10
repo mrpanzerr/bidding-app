@@ -298,9 +298,12 @@ export async function projectTotal(projectId) {
   calculatorSnap.forEach((calculatorDoc) => {
     const data = calculatorDoc.data();
 
-    if (data.type !== "MeasurementCalculator") {
+    if (data.type === "SevenFieldCalculator") {
       total += data.finalTotal;
-  }});
+    } else if (data.type === "ThreeFieldCalculator") {
+      total += data.grandTotal;
+    }
+  });
 
   const projectRef = doc(db, "projects", projectId);
   await updateDoc(projectRef, { total });

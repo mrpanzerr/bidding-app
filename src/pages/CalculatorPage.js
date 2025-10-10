@@ -42,6 +42,7 @@ export default function CalculatorPage() {
     calcMeasurement,
     checkCode,
     sectionTotal,
+    calculateProjectTotal,
     calculateGrandTotal,
     updateTax,
     laborTotal,
@@ -112,6 +113,7 @@ export default function CalculatorPage() {
       setNewCalculatorName={setNewCalculatorName}
       handleRenameCalculator={handleRenameCalculator}
       renaming={renaming}
+      calculateProjectTotal={calculateProjectTotal}
       updateTax={updateTax}
       laborTotal={laborTotal}
     />

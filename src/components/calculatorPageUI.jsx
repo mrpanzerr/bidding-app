@@ -255,11 +255,11 @@ export default function CalculatorPageUI(props) {
       >
         {/* Total */}
         <h2 style={{ margin: 0 }}>
-          Total: {safeCalculator.type !== "MeasurementCalculator" && "$"}
+          Total: {safeCalculator.type == "SevenFieldCalculator" && "$"}
           {Number(safeCalculator.grandTotal).toFixed(2) || 0}
         </h2>
 
-        {safeCalculator.type !== "MeasurementCalculator" && (
+        {safeCalculator.type === "SevenFieldCalculator" && (
           <>
             {/* Tax Rate + Input */}
             <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
