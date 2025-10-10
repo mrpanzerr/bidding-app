@@ -58,13 +58,13 @@ export default function SevenFieldCalculatorUI({
           {/* Section Headers */}
           <div className={styles.headerRow}>
             <div>Quantity</div>
-            <div>Product Code</div>
-            <div>Product Description</div>
-            <div>Extra Description</div>
+            <div>Code</div>
+            <div>Name</div>
+            <div>Description</div>
             <div>Length</div>
             <div>Price</div>
             <div>Total Price</div>
-            <div></div> {/* Empty div for the Delete button column */}
+            <div></div>
           </div>
           {/* Lines */}
           {section.lines?.map((line) => (
@@ -141,7 +141,7 @@ export default function SevenFieldCalculatorUI({
                   width: "100px",
                   padding: "6px 8px",
                   color: "#333",
-                  textAlign: "right",
+                  textAlign: "left",
                   fontFamily: "inherit",
                   fontSize: "0.9rem",
                   userSelect: "none",
@@ -195,7 +195,7 @@ export default function SevenFieldCalculatorUI({
                   width: "100px",
                   padding: "6px 8px",
                   color: "#333",
-                  textAlign: "right",
+                  textAlign: "center",
                   fontFamily: "inherit",
                   fontSize: "0.9rem",
                   userSelect: "none",
@@ -210,7 +210,7 @@ export default function SevenFieldCalculatorUI({
                   width: "100px",
                   padding: "6px 8px",
                   color: "#333",
-                  textAlign: "right",
+                  textAlign: "center",
                   fontFamily: "inherit",
                   fontSize: "0.9rem",
                   userSelect: "none",

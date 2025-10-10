@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styles from "../styles/projectDashboardModules/projectDashboard.module.css";
 import {
-  exportMaterialListToDocx,
+  exportMaterialListToExcel,
   exportMaterialListToPDF,
 } from "../utils/exportUtils";
 
@@ -112,9 +112,9 @@ function ProjectDashboard() {
             </button>
             <button
               className={styles.exportBtn}
-              onClick={() => exportMaterialListToDocx(project, calculators)}
+              onClick={() => exportMaterialListToExcel(project, calculators)}
             >
-              Export Material List - Word
+              Export Material List - Excel
             </button>
           </div>
         </aside>

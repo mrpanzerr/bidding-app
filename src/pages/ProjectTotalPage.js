@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useCalculators } from "../hooks/useCalculator";
 import { useProject } from "../hooks/useProjects";
-import { exportToDocx, exportToPDF } from "../utils/exportUtils";
+import { exportToExcel, exportToPDF } from "../utils/exportUtils";
 
 export default function ProjectTotalPage() {
   const { id } = useParams();
@@ -85,9 +85,9 @@ export default function ProjectTotalPage() {
           </button>
           <button
             style={{ padding: "10px 20px" }}
-            onClick={() => exportToDocx(project, calculators)}
+            onClick={() => exportToExcel(project, calculators)}
           >
-            Export Word
+            Export Excel
           </button>
         </div>
       </div>

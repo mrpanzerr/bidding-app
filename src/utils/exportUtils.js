@@ -1,16 +1,8 @@
 // exportUtils.js
-import {
-  Document,
-  Packer,
-  Paragraph,
-  Table,
-  TableCell,
-  TableRow,
-  WidthType,
-} from "docx";
 import { saveAs } from "file-saver";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import * as XLSX from "xlsx";
 
 // Helper to get the correct total
 const getCalculatorTotal = (calc) => {
@@ -41,6 +33,7 @@ const getMaterialLineItems = (calculators) => {
           productCode: line.productCode || "",
           description: line.description || "",
           quantity: line.quantity || "",
+          length: line.descriptionThree || "",
         }))
       )
     );
@@ -62,13 +55,14 @@ export const exportMaterialListToPDF = (project, calculators) => {
     return;
   }
 
-  const tableColumn = ["#", "Product Code", "Description", "Quantity"];
+  const tableColumn = ["#", "Quantity", "Product Code", "Name", "Length"];
 
   const tableRows = materials.map((prod, index) => [
-    index + 1, // auto-number
-    prod.productCode || "", // Product Code
-    prod.description || "", // Description
-    prod.quantity || "", // Quantity
+    index + 1,
+    prod.quantity || "",
+    prod.productCode || "",
+    prod.description || "",
+    prod.length || "",
   ]);
 
   autoTable(doc, {
@@ -83,134 +77,66 @@ export const exportMaterialListToPDF = (project, calculators) => {
 };
 
 /**
- * Export Material List to DOCX
+ * Export Material List to EXCEL
  */
-export const exportMaterialListToDocx = async (project, calculators) => {
+export const exportMaterialListToExcel = (project, calculators) => {
   const materials = getMaterialLineItems(calculators);
 
-  const header = new Paragraph({
-    text: `Material List - ${project.name}`,
-    heading: "Heading1",
-    spacing: { after: 200 },
-  });
-
   if (materials.length === 0) {
-    const doc = new Document({
-      sections: [
-        { children: [header, new Paragraph("No material data found.")] },
-      ],
-    });
-    const blob = await Packer.toBlob(doc);
-    saveAs(blob, `${project.name}_materials.docx`);
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet([["No material data found."]]);
+    XLSX.utils.book_append_sheet(wb, ws, "Materials");
+    const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    saveAs(new Blob([wbout], { type: "application/octet-stream" }), `${project.name}_materials.xlsx`);
     return;
   }
 
-  // Table rows
-  const rows = [
-    // Header row
-    new TableRow({
-      children: ["#", "Product Code", "Description", "Quantity"].map(
-        (text) =>
-          new TableCell({
-            children: [new Paragraph({ text, bold: true })],
-            width: { size: 25, type: WidthType.PERCENTAGE },
-          })
-      ),
-    }),
-    // Product rows
-    ...materials.map(
-      (prod, index) =>
-        new TableRow({
-          children: [
-            index + 1,
-            prod.productCode || "",
-            prod.description || "",
-            prod.quantity || "",
-          ].map(
-            (text) =>
-              new TableCell({
-                children: [new Paragraph(String(text))],
-                width: { size: 25, type: WidthType.PERCENTAGE },
-              })
-          ),
-        })
-    ),
+  const data = [
+    ["#", "Quantity", "Product Code", "Name", "Length"],
+    ...materials.map((prod, index) => [
+      index + 1,
+      prod.quantity,
+      prod.productCode,
+      prod.description,
+      prod.length,
+    ]),
   ];
 
-  const table = new Table({
-    rows,
-    width: { size: 100, type: WidthType.PERCENTAGE },
-  });
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet(data);
+  XLSX.utils.book_append_sheet(wb, ws, "Materials");
 
-  const doc = new Document({
-    sections: [{ children: [header, table] }],
-  });
-
-  const blob = await Packer.toBlob(doc);
-  saveAs(blob, `${project.name}_Material_List.docx`);
+  const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+  saveAs(new Blob([wbout], { type: "application/octet-stream" }), `${project.name}_Material_List.xlsx`);
 };
 
-// Export DOCX
-export const exportToDocx = (project, calculators) => {
-  const rows = calculators
-    .filter((calc) => calc.type !== "MeasurementCalculator")
-    .map(
-      (calc) =>
-        new TableRow({
-          children: [
-            new TableCell({
-              width: { size: 70, type: WidthType.PERCENTAGE },
-              children: [new Paragraph(calc.name)],
-            }),
-            new TableCell({
-              width: { size: 30, type: WidthType.PERCENTAGE },
-              children: [
-                new Paragraph(`$${getCalculatorTotal(calc).toFixed(2)}`),
-              ],
-            }),
-          ],
-        })
-    );
+// ==========================
+// TOTALS EXPORTS
+// ==========================
 
-  rows.push(
-    new TableRow({
-      children: [
-        new TableCell({
-          children: [new Paragraph({ text: "Grand Total", bold: true })],
-        }),
-        new TableCell({
-          children: [
-            new Paragraph({
-              text: `$${Number(project.total).toFixed(2)}`,
-              bold: true,
-            }),
-          ],
-        }),
-      ],
-    })
-  );
+/**
+ * Export Totals to EXCEL
+ */
+export const exportToExcel = (project, calculators) => {
+  const data = [
+    ["Category", "Total"],
+    ...calculators
+      .filter((calc) => calc.type !== "MeasurementCalculator")
+      .map((calc) => [calc.name, `$${getCalculatorTotal(calc).toFixed(2)}`]),
+    ["Grand Total", `$${Number(project.total).toFixed(2)}`],
+  ];
 
-  const doc = new Document({
-    sections: [
-      {
-        properties: {},
-        children: [
-          new Paragraph({
-            text: `${project.name} Totals`,
-            heading: "Heading1",
-          }),
-          new Table({ rows, width: { size: 100, type: WidthType.PERCENTAGE } }),
-        ],
-      },
-    ],
-  });
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet(data);
+  XLSX.utils.book_append_sheet(wb, ws, "Totals");
 
-  Packer.toBlob(doc).then((blob) => {
-    saveAs(blob, `${project.name}_totals.docx`);
-  });
+  const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+  saveAs(new Blob([wbout], { type: "application/octet-stream" }), `${project.name}_totals.xlsx`);
 };
 
-// Export PDF
+/**
+ * Export Totals to PDF
+ */
 export const exportToPDF = (project, calculators) => {
   const doc = new jsPDF();
   doc.setFontSize(16);
