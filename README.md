@@ -24,42 +24,34 @@ This app helps general contractors:
   - Descriptions and work breakdowns  
   - Real-time total calculations  
 - Rename or delete projects and calculators instantly  
-- (Coming soon) Generate a printable bid-ready document with full cost breakdown
+- Generate a printable bid-ready document with full cost breakdown.
+  - This includes PDF and Excel exports of project total breakdown, material list and labor estimations.
 
 It’s built to feel familiar to contractors — simple, clear, and focused — while saving them hours of manual work.
-
----
-
-## Current Status
-
-- Core functionality is working and deployed  
-- Firebase backend is fully connected for real-time data sync  
-- UI is clean but minimal — visual polish is on the roadmap  
-- User authentication is set up on Firebase but not yet integrated  
-- Roadmap features (printable summaries, role-based access, import/export tools) are planned and in progress  
-- ESLint is configured and enforced  
-- App currently relies on a combination of manual testing across workflows to ensure reliability, with plans to focus on automated testing in the future
 
 ---
 
 ## Features
 
 > **Project & Calculator Management**
-- Create, rename, and delete projects  
-- Add calculators per project with nested pricing and descriptions  
-- Real-time total calculations
+- Create, rename, and delete projects to organize construction bids  
+- Add detailed calculators per project, including nested pricing and descriptions  
+- Real-time total calculations for fast, accurate estimates  
 
-> **Data Handling**
-- Firestore-backed database for live sync  
-- All calculations persist instantly — no refresh needed  
-- Vercel deployment with live updates
+> **Estimation Tools**
+- Material and labor calculators tailored for construction bids  
+- Instant PDF and Excel exports for client-ready proposals  
 
-> **Roadmap**
-- PDF export for client-ready bids  
-- Role-based login (e.g., estimator vs. admin)  
-- New calculator types (materials, labor, transportation)  
-- Firebase seed data for easier setup  
-- Full UI redesign focused on readability and mobile usability
+> **Data Handling & Collaboration**
+- Firestore-backed database with live sync for seamless collaboration  
+- All calculations persist instantly — no refresh required  
+- Deployed on Vercel for reliable, always-up-to-date access  
+
+> **User Access & Security**
+- Role-based login with admin access for secure, multi-user environments  
+
+> **User Interface**
+- Intuitive, user-friendly interface designed for efficiency and readability
 
 ---
 
@@ -102,16 +94,6 @@ npm start
 - Translated real-world workflows into usable software without losing the human logic behind them  
 - Learned how to ship working software that trades polish for usefulness
 - Prioritized clear scoping and thoughtful planning to reduce rework, align features with real needs, and support long-term scalability.
-
----
-
-## Roadmap
-
-- PDF export  
-- Default Firebase seed data  
-- UI/UX polish  
-- More calculator types  
-- Unit + integration testing
 
 ---
 
