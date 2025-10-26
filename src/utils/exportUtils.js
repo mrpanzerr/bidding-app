@@ -93,11 +93,12 @@ export const exportMaterialListToPDF = (project, calculators) => {
     }
 
     // Prepare table
-    const tableColumn = ["Quantity", "Product Code", "Name", "Length"];
+    const tableColumn = ["Quantity", "Product Code", "Name", "Description", "Length"];
     const tableRows = lines.map((line) => [
       line.quantity || "",
       line.productCode || "",
       line.description || "",
+      line.descriptionTwo || "",
       line.descriptionThree || "",
     ]);
 
@@ -146,12 +147,14 @@ export const exportMaterialListToExcel = (project, calculators) => {
       const data =
         lines.length > 0
           ? [
-              ["Quantity", "Product Code", "Name", "Length"],
+              ["Quantity", "Product Code", "Name", "Description", "Length", "Price"],
               ...lines.map((line) => [
                 line.quantity || "",
                 line.productCode || "",
                 line.description || "",
+                line.descriptionTwo || "",
                 line.descriptionThree || "",
+                line.amount || "",
               ]),
             ]
           : [["No line items found."]];
