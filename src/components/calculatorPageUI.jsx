@@ -180,6 +180,15 @@ export default function CalculatorPageUI(props) {
   // -----------------------
 
   /**
+   * Adds commas to a number for thousands separation
+   * @param {number|string} num - Number to format
+   * @returns {string} Formatted number with commas
+   */
+  const addCommas = (num) => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  /**
    * Wraps async actions with loading state management
    * @param {Function} action - Async function to execute
    */
@@ -256,7 +265,7 @@ export default function CalculatorPageUI(props) {
         {/* Total */}
         <h2 style={{ margin: 0 }}>
           Total: {safeCalculator.type === "SevenFieldCalculator" && "$"}
-          {Number(safeCalculator.grandTotal).toFixed(2) || 0}
+          {addCommas(Number(safeCalculator.grandTotal).toFixed(2)) || 0}
         </h2>
 
         {safeCalculator.type === "SevenFieldCalculator" && (
@@ -279,13 +288,13 @@ export default function CalculatorPageUI(props) {
             {/* Tax Amount */}
             <h2 style={{ margin: 0 }}>
               Tax: {safeCalculator.type !== "MeasurementCalculator" && "$"}
-              {Number(safeCalculator.taxAmount).toFixed(2) || 0}
+              {addCommas(Number(safeCalculator.taxAmount).toFixed(2)) || 0}
             </h2>
 
             {/* Grand Total */}
             <h2 style={{ margin: 0 }}>
               Grand Total: {safeCalculator.type !== "MeasurementCalculator" && "$"}
-              {Number(safeCalculator.finalTotal).toFixed(2) || 0}
+              {addCommas(Number(safeCalculator.finalTotal).toFixed(2)) || 0}
             </h2>
           </>
         )}

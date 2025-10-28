@@ -21,6 +21,10 @@ function toFeet(lengthStr) {
   return feet + inches / 12;
 }
 
+function addCommas(num) {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 export default function SevenFieldCalculatorUI({
   calculator,
   editingState,
@@ -230,7 +234,7 @@ export default function SevenFieldCalculatorUI({
                   userSelect: "none",
                 }}
               >
-                ${Number(line.amount).toFixed(2) ?? 0}
+                ${addCommas(Number(line.amount).toFixed(2)) ?? 0}
               </div>
 
               <button
@@ -294,7 +298,7 @@ export default function SevenFieldCalculatorUI({
               textAlign: "right",
             }}
           >
-            Section Total: {Number(section.total).toFixed(2)}
+            Section Total: ${addCommas(Number(section.total).toFixed(2))}
           </div>
         </div>
       ))}

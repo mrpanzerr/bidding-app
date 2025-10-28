@@ -28,6 +28,10 @@ export default function ThreeFieldCalculatorUI({
     }
   };
 
+  const addCommas = (num) => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
   return (
     <>
       {calculator.section.map((section) => (
@@ -90,7 +94,7 @@ export default function ThreeFieldCalculatorUI({
               />
 
               {/* Total */}
-              <div>${Number(line.amount).toFixed(2)}</div>
+              <div>${addCommas(Number(line.amount).toFixed(2))}</div>
 
               <button
                 className={styles.sectionButtonGroup}
@@ -152,7 +156,7 @@ export default function ThreeFieldCalculatorUI({
               textAlign: "right",
             }}
           >
-            Section Total: ${Number(section.total).toFixed(2)}
+            Section Total: ${addCommas(Number(section.total).toFixed(2))}
           </div>
         </div>
       ))}
