@@ -17,6 +17,11 @@ const getCalculatorTotal = (calc) => {
   return 0;
 };
 
+// Helper to add commas to numbers
+const addCommas = (num) => {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
 // ==========================
 // MATERIAL LIST EXPORTS
 // ==========================
@@ -93,7 +98,13 @@ export const exportMaterialListToPDF = (project, calculators) => {
     }
 
     // Prepare table
-    const tableColumn = ["Quantity", "Product Code", "Name", "Description", "Length"];
+    const tableColumn = [
+      "Quantity",
+      "Product Code",
+      "Name",
+      "Description",
+      "Length",
+    ];
     const tableRows = lines.map((line) => [
       line.quantity || "",
       line.productCode || "",
@@ -147,7 +158,14 @@ export const exportMaterialListToExcel = (project, calculators) => {
       const data =
         lines.length > 0
           ? [
-              ["Quantity", "Product Code", "Name", "Description", "Length", "Price"],
+              [
+                "Quantity",
+                "Product Code",
+                "Name",
+                "Description",
+                "Length",
+                "Price",
+              ],
               ...lines.map((line) => [
                 line.quantity || "",
                 line.productCode || "",
@@ -156,6 +174,14 @@ export const exportMaterialListToExcel = (project, calculators) => {
                 line.descriptionThree || "",
                 line.amount || "",
               ]),
+              [
+                "",
+                "",
+                "",
+                "",
+                "Grand Total",
+                `$${addCommas(Number(calc.grandTotal || 0).toFixed(2))}`,
+              ],
             ]
           : [["No line items found."]];
 
@@ -231,7 +257,7 @@ export const exportLaborToPDF = (project, calculators) => {
       "",
       "Grand Total",
       "",
-      `$${Number(calc.grandTotal || 0).toFixed(2)}`,
+      `$${addCommas(Number(calc.grandTotal || 0).toFixed(2))}`,
     ]);
 
     autoTable(doc, {
@@ -297,7 +323,7 @@ export const exportLaborToExcel = (project, calculators) => {
                 "",
                 "Grand Total",
                 "",
-                `$${Number(calc.grandTotal || 0).toFixed(2)}`,
+                `$${addCommas(Number(calc.grandTotal || 0).toFixed(2))}`,
               ],
             ]
           : [["No line items found."]];
@@ -340,8 +366,11 @@ export const exportToExcel = (project, calculators) => {
     ["Category", "Total"],
     ...calculators
       .filter((calc) => calc.type !== "MeasurementCalculator")
-      .map((calc) => [calc.name, `$${getCalculatorTotal(calc).toFixed(2)}`]),
-    ["Grand Total", `$${Number(project.total).toFixed(2)}`],
+      .map((calc) => [
+        calc.name,
+        `$${addCommas(getCalculatorTotal(calc).toFixed(2))}`,
+      ]),
+    ["Grand Total", `$${addCommas(Number(project.total).toFixed(2))}`],
   ];
 
   const wb = XLSX.utils.book_new();
@@ -366,9 +395,15 @@ export const exportToPDF = (project, calculators) => {
   const tableColumn = ["Category", "Total"];
   const tableRows = calculators
     .filter((calc) => calc.type !== "MeasurementCalculator")
-    .map((calc) => [calc.name, `$${getCalculatorTotal(calc).toFixed(2)}`]);
+    .map((calc) => [
+      calc.name,
+      `$${addCommas(getCalculatorTotal(calc).toFixed(2))}`,
+    ]);
 
-  tableRows.push(["Grand Total", `$${Number(project.total).toFixed(2)}`]);
+  tableRows.push([
+    "Grand Total",
+    `$${addCommas(Number(project.total).toFixed(2))}`,
+  ]); // Add commas where necessary for thousands
 
   autoTable(doc, {
     head: [tableColumn],
