@@ -8,6 +8,10 @@ export default function ProjectTotalPage() {
   const { project, loading, error } = useProject(id);
   const { calculators, loading: calcLoading } = useCalculators(id);
 
+  const addCommas = (num) => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
   if (loading || calcLoading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
   if (!project) return <p>No project found</p>;
@@ -62,13 +66,14 @@ export default function ProjectTotalPage() {
                   <td style={{ padding: "8px" }}>{calc.name}</td>
                   <td style={{ padding: "8px" }}>
                     $
-                    {Number(
-                      calc.type === "SevenFieldCalculator"
-                        ? calc.finalTotal
-                        : calc.type === "ThreeFieldCalculator"
-                        ? calc.grandTotal
-                        : 0
-                    ).toFixed(2)}
+                    {addCommas(
+                      Number(
+                        calc.type === "SevenFieldCalculator"
+                          ? calc.finalTotal
+                          : calc.type === "ThreeFieldCalculator"
+                          ? calc.grandTotal
+                          : 0
+                    ).toFixed(2))}
                   </td>
                 </tr>
               ))}
@@ -77,7 +82,7 @@ export default function ProjectTotalPage() {
                 Grand Total
               </td>
               <td style={{ padding: "8px", fontWeight: "bold" }}>
-                ${Number(project.total).toFixed(2)}
+                ${addCommas(Number(project.total).toFixed(2))}
               </td>
             </tr>
           </tbody>
