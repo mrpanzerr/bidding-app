@@ -151,29 +151,45 @@ export const exportMaterialListToExcel = (project, calculators) => {
   } else {
     filteredCalcs.forEach((calc, index) => {
       const calcName = calc.name?.trim() || `Calculator ${index + 1}`;
-
       const lines =
         (calc.section || []).flatMap((sec) => sec.lines || []) || [];
 
-      const data =
+      const headerRows = [
+        ["Company Name"],
+        [],
+        ["Job", "Job Title", "", new Date().toLocaleDateString()],
+        ["", "Job Address"],
+        ["", "State, City, Zip"],
+        [],
+        [calcName],
+        [],
+      ];
+
+      // Table data
+      const tableHeader = [
+        "Quantity",
+        "Product Code",
+        "Name",
+        "Description",
+        "Length",
+        "Price",
+      ];
+      const tableData =
+        lines.length > 0
+          ? lines.map((line) => [
+              line.quantity || "",
+              line.productCode || "",
+              line.description || "",
+              line.descriptionTwo || "",
+              line.descriptionThree || "",
+              `$${Number(line.amount || 0).toFixed(2)}`,
+            ])
+          : [["No line items found."]];
+
+      // Grand total row
+      const totalRow =
         lines.length > 0
           ? [
-              [
-                "Quantity",
-                "Product Code",
-                "Name",
-                "Description",
-                "Length",
-                "Price",
-              ],
-              ...lines.map((line) => [
-                line.quantity || "",
-                line.productCode || "",
-                line.description || "",
-                line.descriptionTwo || "",
-                line.descriptionThree || "",
-                line.amount || "",
-              ]),
               [
                 "",
                 "",
@@ -183,9 +199,22 @@ export const exportMaterialListToExcel = (project, calculators) => {
                 `$${addCommas(Number(calc.grandTotal || 0).toFixed(2))}`,
               ],
             ]
-          : [["No line items found."]];
+          : [];
 
-      const ws = XLSX.utils.aoa_to_sheet(data);
+      // Combine header + table + total
+      const wsData = [...headerRows, tableHeader, ...tableData, ...totalRow];
+
+      const ws = XLSX.utils.aoa_to_sheet(wsData);
+
+      // Make columns A through F wider
+      ws["!cols"] = [
+        { wch: 25 }, // Column A
+        { wch: 15 }, // Column B
+        { wch: 25 }, // Column C
+        { wch: 25 }, // Column D
+        { wch: 12 }, // Column E
+        { wch: 10 }, // Column F
+      ];
 
       // Limit sheet name to 31 chars (Excel restriction)
       const safeName = calcName.slice(0, 31);
@@ -250,7 +279,7 @@ export const exportLaborToPDF = (project, calculators) => {
       line.description || "",
       line.squarefoot || "",
       line.pricePerUnit || "",
-      Number(line.amount || 0).toFixed(2) || "",
+      `$${Number(line.amount || 0).toFixed(2) || ""}`,
     ]);
 
     tableRows.push([
@@ -317,7 +346,7 @@ export const exportLaborToExcel = (project, calculators) => {
                 line.description || "",
                 line.squarefoot || "",
                 line.pricePerUnit || "",
-                Number(line.amount.toFixed(2)) || "",
+                `$${Number(line.amount || 0).toFixed(2)}`,
               ]),
               [
                 "",
